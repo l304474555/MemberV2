@@ -1,11 +1,11 @@
 
-const accessTokenUrl = "https://servicedx.myj.com.cn/mp_token.ashx?grant_type=client_credential&partner_code=wxxiaochengxu&secret=e857tsd1f3sd7ras8r677ur";
-const apiUrl = "https://servicedx.myj.com.cn/mp_aip.ashx";
-const apiPartner = "wxxiaochengxu";
-
-// const accessTokenUrl = "https://ceshiserver.myj.com.cn/mp_token.ashx?grant_type=client_credential&partner_code=myjapp&secret=ad526837e2504c11b13439986c710869";
-// const apiUrl = "https://ceshiserver.myj.com.cn/mp_aip.ashx";
+// const accessTokenUrl = "https://servicedx.myj.com.cn/mp_token.ashx?grant_type=client_credential&partner_code=wxxiaochengxu&secret=e857tsd1f3sd7ras8r677ur";
+// const apiUrl = "https://servicedx.myj.com.cn/mp_aip.ashx";
 // const apiPartner = "wxxiaochengxu";
+
+const accessTokenUrl = "https://ceshiserver.myj.com.cn/mp_token.ashx?grant_type=client_credential&partner_code=myjapp&secret=ad526837e2504c11b13439986c710869";
+const apiUrl = "https://ceshiserver.myj.com.cn/mp_aip.ashx";
+const apiPartner = "wxxiaochengxu";
 
 var util = {
   getUrlParams:function(url){
