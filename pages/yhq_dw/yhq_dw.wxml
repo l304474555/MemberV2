@@ -1,0 +1,46 @@
+<view class='yhq_dw_title'>
+
+  <view class='yhq_dw_search_fa'>
+    <input class='yhq_dw_search' placeholder='输入城市名查询' bindinput='searchBykeyword'></input>
+  </view>
+  <view class='yhq_city_title_list' style='border-bottom:1px solid #f0eff4;{{isShow?"display:none":"display:block"}}' bindtap='locationCurrCity'>
+    <text>{{cityName}}</text><text style='color:#999; margin-left:5px; font-size:13px;'>GPS定位</text>
+  </view>
+
+  <!--查询不到城市提示语-->
+ <view style='{{isNoneData?"display:block":"display:none"}}'>
+  <view class='yhq_city_search_nodate'>抱歉！查询不到与<text style='color:#d1121a;'>{{searchWord}}</text>相关的城市,请更换关键词试试。</view>
+</view>
+
+
+</view>
+<view style='width:100%; height:101px;{{isShow?"display:none":"display:block"}}'></view>
+
+<view wx:for="{{ShowCityList}}">
+<view style='display:block'>
+  <view class='yhq_city_title_list yhq_city_title_gray'>
+    <text>热门城市</text>
+  </view>
+
+  <view class='yhq_city_list' wx:for="{{item.hotCitys}}"  bindtap='selectCity' data-city="{{item.Name}}" data-peovince="{{item.Province}}">
+    <text>{{item.Name}}</text>
+  </view>
+
+<!--省份-->
+  <view  wx:for="{{item.cityList}}" wx:for-item="province">
+    <view class='yhq_city_title_list yhq_city_title_gray'>{{province.Province}}</view>
+  <!--显示城市-->
+  <view class='yhq_city_list' wx:for="{{province.Citys}}" wx:for-item="city" bindtap='selectCity' data-city="{{city.Name}}"  data-peovince="{{ isSerchcity?city.Province: province.Province}}">
+    <text>{{city.Name}}</text>
+  </view>
+  </view>
+</view>
+</view> 
+
+<!--修改城市成功！提示
+<view class='yhq_city_tip' style='{{upSucess?"display:block":"display:none"}}'>
+  <view><image src="../img/y18.png" mode="widthFix" style="width:60px; "></image></view>
+  <text>修改城市成功！</text>
+</view> -->
+
+

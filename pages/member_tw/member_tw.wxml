@@ -1,0 +1,13 @@
+<import src="../../wxParse/wxParse.wxml" />
+<view style="padding:10px;">
+  
+  <view class="h_tw_title_big">{{objCom.Title}}</view>
+  <view class='h_tw_time'>{{objCom.FbTime}}</view>
+  <view class='h_tw_value'><template is="wxParse" data="{{wxParseData:article.nodes}}" />
+  </view>
+  <block wx:if="{{objCom.ToWeChatStat}}">
+  <button class="modal_btn" style="margin-top:25px;" bindtap="locationProm" data-ptype="{{objCom.WeChatApp}}">打开小程序</button>
+  </block>
+</view>
+
+

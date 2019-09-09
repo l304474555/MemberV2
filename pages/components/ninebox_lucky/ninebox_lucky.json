@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "regesmember": "../regester_member/regestermember"
+    }
+}

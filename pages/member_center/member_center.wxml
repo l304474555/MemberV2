@@ -1,0 +1,321 @@
+<import src="../../wxParse/wxParse.wxml" />
+<view class="h_center_title_fa">
+  <view class="h_c_title">
+    <view style="padding:0 10px;">
+      <view class="h_c_title_l">
+        <image src='{{userInfo.avatarUrl?userInfo.avatarUrl:defaultAvatar}}' mode="widthFix" style='width:50px; height:50px; border-radius:50px;'></image>
+      </view>
+      <view class="h_c_title_r">
+        <view class="h_c_title_r_name">
+          <view style='float:left;vertical-align: middle;'>{{userInfo.nickName}}</view>
+          <view style="{{jfUserInfo!=null?'display:none':'display:block'}};float:left;margin-left:10px;">
+            <view style="font-size:12px; color:#d1121a; display:inline-block;vertical-align: middle;margin-top:-4px;" >{{ordinaryMember}}</view>
+          </view>
+
+          <view style="{{jfUserInfo==null?'display:none':'display:block'}};float:left;margin-left:10px;">
+            <view style="font-size:12px; color:#d1121a; display:inline-block;vertical-align: middle;margin-top:-4px;">美宜佳会员</view>
+          </view>
+
+        </view>
+        <!--会员标签-->
+        <view class="h_c_title_r_label">
+          <view class="label_list" style='display:none;' wx:for="{{myTags}}">{{item}}</view>
+        </view>
+
+        <!--开通佳纷会员前展示-->
+        <image src="{{openbeforimg}}" mode="widthFix" class='fun_kt' hidden='true' catchtap='openJFMember'></image>
+        <!--开通佳纷会员前展示-->
+
+        <!--开通佳纷会员后展示-->
+        <image src="{{openbeforafter}}" mode="widthFix" class='fun_kt' hidden='true' catchtap='nagativeCenter'></image>
+        <!--开通佳纷会员后展示-->
+
+      </view>
+
+
+
+
+      <view class="h_c_title_set" style='display:none' bindtap="locaindex">
+        <text style="font-size:14px;vertical-align: middle;">返回首页</text>
+        <image src="../img/return.png" mode="widthFix" style="width:16px;vertical-align: middle; margin-left:5px;"></image>
+      </view>
+      <view class="h_c_title_dw" style='display:none;'>
+        <block wx:if="{{city!=''}}">
+          <image src="../img/b1.png" mode="widthFix" style="width:16px;vertical-align: middle;"></image>
+          <text style="font-size:14px;vertical-align: middle;">{{city}}</text>
+        </block>
+      </view>
+
+      <view class="h_c_title_back" bindtap='AcountIndex'>
+        <text style="font-size:14px;vertical-align: middle;">会员信息</text>
+        <image src="../img/b2.png" mode="widthFix" style="width:16px;vertical-align: middle; margin-left:5px;"></image>
+      </view>
+      <view class='h_c_title_jf'>
+        <image src="../img/b3.png" mode="widthFix" style="width:12px;vertical-align: middle; margin-right:5px;"></image>
+        <text style='vertical-align: middle;display:inline-block; '>积分{{userPoint}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view style="float:left;  width:100%; height:10px;background-color:#f0eff4;"></view>
+  <view class="h_my {{selected?'h_my_select red':'default'}}" bindtap="selected">我的券</view>
+  <view class="h_my {{selected1?'h_my_select red':'default'}}" bindtap="selected1">我的积分</view>
+
+
+</view>
+
+<!--留白-->
+<view style="width:100%; height:141px;"></view>
+
+<view class="{{selected?'show':'hidden'}}">
+  <!--"我的券"标题栏-->
+  <view class="tab_bg" style='position: fixed;z-index: 9999;'>
+    <view class="tab_list" style='{{selectColorall}}' bindtap="allCoupe">所有券</view>
+    <view class="tab_list" style='{{selectColorwait}}' bindtap="waitUse">待使用</view>
+    <view class="tab_list" style='{{selectColoexpire}}' bindtap="haveExpire">已过期</view>
+    <view class="tab_list" style='{{selectColoruse}}' bindtap="havaUse">已使用</view>
+  </view>
+  <view style="width:100%; height:50px;"></view>
+
+
+  <!--我的券列表-->
+  <view class="yhq_fa">
+    <block wx:for="{{coupeList}}" wx:key="Id">
+      <view class="yhq_body" bindtap='opencoupe' data-id="{{item.Id}}" data-vibid="{{item.VBId}}">
+        <view class="yhq_spot">
+          <image src="../img/spot.png" mode="widthFix" style="width:5px;"></image>
+        </view>
+        <view class="yhq_spot2">
+          <image src="../img/spot.png" mode="widthFix" style="width:5px;"></image>
+        </view>
+        <view class="yhq_spot3">
+          <text>●</text>
+        </view>
+        <view class="yhq_spot4">
+          <text>●</text>
+        </view>
+        <block wx:if="{{item.Status=='立即使用'}}">
+          <view class="yhq_btn_gq">
+            <image src="../img/h16red.png"></image>
+          </view>
+        </block>
+
+        <block wx:if="{{item.Status=='已过期'}}">
+          <view class="yhq_btn_gq">
+            <image src="../img/h08.png"></image>
+          </view>
+        </block>
+
+        <block wx:if="{{item.Status=='待使用'}}">
+          <view class="yhq_btn_gq">
+            <image src="../img/h16red.png"></image>
+          </view>
+        </block>
+
+        <block wx:if="{{item.Status=='已使用'}}">
+          <view class="yhq_btn_gq">
+            <image src="../img/h07.png"></image>
+          </view>
+        </block>
+        <view class="yhq_tpye">
+          <image src="{{item.ImageUrl}}" mode="widthFix" style="height: 70px; border: 1px solid rgb(221, 221, 221); border-radius: 8px;"></image>
+        </view>
+
+        <view class="yhq_value_fa">
+          <view class="yhq_value">
+            <text class="yhq_value_title1">{{item.CardName}}</text>
+          </view>
+          <view class="yhq_value" style="margin-top:0;">
+            <text class="yhq_value2 yhq_red_txt">{{item.MDescription==null?"":item.MDescription}}</text>
+            <text class="yhq_value3 yhq_red_txt">{{item.SDescription==null?"":item.SDescription}}</text>
+          </view>
+          <view class="yhq_value" style="margin-top:0;">
+            <text class="yhq_value1">使用时间：{{item.UseBeginTime}}-{{item.UseEndTime}}</text>
+          </view>
+        </view>
+
+
+
+      </view>
+    </block>
+
+
+
+  </view>
+
+  <view style="width:100%; height:50px;"></view>
+  <!--无优惠券-->
+  <view class="yhq_none_fa" hidden='{{!isCompleted||coupeList.length>0}}'>
+    <image src="../img/h10.png" style="width:90px; height:90px;"></image>
+    <view style='font-size:14px; margin-top:30px;'>您当前暂无该类优惠券</view>
+    <button class='yhq_btn1' style='margin-top:10px;' bindtap='getCoupe'>去领券</button>
+  </view>
+</view>
+
+<!--我的积分-->
+<view class="{{selected1?'show':'hidden'}}">
+  <!--"我的积分"标题栏-->
+  <view class="tab_jf_bg" style='position: fixed;z-index: 9999;'>
+    <view class="tab_jf_title" style='text-align: left; margin-left:10px;font-weight: bold;'>积分记录</view>
+    <block wx:if="{{selectType==0}}">
+      <view class="tab_jf_title" style='text-align: right;float: right;margin-right:10px;vertical-align:middle;' bindtap='showSeleTask'>全部
+        <image src="../img/h19.png" style="width:14px;height:14px;margin-left:5px;vertical-align:middle;" bindtap='closeT'></image>
+      </view>
+    </block>
+    <block wx:if="{{selectType==1}}">
+      <view class="tab_jf_title" style='text-align: right;float: right;margin-right:10px;vertical-align:middle;' bindtap='showSeleTask'>获取
+        <image src="../img/h19.png" style="width:14px;height:14px;margin-left:5px;vertical-align:middle;" bindtap='closeT'></image>
+      </view>
+    </block>
+    <block wx:if="{{selectType==2}}">
+      <view class="tab_jf_title" style='text-align: right;float: right;margin-right:10px;vertical-align:middle;' bindtap='showSeleTask'>使用
+        <image src="../img/h19.png" style="width:14px;height:14px;margin-left:5px;vertical-align:middle;" bindtap='closeT'></image>
+      </view>
+    </block>
+  </view>
+  <view style="width:100%; height:41px;position:relative;"></view>
+
+  <view class='tab_jf_choose_fa' style='{{selectMonthTask?"display:block":"display:none"}}'>
+    <view class='tab_jf_choose'>
+      <view class='tab_jf_choose_list' bindtap='SelectCoin' data-typeSelect="0">全部</view>
+      <view class='tab_jf_choose_list' bindtap='SelectCoin' data-typeSelect="1">获取</view>
+      <view class='tab_jf_choose_list' bindtap='SelectCoin' data-typeSelect="2">使用</view>
+    </view>
+  </view>
+
+
+
+  <!--”我的积分“内容-->
+  <view style='position: relative;z-index: 8;' wx:for="{{monthList}}">
+
+    <view class="tab_jf_bg_title" style='display:none;'>
+      <view class="tab_jf_title" style='text-align: left; margin-left:10px;'>
+        <view style='float:left;height:20px; margin-top:10px;display:inline-block;margin-right:8px; border-left:3px solid #d1121a;'></view>
+        <view style='float:left;'>{{item.uModel.OperateTime}}</view>
+      </view>
+
+      <!--全部-->
+      <block wx:if="{{selectType==0}}">
+        <view class="tab_jf_title" style='text-align: right;float: right;margin-right:10px;'>使用:{{item.UseGoldCoinInfo}}</view>
+        <view class="tab_jf_title" style='text-align: right;float: right;margin-right:10px;'>获取:
+          <text style='color:#01ab02;'>{{item.GetGoldCoinInfo}}</text>
+        </view>
+      </block>
+
+      <!--获得-->
+      <block wx:if="{{selectType==1}}">
+        <view class="tab_jf_title" style='text-align: right;float: right;margin-right:10px;'>获取:
+          <text style='color:#01ab02;'>{{item.GetGoldCoinInfo}}</text>
+        </view>
+      </block>
+
+      <!--使用-->
+      <block wx:if="{{selectType==2}}">
+        <view class="tab_jf_title" style='text-align: right;float: right;margin-right:10px;'>使用:{{item.UseGoldCoinInfo}}</view>
+      </block>
+    </view>
+
+
+    <view class='h_jf_list_fa' wx:for="{{item.USignModelDetail}}" wx:for-item="detail">
+      <view style='display:inline-block; width:100%;'>
+        <view class='h_jf_list_l'>{{detail.SrcTypeName}}</view>
+        <view class='h_jf_list_l2'>{{detail.opTime}}</view>
+        <block wx:if="{{detail.ChangeCnt>0}}">
+          <view class='h_jf_list_r'>+{{detail.ChangeCnt}}</view>
+        </block>
+        <block wx:if="{{detail.ChangeCnt<0}}">
+          <view class='h_jf_list_red'>{{detail.ChangeCnt}}</view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+</view>
+<view class="loading" style="text-align:center" hidden='{{!isLoading}}'>加载中，请稍候……</view>
+<view class="loading complete" style="text-align:center" hidden='{{!isCompleted}}'>已加载全部
+</view>
+
+
+
+
+<!--提示语弹框-->
+<view class="modal_bg" style="{{isHowtast?'display:block':'display:none'}}"></view>
+<view class="modal_fa2" style="top:50%; margin-top:-210px;text-align:left; width:85%;{{isHowtast?'display:block':'display:none'}}">
+  <view style="padding:12px 10px 20px 10px;">
+    <view class='modal_close3_new' bindtap='clcoseTast'>
+      <image src="../img/y_close2.png" mode="widthFix" style="margin-left: 0;margin-top: 10px;width: 22px;height: 22px;"></image>
+    </view>
+    <view class="modal_title">美宜佳优惠券</view>
+    <view class='modal_value_txt_ot_fa'>
+      <view class='modal_value_txt' style="text-align: center;">{{objcoupe.CardName}}</view>
+      <view class='modal_value_txt_ot'>使用时间：{{objcoupe.UseBeginTime}} 至 {{objcoupe.UseEndTime}}</view>
+      <view class='modal_value_txt_ot' style='color:red;'>本优惠券只需到店购物时，直接微信支付即可自动抵扣！</view>
+      <view class='modal_value_txt_ot'>
+        <template is="wxParse" data="{{wxParseData:article.nodes}}" />
+      </view>
+    </view>
+
+    <view class="modal_btn_fa">
+      <block wx:if="{{objcoupe.Status=='已过期'}}">
+        <button class='modal_btn' style='margin-top:20px;margin-right:15px; display:inline-block;background-color: #D3D3D3;' disabled='true'>已过期</button>
+      </block>
+
+      <block wx:if="{{objcoupe.Status=='立即使用'}}">
+        <form report-submit="true" bindsubmit='url_wxpay'>
+          <button class='modal_btn' form-type="submit" hover-stop-propagation="true" style="margin-top:20px;display:inline-block;background-color: #50a837;color:white;margin-right:15px;" data-cardid="{{objcoupe.Id}}">打开微信支付</button>
+        </form>
+      </block>
+      <block wx:if="{{objcoupe.Status=='已使用'}}">
+        <button class='modal_btn' style='margin-top:20px;margin-right:15px; display:inline-block;background-color: #D3D3D3;' disabled='true'>已使用</button>
+      </block>
+
+      <form report-submit="true" bindsubmit='clcoseTast'>
+        <button form-type="submit" hover-stop-propagation="true" class='modal_btn_n' style='margin-top:20px;display:inline-block;'>朕知道了</button>
+      </form>
+    </view>
+  </view>
+</view>
+
+<!-- <view class="modal_bg" style="{{isMember?'display:block':'display:none'}}"></view>
+<view class="modal_fa2" style="{{isMember?'display:block':'display:none'}}">
+  <view style="padding:30px 10px;">
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close3" bindtap='closeTask'></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <text>您还不是会员,点击[马上成为会员]注册会员以享受更多优惠哦~
+</text>
+    </view> -->
+
+    <!-- <form bindsubmit="getMemberCard" report-submit='true'>
+      <button form-type="submit" class='modal_btn' style='margin-top:30px;'>马上成为会员</button>
+    </form> -->
+            <!-- <button open-type="getPhoneNumber" bindgetphonenumber="regesterByMobile" class='modal_btn' style='margin-top:30px;'>马上成为会员</button>
+  </view>
+</view> -->
+
+
+<!-- 获取用户信息组件 -->
+<view class="modal_bg" style="{{isShowUserInfoBtn?'display:block':'display:none'}}"></view>
+<view class='modal_fa2' style="{{isShowUserInfoBtn?'display:block':'display:none'}}">
+  <view style="padding:30px 10px;">
+    <view class="modal_txt" style="margin-top:10px; color:#666; font-size:16px;">无法获取您的用户信息，请授权给我们应用以正常使用本应用的相关功能。</view>
+    <button class='modal_btn' style='margin-top:30px; font-size:16px;' open-type='getUserInfo' bindgetuserinfo='getUserInfoBtnClick'>确定</button>
+  </view>
+</view>
+<!-- 获取用户信息组件 -->
+
+
+<!--悬浮浮标-->
+<view>
+  <movable-area style="height:{{tuodongheight}}px;width: {{tuodongwidth}}px;'">
+    <!--x值，y值控制初始值的位置{{showadimginfo[0].FloatImageUrl}}-->
+    <movable-view direction="all" out-of-bounds="true" style="background: blue;z-index:9999999;" x="10" y="{{floatheight}}">
+      <view class='fun_icon '>
+        <image src="https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201904/61aa6a1e91ef9881.png" mode="widthFix" bindtap="jumpToApplyFor" style='height: 50px; width: 50px; z-index: 99999999;' ></image>
+      </view>
+    </movable-view>
+  </movable-area>
+</view>
+<!--悬浮浮标-->
+<!--黎梅芳 20190424 注册会员组件-->
+ <regesmember id="regerter" ></regesmember>
+ <!--黎梅芳 20190424 注册会员组件-->

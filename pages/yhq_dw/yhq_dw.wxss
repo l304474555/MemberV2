@@ -1,0 +1,22 @@
+page {  
+  display: block;  
+  min-height: 100%;  
+  background-color: #fff;  
+  font-family: "microsoft yahei";
+}  
+
+.yhq_dw_title{position: fixed; top:0;left: 0;right: 0px; z-index: 9999;background-color:#f0eff4;}
+
+.yhq_dw_search_fa{width: 96%; margin:10px 2%;   background-color:#f0eff4;}
+
+.yhq_dw_search{background-color: #fff; border: 1px solid #ddd; border-radius: 5px; padding: 6px 5px; font-size: 13px; text-align: center;}
+
+.yhq_city_title_list{padding:14px 3%; background-color: #fff; font-size: 14px; }
+
+.yhq_city_title_gray{background-color:#f0eff4 !important;}
+
+.yhq_city_list{padding:0 3%; background-color: #fff; font-size: 13px; height: 47px; line-height: 47px;border-bottom:1px solid #f0eff4;}
+
+.yhq_city_tip{ position: fixed; z-index: 9999; top:38%; left: 0; right: 0; margin: 0 auto; background-color: #505050; border-radius: 5px; width: 110px; color: #fff; padding: 16px 0; font-size: 14px; text-align: center; }
+
+.yhq_city_search_nodate{font-size: 14px; padding: 20px 8%; background-color: #fff;}

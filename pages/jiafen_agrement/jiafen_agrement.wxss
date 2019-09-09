@@ -1,0 +1,2 @@
+/* pages/jiafen_agrement/jiafen_agrement.wxss */
+.h_tw_value{ display: inline-block;width: 100%; margin-top: 30px;  font-size: 14px;}

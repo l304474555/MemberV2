@@ -1,0 +1,78 @@
+page{overflow: hidden;}
+
+.cj_back{position: absolute; left: 10px;top: 10px;z-index: 10}
+.ld_tip_btnt{  background-color: transparent; color: #fff;  margin: 0;border: 0px; line-height: 0; display: inline-block;position:static;padding: 0;text-align:initial;}
+button[class="ld_tip_btnt"]::after {
+  border: 0;
+}
+.container {
+ /* background-color: #ccc; */
+ height:500rpx;
+ margin: 20rpx 20rpx 20rpx 20rpx; 
+ overflow:auto;
+}
+.cj_rule{position: absolute; right: 10px;top: 10px;z-index: 10}
+
+.zl_title_fa{ font-size: 30rpx; text-align: center; padding-top: 20px;}
+
+.zl_title{display: inline-block; vertical-align: middle; margin: 0 10px;}
+
+.zl_title_l{ display: inline-block; vertical-align: middle; color: #b6b6b6;}
+
+.zl_title_list{background-color: rgba(255, 255, 255, .6); border-radius: 8px; margin:5px 10px 0 10px;}
+
+.zl_list{ padding: 10px; position: relative;}
+
+.zl_list image{ border-radius: 100px; vertical-align: middle; width: 60rpx;}
+
+.zl_txt{display: inline-block; vertical-align: middle; font-size: 28rpx;}
+
+.zl_txt_r{display: inline-block; vertical-align: middle; font-size: 28rpx; position: absolute;top:50%;
+right:10px;margin-top:-9.5px;}
+
+.zl_pro{ position: absolute; top: 9px; right: 10px; width: 20px; height: 20px;}
+
+.account_popup_smo{position: fixed;
+z-index: 9999;
+top: 25%;
+left:0;
+right:0;
+margin: 
+
+0 auto;
+background-color: #fff;
+border-radius: 8px;
+width: 65%;
+height: auto;
+text-align: center;
+border: 1px solid #d1121a;}
+
+.account_popup_smo_title{background-color: #d1121a; color: #fff; text-align: center; font-size:16px; border-radius: 
+
+7px 7px 0 0; height: 40px; line-height: 40px; }
+
+.modal_txt{
+  font-size: 14px;
+  text-align: center;
+  line-height: 20px;
+}
+.modal_txt2{
+  font-size: 18px;
+  text-align: center;
+  line-height: 20px;
+  color: #d1121a;
+}
+
+.modal_btn{
+  width: 115px; height: 36px; line-height: 36px; font-size: 14px; 
+
+background-color: #d1121b; color: #fff;
+}
+
+.zl_btn_fa{position: fixed;top: 32%; left: 0; right: 0; z-index: 999;}
+
+.zl_list_fa{position: fixed;bottom:20rpx; left: 0; right: 0; z-index: 999; }
+
+
+
+

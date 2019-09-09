@@ -1,0 +1,23 @@
+<!--通用头部-->
+<import src="../../../wxParse/wxParse.wxml" />
+<view class='currency_head'>
+  <view>活动规则</view>
+</view>
+<view class='currency_head_space'></view>
+<!--通用头部-->
+
+<view style='padding:10px'>
+  <view class='lr_txt'> 
+   <template is="wxParse" data="{{wxParseData:rules.nodes}}" />
+  </view>
+
+</view>
+
+
+
+
+
+
+
+
+

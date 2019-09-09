@@ -1,0 +1,91 @@
+{
+  "pages": [
+        
+    "pages/member_index/member_index",
+"pages/Basketball_integral/Basketball_integral",
+    "pages/login/login",
+    "pages/member_barcode/member_barcode",
+    "pages/store_map/store_map",
+    "pages/applyfor/index",
+    "pages/member_center/member_center",
+    "pages/jiafen_openidex/jiafen_openidex",
+    "pages/jiafen_memberinfo/jiafen_memberinfo",
+    "pages/jiafen_agrement/jiafen_agrement",
+    "pages/member_mainbill/member_mainbill",
+    "pages/member_bill_detail/member_bill_detail",
+    "pages/member_services/member_services",
+    "pages/member_gift/member_gif",
+    "pages/member_account/member_account",
+    "pages/yhq_dw/yhq_dw",
+    "pages/member_popup/member_popup",
+    "pages/yhq_channel/yhq_channel",
+    "pages/member_dh/member_dh",
+    "pages/member_zx/member_zx",
+    "pages/member_tw/member_tw",
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/member_card/index",
+    "pages/member_card/activate",
+ 
+    "pages/bannerWeb/bannerWeb",
+    "pages/yhq_squa_zl/yhq_squa_zl",
+    "pages/wetchat_payment/wetchat_payment",
+    "pages/sign/sign"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "美宜佳会员",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#333333",
+    "borderStyle": "white",
+    "backgroundColor": "#fff",
+    "selectedColor": "#d1121b",
+    "list": [
+      {
+        "selectedIconPath": "pages/img/nav_01_select.png",
+        "iconPath": "pages/img/nav_01.png",
+        "pagePath": "pages/member_index/member_index",
+        "text": "我是VIP"
+      },
+      {
+        "selectedIconPath": "pages/img/nav_02_select.png",
+        "iconPath": "pages/img/nav_02.png",
+        "pagePath": "pages/wetchat_payment/wetchat_payment",
+        "text": "微信支付"
+      },
+      {
+        "selectedIconPath": "pages/img/mytag_select.png",
+        "iconPath": "pages/img/mytag.png",
+        "pagePath": "pages/member_center/member_center",
+        "text": "会员中心"
+      }
+    ]
+  },
+  "navigateToMiniProgramAppIdList": [
+    "wxc94d087c5890e1f8",
+    "wx8bdb03cbe56ad21e",
+    "wx64286f463c42df55",
+    "wx572796b93d5c783b",
+    "wxeb490c6f9b154ef9",
+    "wx55595d5cf709ce79",
+    "wx7c28a134c03776f8",
+    "wx0a4845e45aaf634a",
+    "wx36dc7878ec18111b",
+    "wx5bb96f017a0d2db2"
+  ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置将用于推荐附近美宜佳的会员权益服务"
+    }
+  },
+  "sitemapLocation": "sitemap.json",
+  "plugins": {
+    "calendar": {
+      "version": "1.1.3",
+      "provider": "wx92c68dae5a8bb046"
+    }
+  }
+}
