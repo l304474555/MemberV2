@@ -300,7 +300,7 @@ Page({
       {
         var cityName = wx.getStorageSync("membercity");
         var provinceName = wx.getStorageSync("memberprovince");
-        if (cityName)
+        if (cityName && provinceName)
         {
           that.setData({
             cityName: cityName,

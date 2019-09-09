@@ -30,7 +30,9 @@
     "pages/bannerWeb/bannerWeb",
     "pages/yhq_squa_zl/yhq_squa_zl",
     "pages/wetchat_payment/wetchat_payment",
-    "pages/sign/sign"
+    "pages/sign/sign",
+    "pages/brandDay/brandDay",
+    "pages/brandMemberAgreement/brandMemberAgreement"
   ],
   "window": {
     "backgroundTextStyle": "dark",

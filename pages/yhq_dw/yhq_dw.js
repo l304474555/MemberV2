@@ -61,6 +61,8 @@ Page({
             });
             app.currCity = that.data.cityName;
             app.currProvince = res.result.address_component.province;
+            app.globalData.currCity = that.data.cityName;
+            app.globalData.currProvince = res.result.address_component.province;
           },
           fail: function (msg) {
             console.log("失败")
@@ -86,6 +88,8 @@ Page({
     //把选择的城市，省份信息写入全局变量
     app.currCity = city;
     app.currProvince = province;
+    app.globalData.currCity = city;
+    app.globalData.currProvince = province;
     //把选择的城市，省份信息写入缓存
     wx.setStorageSync("membercity", city);
     wx.setStorageSync("memberprovince", province);
@@ -118,6 +122,11 @@ Page({
           } else if (that.data.target=="basketball")//篮球分换券
           {
             wx.navigateBack();
+          } else if (that.data.target == 'brandDay') {
+            let pages = getCurrentPages();
+            let page = pages[pages.length - 2];
+            page.onLoad();
+            wx.navigateBack();
           }
            else {
             wx.reLaunch({
@@ -139,6 +148,11 @@ Page({
               })
 
             }, 1500) //延迟时间 这里是1.5秒  
+          } else if (that.data.target == 'brandDay') {
+            let pages = getCurrentPages();
+            let page = pages[pages.length - 2];
+            page.onLoad();
+            wx.navigateBack();
           } else {
             wx.reLaunch({
               url: '../member_index/member_index'
@@ -175,7 +189,8 @@ Page({
               //把修改城市后的值赋值到全局变量
               app.latitude = lat;
               app.longitude = lng;
-              
+              app.globalData.latitude = lat;
+              app.globalData.longitude = lng;
             },
             fail: function (msg) {
               console.log("出现异常：" + JSON.stringify(msg));
@@ -344,6 +359,9 @@ Page({
         return;
       }
       app.currCity = that.data.cityName;
+      app.globalData.currCity = that.data.cityName;
+      wx.setStorageSync('membercity', that.data.cityName);
+      wx.setStorageSync('memberprovince', '');
       wx.showToast({
         title: '修改城市成功！',
         icon: 'success',
@@ -359,6 +377,11 @@ Page({
               }, 1500) //延迟时间 这里是1.5秒  
             } else if (that.data.target == "basketball")//篮球分换券
             {
+              wx.navigateBack();
+            } else if (that.data.target == 'brandDay') {
+              let pages = getCurrentPages();
+              let page = pages[pages.length - 2];
+              page.onLoad();
               wx.navigateBack();
             }
              else {
@@ -397,6 +420,11 @@ Page({
               })
 
             }, 1500) //延迟时间 这里是1.5秒  
+          } else if (that.data.target == 'brandDay') {
+            let pages = getCurrentPages();
+            let page = pages[pages.length - 2];
+            page.onLoad();
+            wx.navigateBack();
           } else {
             wx.reLaunch({
               url: '../member_index/member_index'
