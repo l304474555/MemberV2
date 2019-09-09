@@ -784,47 +784,56 @@ Page({
         app.currCity = currCity
         app.currProvince = currProvince
 
+        //调用保存接口把定位信息保存到表里
         var qqmapsdk = new QQMapWX({
           key: that.data.key // 必填
         });
-        qqmapsdk.geocoder({
-          address: currCity, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
-          success: function (res) { //成功后的回调
-          console.log(res)
-          },
-        })
-return
-        //调用保存接口把定位信息保存到表里
-        myjCommon.callApi({
-          interfaceCode: "WxMiniProgram.Service.UpdateUserLocation",
-          biz: {
-            sessionId: user.sessionId,
-            city: app.currCity, //城市
-            province: app.currProvince,//省份
-            lat: latitude, //城市维度
-            lng: longitude, //城市经度
-            fromApp: that.data.fromApp //来源：1 优惠券小程序； 2 会员小程序
-          },
-          success: function (res) {
-            //当旧账号解绑的时候业务要求不弹出“马上成为会员”弹框 4014是已经解 2018.05.15
-            if (user.lastErrorCode != "4014") {
-              if (res.Code == "301") {
-                that.setData({
-                  noMemberTask: true
-                });
-                /**初始化注册会员组件方法 */
-                that.regerter1 = that.selectComponent("#regerter");
-                that.regerter1.init(that.data.noMemberTask, "wxc94d087c5890e1f8", "member_card");
-              }
-            }
-
-          },
-          fail: function (res) {
-          },
-          complete: function (res) {
+        myjCommon.getLoginUser(function (user) {
+          if (!user.isLogin) {
+            that.setData({
+              isShowUserInfoBtn: true
+            });
+            return;
           }
-        });
 
+          qqmapsdk.geocoder({
+            address: currCity, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
+            success: function (res) { //成功后的回调
+              console.log(res)
+              var latitude = res.result.location.lat,
+                longitude = res.result.location.lng;
+              myjCommon.callApi({
+                interfaceCode: "WxMiniProgram.Service.UpdateUserLocation",
+                biz: {
+                  sessionId: user.sessionId,
+                  city: app.currCity, //城市
+                  province: app.currProvince,//省份
+                  lat: latitude, //城市维度
+                  lng: longitude, //城市经度
+                  fromApp: that.data.fromApp //来源：1 优惠券小程序； 2 会员小程序
+                },
+                success: function (res) {
+                  //当旧账号解绑的时候业务要求不弹出“马上成为会员”弹框 4014是已经解 2018.05.15
+                  if (user.lastErrorCode != "4014") {
+                    if (res.Code == "301") {
+                      that.setData({
+                        noMemberTask: true
+                      });
+                      /**初始化注册会员组件方法 */
+                      that.regerter1 = that.selectComponent("#regerter");
+                      that.regerter1.init(that.data.noMemberTask, "wxc94d087c5890e1f8", "member_card");
+                    }
+                  }
+
+                },
+                fail: function (res) {
+                },
+                complete: function (res) {
+                }
+              });
+            },
+          })
+        })
         that.getUserLocationInfoV1()
       },
       fail: function(){
