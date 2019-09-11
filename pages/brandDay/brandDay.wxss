@@ -1,12 +1,7 @@
 /* pages/brandDay/brandDay.wxss */
 
 page {
-  background-color: #343a50;
-}
-
-.movable-area{
-  height:100vh;width: calc(100vw);top:0;z-index:2;overflow: scroll;
-  /* pointer-events: none; */
+  /* background-color: #343a50; */
 }
 
 .modal_fa2>.modal_txt {
@@ -20,18 +15,40 @@ page {
   font-size: 16px;
 }
 
+.modal_fa2 cover-view {
+  /* white-space: normal nowrap; */
+  white-space: normal;
+}
+
+.returnHomePage {
+  margin: 10rpx 0 0 10rpx;
+}
+
+.returnHomePage>image {
+  width: 70rpx;
+  height: 70rpx;
+  z-index: 1;
+  position: relative;
+}
+
 .brand-day {
-  padding: 40rpx;
+  padding: 0 40rpx 40rpx 40rpx;
 }
 
 .memberCard {
   position: relative;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 380rpx;
+  border-radius: 8px;
 }
 
 .memberCard>image {
   width: 100%;
   vertical-align: top;
   max-height: 200px;
+  position: absolute;
+  height: 190px;
 }
 
 .memberCard>.memberCode {
@@ -39,7 +56,7 @@ page {
   text-align: center;
   vertical-align: middle;
   right: 10rpx;
-  z-index: 8;
+  z-index: 1;
   bottom: 20rpx;
 }
 
@@ -59,7 +76,7 @@ page {
   position: absolute;
   top: 20rpx;
   right: 20rpx;
-  z-index: 999;
+  z-index: 1;
 }
 
 /* .memberCard>.position>.positionBody {
@@ -93,7 +110,7 @@ page {
   position: absolute;
   top: 20rpx;
   left: 45rpx;
-  z-index: 8;
+  z-index: 1;
 }
 
 .memberCard>.memberInfo>image {
@@ -116,11 +133,14 @@ page {
 }
 
 .barCode {
-  margin: 10px;
+  margin: 48px 0 0 20px;
   padding: 10px 10px 30px 10px;
-  position: relative;
+  position: absolute;
   background-color: #fff;
   border-radius: 8px;
+  width: 540rpx;
+  height: 160rpx;
+  /* height: 270rpx; */
 }
 
 .barCode>.barCodeTitle {
@@ -128,13 +148,28 @@ page {
   text-align: center;
   padding: 8px;
   color: #b2b2b2;
-  margin-top: 20px;
+  /* margin-top: 20px; */
+}
+
+.barCode>.barCodePic {
+  position: relative;
 }
 
 .barCode>.barCodePic>canvas {
-  width: 550rpx;
-  height: 200rpx;
+  width: 400rpx;
+  height: 100rpx;
   margin: 0 auto;
+}
+
+/*屏幕响应判断 iphone5 兼容 */
+
+@media (max-width:330px) {
+  /*这个一定要 要不然扫不出来*/
+
+  .barCode>.barCodePic>canvas {
+    width: 550rpx;
+    height: 200rpx;
+  }
 }
 
 .barCode>.barCodeNum {
@@ -159,9 +194,16 @@ page {
   align-items: center;
   justify-content: center; */
   height: 80px;
-  margin-bottom: 15px;
+  margin-top: 15px;
   display: flex;
   align-items: center;
+}
+
+.brandList>.brandTip {
+  color: white;
+  font-family: 'Alibaba';
+  font-size: 27rpx;
+  text-align: right;
 }
 
 .brandList>.brandItem>.brandCheckbox {
@@ -207,7 +249,7 @@ page {
   width: 100%;
   height: 80px;
   position: absolute;
-  z-index: 9998;
+  /* z-index: 9998; */
   background-color: rgba(0, 0, 0, 0.4);
   border-radius: 55px;
   text-align: right;
@@ -222,7 +264,7 @@ page {
   right: 30rpx;
   height: 180rpx;
   width: 180rpx;
-  z-index: 99991;
+  z-index: 1;
 }
 
 .brandList>.brandItem>.brandBody>image {
@@ -279,6 +321,8 @@ page {
   border-radius: 20px; */
   width: 350rpx;
   margin-top: 20rpx;
+  height: 70rpx;
+  z-index: 1;
 }
 
 .rule {
@@ -286,20 +330,50 @@ page {
 }
 
 .rule>view {
-  width: 100%;
+  /* width: 100%;
   color: white;
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 10px; */
 }
 
 .rule>view>view {
-  color: white;
-  width: 100%;
-  font-size: 24rpx;
-  line-height: 20px;
+  /* font-size: 24rpx;
+  line-height: 20px; */
 }
 
 button[class="modal_btn"]::after {
   border: 0;
 }
+
+.backGroundImg {
+  position: fixed;
+  height: 100%;
+  top: 0;
+  width: calc(100vw);
+  z-index: -1;
+  overflow: scroll;
+  display: block;
+}
+
+.movable-area {
+  height: 100vh;
+  width: calc(100vw);
+  top: 0;
+  overflow: scroll;
+  position: absolute;
+  /* pointer-events: none; */
+}
+
+/* .backGroundImg { */
+
+/* width: calc(100vw);
+  height: 100vh;
+  position: fixed;
+  z-index: -100;
+  top: 0; */
+
+/* background-size: cover;
+  pointer-events: none; */
+
+/* } */

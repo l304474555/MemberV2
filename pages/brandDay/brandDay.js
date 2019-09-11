@@ -1,6 +1,7 @@
 // pages/brandDay/brandDay.js
 let app = getApp();
 const mapKey = 'WJFBZ-QVMWX-DKE4Y-7R7MN-TZN7H-3GFBP';
+const yhqAppId = 'wx55595d5cf709ce79';
 const barCodeSign = 'myj_barcode_sign';
 const createMpBarcode_interface = 'WxMiniProgram.Service.CreateMpBarcode';
 const getBrandDetails_interface = 'WxMiniProgram.Service.GetBrandDetails';
@@ -10,6 +11,7 @@ const openBrand_interface = 'WxMiniProgram.Service.OpenBrand';
 const checkBrandStock_interface = 'WxMiniProgram.Service.CheckBrandStockInRedis';
 const prePay_interface = 'WxMiniProgram.Service.Prepay';
 const checkBrandOrderStatus = 'WxMiniProgram.Service.CheckBrandOrderStatus';
+const getMemberBrandDiscountCnt_interface = 'WxMiniProgram.Service.GetMemberBrandDiscountCnt';
 import QQMapWX from '../../map/qqmap-wx-jssdk.js';
 import myjCommon from '../../utils/myjcommon.js';
 import wxParse from '../../wxParse/wxParse.js';
@@ -48,12 +50,13 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     console.log('onload...');
     let self = this;
     wx.showLoading({
       title: '加载中',
     });
+
     wx.getUserInfo({
       success(e) {
         self.setData({
@@ -74,49 +77,49 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   },
 
@@ -163,6 +166,7 @@ Page({
           provinceName: app.globalData.currProvince
         });
         self.loadBrandDayInfo(self.data.cityName);
+        self.loadBarCodeInfo();
         return;
       }
       let cityName = wx.getStorageSync('membercity');
@@ -176,6 +180,7 @@ Page({
         app.globalData.currCity = cityName;
         app.globalData.currProvince = provinceName;
         self.loadBrandDayInfo(cityName);
+        self.loadBarCodeInfo();
         return;
       }
       wx.getLocation({
@@ -200,6 +205,7 @@ Page({
                 provinceName: res.result.address_component.province
               });
               self.loadBrandDayInfo(self.data.provinceName);
+              self.loadBarCodeInfo();
             },
             fail(res) {
               self.setData({
@@ -233,6 +239,7 @@ Page({
       // self.setData({
       //   defaultAvatar: user.userInfo.avatarUrl
       // });
+      debugger
       myjCommon.callApi({
         interfaceCode: isMember_interface,
         biz: {
@@ -283,27 +290,32 @@ Page({
       myjCommon.callApi({
         interfaceCode: getBrandDayInfo_interface,
         biz: {
-          cityName: cityName
+          cityName: cityName,
+          sessionId: user.sessionId
         },
         success(res) {
+          
           console.log('调用WxMiniProgram.Service.GetBrandDayInfo成功');
 
           if (res.Code == '-1') {
             console.log(`[code=-1]：${res.Msg}`);
             wx.showModal({
               title: '提示',
-              content: res.Msg,
+              content: '当前城市未开展品牌日活动，敬请期待',
+              showCancel: false
             });
             return;
           }
           wx.setStorageSync('brandMemberAgreement', res.Result.BrandDayModel.MemberAgreement);
           wxParse.wxParse('rule', 'html', res.Result.BrandDayModel.ActivityRule, self, 1);
+
           let isBrandMember = false;
           let list = res.Result.BrandModels.map((item, i) => {
             if (item.IsOpen == 1) {
               isBrandMember = true;
             }
-            item.isFull = Number(item.Stock) <= 0;
+            // item.isFull = Number(item.Stock) <= 0;
+            item.EndTime = item.EndTime.substring(0, 10);
             return item;
           });
           self.setData({
@@ -320,105 +332,6 @@ Page({
           wx.hideLoading();
         }
       });
-
-      // let obj = {
-      //   Id: 1,
-      //   PageBgImage: '../img/brandDay/brand_member_card-min.png',
-      //   OpenIcon: '../img/brandDay/foot_btn-min.png',
-      //   DrawId: 1,
-      //   DrawIcon: '../img/member_kf.png',
-      //   MemberAgreement: '<p>测试</p>',
-      //   ActivityRule: `<p>1.品牌活动的排序根据后台设置的排序来排列；每个品牌活动都有各自的权益说明，点击【查看详情】即可弹出框查看。</p><p>2.每个品牌都有开始活动时间和结束时间，当该品牌状态为未开通时，则显示 "未开通品牌，敬请期待" 。</p><p>3.每个品牌活动都有库存数，当开通该品牌的人数已达到品牌的库存数时，则未开通该品牌的用户前端显示 "很抱歉，该品牌已满员" ；已开通该品牌的用户前端显示 "已开通" 标识。</p>`,
-      //   CompanyCode: 'GD'
-      // };
-      // wx.setStorageSync('brandMemberAgreement', obj.MemberAgreement);
-      // wxParse.wxParse('rule', 'html', obj.ActivityRule, self, 1);
-      // let list = [{
-      //   Id: 1,
-      //   Name: '测试品牌1',
-      //   BeginTime: '2019-01-01',
-      //   EndTime: '2019-12-31',
-      //   State: 1,
-      //   Stock: 100,
-      //   Amount: 10,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 1
-      // }, {
-      //   Id: 2,
-      //   Name: '测试品牌2',
-      //   BeginTime: '2019-01-01',
-      //   EndTime: '2019-12-31',
-      //   State: 1,
-      //   Stock: 100,
-      //   Amount: 20,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 0
-      // }, {
-      //   Id: 3,
-      //   Name: '测试品牌3',
-      //   BeginTime: '2019-01-01',
-      //   EndTime: '2019-12-31',
-      //   State: 1,
-      //   Stock: 100,
-      //   Amount: 0.01,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 0
-      // }, {
-      //   Id: 4,
-      //   Name: '测试品牌4',
-      //   BeginTime: '2019-01-01',
-      //   EndTime: '2019-12-31',
-      //   State: 1,
-      //   Stock: 100,
-      //   Amount: 10,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 0
-      // }, {
-      //   Id: 5,
-      //   Name: '测试品牌5',
-      //   BeginTime: '2019-01-01',
-      //   EndTime: '2019-12-31',
-      //   State: 3,
-      //   Stock: 100,
-      //   Amount: 10,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 0
-      // }, {
-      //   Id: 6,
-      //   Name: '测试品牌6',
-      //   BeginTime: '2019-10-01',
-      //   EndTime: '2019-12-31',
-      //   State: 3,
-      //   Stock: 100,
-      //   Amount: 10,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 0
-      // }, {
-      //   Id: 7,
-      //   Name: '测试品牌7',
-      //   BeginTime: '2019-01-01',
-      //   EndTime: '2019-12-31',
-      //   State: 1,
-      //   Stock: 0,
-      //   Amount: 10,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 0
-      // }];
-      // let isBrandMember = false;
-      // list = list.map((item, i) => {
-      //   if (item.IsOpen == 1) {
-      //     isBrandMember = true;
-      //   }
-      //   item.isFull = Number(item.Stock) <= 0;
-      //   return item;
-      // });
-      // self.setData({
-      //   brandDayInfo: obj,
-      //   brandList: list,
-      //   isBrandMember: isBrandMember
-      // });
-      // wx.hideLoading();
-
     });
   },
 
@@ -443,7 +356,7 @@ Page({
     let state = event.currentTarget.dataset.state;
     let isFull = event.currentTarget.dataset.isfull;
 
-    if (state == 3 || isFull) {
+    if (state == 3 || isFull == 1) {
       return;
     }
     myjCommon.callApi({
@@ -612,7 +525,7 @@ Page({
     let self = this;
     this.getBarCode();
     console.log('刷新会员条形码');
-    this.data.timeOutId = setTimeout(self.refreshBarCode, 30000);
+    this.data.timeOutId = setTimeout(self.refreshBarCode, 60000);
   },
 
   /**
@@ -625,7 +538,8 @@ Page({
     let isCheck = false;
 
     if (e.detail.value.length != 1) {
-      brandAmount -= brandList[checkId].Amount;
+      brandAmount = Number(brandAmount) - Number(brandList[checkId].Amount);
+      brandAmount = brandAmount.toFixed(2);
       this.setData({
         brandAmount: brandAmount,
         [`checkStatus[${checkId}]`]: false
@@ -644,7 +558,9 @@ Page({
       }
       return;
     }
-    brandAmount += brandList[checkId].Amount;
+
+    brandAmount = Number(brandAmount) + Number(brandList[checkId].Amount);
+    brandAmount = brandAmount.toFixed(2);
     this.data.isBrandCheck = true;
     this.setData({
       brandAmount: brandAmount,
@@ -703,85 +619,64 @@ Page({
           return brandIds.push(self.data.brandList[i].Id);
         }
       });
+      
       myjCommon.callApi({
-        interfaceCode: checkBrandStock_interface,
+        interfaceCode: openBrand_interface,
         biz: {
+          sessionId: user.sessionId,
+          brandAmount: self.data.brandAmount,
+          brandDayId: self.data.brandDayInfo.Id,
           brandIdsJson: JSON.stringify(brandIds),
-          brandDayId: self.data.brandDayInfo.Id
+          companyCode: self.data.brandDayInfo.CompanyCode
         },
         success(res) {
-          if (res.Code == '-1') {
+          if (res.Code == '300') {
+            wx.hideLoading();
+            wx.showModal({
+              title: '提示',
+              content: '登录已过期，请重新登录',
+              showCancel: false,
+              success(res) {
+                self.setData({
+                  isShowUserInfoBtn: true
+                });
+              }
+            });
+            return;
+          }
+
+          if (res.Code == '301') {
+            wx.hideLoading();
+            self.setData({
+              noMemberTask: true,
+              memberStatus: '301'
+            });
+            wx.showModal({
+              title: '提示',
+              content: '对不起，请先注册会员',
+              showCancel: false,
+              success(res) {
+                self.regerter1 = self.selectComponent('#regerter');
+                self.regerter1.init(self.data.noMemberTask, app.globalData.currenAppid, 'member_card');
+              }
+            })
+            return;
+          }
+
+          if (res.Code != '0') {
             wx.hideLoading();
             wx.showModal({
               title: '提示',
               content: res.Msg,
               showCancel: false
             });
-            reutrn;
+            return;
           }
-          myjCommon.callApi({
-            interfaceCode: openBrand_interface,
-            biz: {
-              sessionId: user.sessionId,
-              brandAmount: self.data.brandAmount,
-              brandDayId: self.data.brandDayInfo.Id,
-              brandIdsJson: JSON.stringify(brandIds),
-              companyCode: self.data.brandDayInfo.CompanyCode
-            },
-            success(res) {
-              if (res.Code == '300') {
-                wx.hideLoading();
-                wx.showModal({
-                  title: '提示',
-                  content: '登录已过期，请重新登录',
-                  showCancel: false,
-                  success(res) {
-                    self.setData({
-                      isShowUserInfoBtn: true
-                    });
-                  }
-                });
-                return;
-              }
-
-              if (res.Code == '301') {
-                wx.hideLoading();
-                self.setData({
-                  noMemberTask: true,
-                  memberStatus: '301'
-                });
-                wx.showModal({
-                  title: '提示',
-                  content: '对不起，请先注册会员',
-                  showCancel: false,
-                  success(res) {
-                    self.regerter1 = self.selectComponent('#regerter');
-                    self.regerter1.init(self.data.noMemberTask, app.globalData.currenAppid, 'member_card');
-                  }
-                })
-                return;
-              }
-
-              if (res.Code != '0') {
-                wx.hideLoading();
-                wx.showModal({
-                  title: '提示',
-                  content: res.Msg,
-                  showCancel: false
-                });
-                return;
-              }
-              self.prePay(res.Result, user.sessionId, brandIds);
-            },
-            fail(msg) {
-              console.error(`调用接口OpenBrand失败：${JSON.stringify(msg)}`);
-              wx.hideLoading();
-            }
-          });
+          self.prePay(res.Result, user.sessionId, brandIds);
         },
         fail(msg) {
+          console.error(`调用接口OpenBrand失败：${JSON.stringify(msg)}`);
           wx.hideLoading();
-          console.error(`调用接口CheckBrandStockInRedis失败：${JSON.stringify(msg)}`);
         }
       });
 
@@ -800,14 +695,13 @@ Page({
   /**
    * 预支付订单
    */
-  prePay(brandOrder, sessionId, brandIds) {
+  prePay(orderNo, sessionId, brandIds) {
     let self = this;
-    brandOrder.CreateTime = brandOrder.CreateTime.replace('+', '%2B');
-
+debugger
     myjCommon.callApi({
       interfaceCode: prePay_interface,
       biz: {
-        brandOrderJson: JSON.stringify(brandOrder),
+        orderNo: orderNo,
         sessionId: sessionId
       },
       success(res) {
@@ -837,7 +731,7 @@ Page({
         }
         wx.hideLoading();
         wx.requestPayment(JSON.parse(res.Result));
-        self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 5000, brandOrder.OrderNo, brandIds);
+        self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 5000, orderNo, brandIds, sessionId);
       },
       fail(msg) {
         console.error(`调用接口Prepay失败：${JSON.stringify(msg)}`);
@@ -849,19 +743,27 @@ Page({
   /**
    * 定时检查品牌订单状态
    */
-  checkBrandOrderStatus(orderNo, brandIds) {
+  checkBrandOrderStatus(orderNo, brandIds, sessionId) {
     let self = this;
 
     myjCommon.callApi({
       interfaceCode: checkBrandOrderStatus,
       biz: {
-        orderNo: orderNo
+        orderNo: orderNo,
+        brandDayId: self.data.brandDayInfo.Id,
+        sessionId: sessionId
       },
       success(res) {
         if (res.Code != "0") {
-          self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 2000, orderNo, brandIds);
+          self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 2000, orderNo, brandIds, sessionId);
           return;
         }
+        self.setData({
+          isBrandCheck: false,
+          brandAmount: 0,
+          checkStatus: [],
+          isBrandCheck: false
+        });
         clearTimeout(self.data.brandOrderStatusTimeOutId);
         self.onLoad();
       },
@@ -877,9 +779,26 @@ Page({
   openDraw() {
     let self = this;
 
-    wx.navigateTo({
-      url: self.data.brandDayInfo.PageUrl,
+    wx.navigateToMiniProgram({
+      appId: yhqAppId,
+      path: self.data.brandDayInfo.PageUrl,
+      envVersion: 'trial',
+      success(res) {}
     });
+  },
+
+  /**
+   * 返回会员小程序首页
+   */
+  returnHomePage() {
+    wx.reLaunch({
+      url: '/pages/member_index/member_index',
+    });
+    // wx.navigateToMiniProgram({
+    //   appId: yhqAppId,
+    //   path: '/pages/member_index_member_index',
+    //   envVersion: 'release'
+    // });
   }
 
 })

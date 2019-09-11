@@ -125,6 +125,28 @@ Page({
           } else if (that.data.target == 'brandDay') {
             let pages = getCurrentPages();
             let page = pages[pages.length - 2];
+            let brandDayInfo = page.data.brandDayInfo;
+            let img;
+
+            if (brandDayInfo!=null){
+              img = brandDayInfo.PageBgImage;
+              brandDayInfo = {};
+              brandDayInfo.PageBgImage = img;
+            }
+            page.setData({
+              brandList:[],
+              brandDayInfo: brandDayInfo,
+              isBrandMember:false,
+              isShowDetails: false, //是否查看详情弹框
+              isShowBarCode: false, //是否展示会员码
+              barCodeNum: '', //会员条形码编码
+              isCodeError: false, //会员条形码是否加载错误
+              brandAmount: 0, //品牌金额
+              checkStatus: [], //品牌勾选列表
+              isBrandCheck: false, //是否勾选了品牌
+              isAgreementCheck: false,
+            });
+            clearTimeout(page.data.timeOutId);
             page.onLoad();
             wx.navigateBack();
           }
@@ -151,6 +173,27 @@ Page({
           } else if (that.data.target == 'brandDay') {
             let pages = getCurrentPages();
             let page = pages[pages.length - 2];
+            let brandDayInfo = page.data.brandDayInfo;
+
+            if (brandDayInfo != null) {
+              img = brandDayInfo.PageBgImage;
+              brandDayInfo = {};
+              brandDayInfo.PageBgImage = img;
+            }
+            page.setData({
+              brandList: [],
+              brandDayInfo: brandDayInfo,
+              isBrandMember: false,
+              isShowDetails: false, //是否查看详情弹框
+              isShowBarCode: false, //是否展示会员码
+              barCodeNum: '', //会员条形码编码
+              isCodeError: false, //会员条形码是否加载错误
+              brandAmount: 0, //品牌金额
+              checkStatus: [], //品牌勾选列表
+              isBrandCheck: false, //是否勾选了品牌
+              isAgreementCheck: false,
+            });
+            clearTimeout(page.data.timeOutId);
             page.onLoad();
             wx.navigateBack();
           } else {
@@ -381,6 +424,27 @@ Page({
             } else if (that.data.target == 'brandDay') {
               let pages = getCurrentPages();
               let page = pages[pages.length - 2];
+              let brandDayInfo = page.data.brandDayInfo;
+
+              if (brandDayInfo != null) {
+                img = brandDayInfo.PageBgImage;
+                brandDayInfo = {};
+                brandDayInfo.PageBgImage = img;
+              }
+              page.setData({
+                brandList: [],
+                brandDayInfo: brandDayInfo,
+                isBrandMember: false,
+                isShowDetails: false, //是否查看详情弹框
+                isShowBarCode: false, //是否展示会员码
+                barCodeNum: '', //会员条形码编码
+                isCodeError: false, //会员条形码是否加载错误
+                brandAmount: 0, //品牌金额
+                checkStatus: [], //品牌勾选列表
+                isBrandCheck: false, //是否勾选了品牌
+                isAgreementCheck: false,
+              });
+              clearTimeout(page.data.timeOutId);
               page.onLoad();
               wx.navigateBack();
             }
@@ -423,6 +487,27 @@ Page({
           } else if (that.data.target == 'brandDay') {
             let pages = getCurrentPages();
             let page = pages[pages.length - 2];
+            let brandDayInfo = page.data.brandDayInfo;
+            
+            if (brandDayInfo != null) {
+              img = brandDayInfo.PageBgImage;
+              brandDayInfo = {};
+              brandDayInfo.PageBgImage = img;
+            }
+            page.setData({
+              brandList: [],
+              brandDayInfo: brandDayInfo,
+              isBrandMember: false,
+              isShowDetails: false, //是否查看详情弹框
+              isShowBarCode: false, //是否展示会员码
+              barCodeNum: '', //会员条形码编码
+              isCodeError: false, //会员条形码是否加载错误
+              brandAmount: 0, //品牌金额
+              checkStatus: [], //品牌勾选列表
+              isBrandCheck: false, //是否勾选了品牌
+              isAgreementCheck: false,
+            });
+            clearTimeout(page.data.timeOutId);
             page.onLoad();
             wx.navigateBack();
           } else {
