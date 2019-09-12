@@ -59,6 +59,7 @@ page {
   height: 190px; */
   width: 100%;
   vertical-align: top;
+  height: 180px;
 }
 
 .memberCard>.memberCode {
@@ -155,24 +156,23 @@ page {
   background-color: #fff;
   border-radius: 8px;
   width: 540rpx;
-  height: 160rpx; */
-  /* height: 270rpx; */
-  padding: 10px 10px 30px 10px;
-position: absolute;
-background-color: #fff;
-border-radius: 8px;
-width: 540rpx;
-height: 160rpx;
-top: 70rpx;
-left: 0;
-right: 0;
-margin: 0 auto;
+  height: 160rpx; *//* height: 270rpx; */
+  padding: 10px 10px 30px 0px;
+  position: absolute;
+  background-color: #fff;
+  border-radius: 8px;
+  width: 622rpx;
+  height: 186rpx;
+  top: 70rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
 }
 
 .barCode>.barCodeTitle {
   font-size: 30rpx;
   text-align: center;
-  padding: 8px;
+  /* padding: 8px; */
   color: #b2b2b2;
   /* margin-top: 20px; */
 }
@@ -182,9 +182,9 @@ margin: 0 auto;
 }
 
 .barCode>.barCodePic>canvas {
-  width: 400rpx;
-  height: 100rpx;
-  margin: 0 auto;
+  width: 650rpx;
+  height: 160rpx;
+  /* margin: 0 auto; */
 }
 
 /*屏幕响应判断 iphone5 兼容 */
@@ -405,31 +405,88 @@ button[class="modal_btn"]::after {
 
 /* } */
 
-.brand-value{position: relative;}
-
-.brand-bg-img{ width: 100%; border-radius: 5px;}
-
-.brand-opened-img{ position: absolute; right: 0; top: 0;z-index: 1; width: 100%;border-radius:0 5px 5px 0; }
-
-.brand-details{position: absolute; right: 120rpx; top: 20rpx; background-color: #565a66; color: #f3dec6; font-size: 24rpx; padding: 10rpx 20rpx; border-radius: 100px;}
-
-.brand-effectivedate{ position: absolute; bottom:20rpx; right: 120rpx; color: #78482f; font-size: 28rpx;}
-
-.brand-equity{ text-align: right; color: #fff; font-size: 25rpx; min-height: 55rpx;
+.brand-value {
+  position: relative;
 }
 
-.brand-equity font { font-weight: bold; color: #ebcd79;}
-
-.brand-checkbox{ position: absolute; right: 16rpx; top:50%; margin-top: -29rpx; z-index: 2;}
-
-checkbox .wx-checkbox-input{
-   border-radius: 50%;
-   width: 40rpx;
-   height: 40rpx;
+.brand-bg-img {
+  width: 100%;
+  border-radius: 5px;
 }
 
-.brand-value-tip{ position: absolute; left: 0; right: 0; top: 0; width: 100%;  z-index: 3; border-radius: 5px;}
+.brand-opened-img {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  border-radius: 0 5px 5px 0;
+}
 
-.back-index{ color: #fff; font-size: 28rpx; margin-top: 20rpx;position: relative;z-index: 1;}
+.brand-details {
+  position: absolute;
+  right: 120rpx;
+  top: 20rpx;
+  background-color: #565a66;
+  color: #f3dec6;
+  font-size: 24rpx;
+  padding: 10rpx 20rpx;
+  border-radius: 100px;
+}
 
-.brand-back{ width: 25rpx; vertical-align: middle;}
+.brand-effectivedate {
+  position: absolute;
+  bottom: 20rpx;
+  right: 120rpx;
+  color: #78482f;
+  font-size: 28rpx;
+}
+
+.brand-equity {
+  text-align: right;
+  color: #fff;
+  font-size: 25rpx;
+  min-height: 55rpx;
+}
+
+.brand-equity font {
+  font-weight: bold;
+  color: #ebcd79;
+}
+
+.brand-checkbox {
+  position: absolute;
+  right: 16rpx;
+  top: 50%;
+  margin-top: -29rpx;
+  z-index: 2;
+}
+
+checkbox .wx-checkbox-input {
+  border-radius: 50%;
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.brand-value-tip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 3;
+  border-radius: 5px;
+}
+
+.back-index {
+  color: #fff;
+  font-size: 28rpx;
+  margin-top: 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-back {
+  width: 25rpx;
+  vertical-align: middle;
+}

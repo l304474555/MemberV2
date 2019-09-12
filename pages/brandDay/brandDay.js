@@ -619,7 +619,7 @@ debugger
           return brandIds.push(self.data.brandList[i].Id);
         }
       });
-      
+      debugger
       myjCommon.callApi({
         interfaceCode: openBrand_interface,
         biz: {
@@ -697,7 +697,7 @@ debugger
    */
   prePay(orderNo, sessionId, brandIds) {
     let self = this;
-debugger
+    
     myjCommon.callApi({
       interfaceCode: prePay_interface,
       biz: {
@@ -729,9 +729,16 @@ debugger
           });
           return;
         }
+        let obj = JSON.parse(res.Result);
+        obj.success = function(){
+          wx.showLoading({
+            title: '支付回调中',
+          });
+          self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 500, orderNo, brandIds, sessionId);
+        }
         wx.hideLoading();
-        wx.requestPayment(JSON.parse(res.Result));
-        self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 5000, orderNo, brandIds, sessionId);
+        wx.requestPayment(obj);
+        
       },
       fail(msg) {
         console.error(`调用接口Prepay失败：${JSON.stringify(msg)}`);
@@ -755,7 +762,7 @@ debugger
       },
       success(res) {
         if (res.Code != "0") {
-          self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 2000, orderNo, brandIds, sessionId);
+          self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 500, orderNo, brandIds, sessionId);
           return;
         }
         self.setData({
@@ -765,10 +772,12 @@ debugger
           isBrandCheck: false
         });
         clearTimeout(self.data.brandOrderStatusTimeOutId);
+        wx.hideLoading();
         self.onLoad();
       },
       fail(msg) {
         console.error(`调用接口CheckBrandOrderStatus失败：${JSON.stringify(msg)}`);
+        wx.hideLoading();
       }
     });
   },
