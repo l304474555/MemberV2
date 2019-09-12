@@ -239,7 +239,7 @@ Page({
       // self.setData({
       //   defaultAvatar: user.userInfo.avatarUrl
       // });
-      debugger
+      
       myjCommon.callApi({
         interfaceCode: isMember_interface,
         biz: {
@@ -286,7 +286,7 @@ Page({
         userInfo: user.userInfo
       });
       console.log('---WxMiniProgram.Service.GetBrandDayInfo---');
-
+debugger
       myjCommon.callApi({
         interfaceCode: getBrandDayInfo_interface,
         biz: {

@@ -19,7 +19,7 @@
 
 <template name="wxParseVideo_Cover">
   <!--增加video标签支持，并循环添加-->
-  <cover-view class="{{item.classStr}} wxParse-{{item.tag}}" style="{{item.styleStr}};white-space:normal nowrap;">
+  <cover-view class="{{item.classStr}} wxParse-{{item.tag}}" style="{{item.styleStr}}">
     <video class="{{item.classStr}} wxParse-{{item.tag}}-video" src="{{item.attr.src}}"></video>
   </cover-view>
 </template>
@@ -50,7 +50,7 @@
 </template>
 
 <template name="WxEmojiView_Cover">
-  <cover-view class="WxEmojiView wxParse-inline" style="{{item.styleStr}};white-space:normal nowrap;">
+  <cover-view class="WxEmojiView wxParse-inline" style="{{item.styleStr}}">
     <block wx:for="{{item.textArray}}" wx:key="">
       <block class="{{item.text == '\\n' ? 'wxParse-hide':''}}" wx:if="{{item.node == 'text'}}">{{item.text}}</block>
       <block wx:elif="{{item.node == 'element'}}">
@@ -174,12 +174,12 @@
     </block>
     <!--li类型-->
     <block wx:elif="{{item.tag == 'li'}}">
-      <cover-view class="{{item.classStr}} wxParse-li" style="{{item.styleStr}};white-space:normal nowrap;">
-        <cover-view class="{{item.classStr}} wxParse-li-inner" style="white-space:normal nowrap;">
-          <cover-view class="{{item.classStr}} wxParse-li-text" style="white-space:normal nowrap;">
-            <cover-view class="{{item.classStr}} wxParse-li-circle" style="white-space:normal nowrap;"></cover-view>
+      <cover-view class="{{item.classStr}} wxParse-li" style="{{item.styleStr}}">
+        <cover-view class="{{item.classStr}} wxParse-li-inner" >
+          <cover-view class="{{item.classStr}} wxParse-li-text" >
+            <cover-view class="{{item.classStr}} wxParse-li-circle" ></cover-view>
           </cover-view>
-          <cover-view class="{{item.classStr}} wxParse-li-text" style="white-space:normal nowrap;">
+          <cover-view class="{{item.classStr}} wxParse-li-text" >
             <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
               <template is="wxParse1_Cover" data="{{item}}" />
             </block>
@@ -200,14 +200,14 @@
 
     <!--a类型-->
     <block wx:elif="{{item.tag == 'a'}}">
-      <cover-view bindtap="wxParseTagATap" class="wxParse-inline {{item.classStr}} wxParse-{{item.tag}}" data-src="{{item.attr.href}}" style="{{item.styleStr}};white-space:normal nowrap;">
+      <cover-view bindtap="wxParseTagATap" class="wxParse-inline {{item.classStr}} wxParse-{{item.tag}}" data-src="{{item.attr.href}}" style="{{item.styleStr}}">
         <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
           <template is="wxParse1_Cover" data="{{item}}" />
         </block>
       </cover-view>
     </block>
     <block wx:elif="{{item.tag == 'table'}}">
-      <cover-view class="{{item.classStr}} wxParse-{{item.tag}}" style="{{item.styleStr}};white-space:normal nowrap;">
+      <cover-view class="{{item.classStr}} wxParse-{{item.tag}}" style="{{item.styleStr}}">
         <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
           <template is="wxParse1_Cover" data="{{item}}" />
         </block>
@@ -219,7 +219,7 @@
     </block>
     <!--其他块级标签-->
     <block wx:elif="{{item.tagType == 'block'}}">
-      <cover-view class="{{item.classStr}} wxParse-{{item.tag}}" style="{{item.styleStr}};white-space:normal nowrap;">
+      <cover-view class="{{item.classStr}} wxParse-{{item.tag}}" style="{{item.styleStr}}">
         <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
           <template is="wxParse1_Cover" data="{{item}}" />
         </block>
@@ -227,7 +227,7 @@
     </block>
 
     <!--内联标签-->
-    <cover-view wx:else class="{{item.classStr}} wxParse-{{item.tag}} wxParse-{{item.tagType}}" style="{{item.styleStr}};white-space:normal nowrap;">
+    <cover-view wx:else class="{{item.classStr}} wxParse-{{item.tag}} wxParse-{{item.tagType}}" style="{{item.styleStr}}">
       <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
         <template is="wxParse1_Cover" data="{{item}}" />
       </block>
@@ -332,12 +332,12 @@
     </block>
     <!--li类型-->
     <block wx:elif="{{item.tag == 'li'}}">
-      <cover-view class="{{item.classStr}} wxParse-li" style="{{item.styleStr}};white-space:normal nowrap;">
-        <cover-view class="{{item.classStr}} wxParse-li-inner" style="white-space:normal nowrap;">
-          <cover-view class="{{item.classStr}} wxParse-li-text" style="white-space:normal nowrap;">
-            <cover-view class="{{item.classStr}} wxParse-li-circle" style="white-space:normal nowrap;"></cover-view>
+      <cover-view class="{{item.classStr}} wxParse-li" style="{{item.styleStr}}">
+        <cover-view class="{{item.classStr}} wxParse-li-inner" >
+          <cover-view class="{{item.classStr}} wxParse-li-text" >
+            <cover-view class="{{item.classStr}} wxParse-li-circle" ></cover-view>
           </cover-view>
-          <cover-view class="{{item.classStr}} wxParse-li-text" style="white-space:normal nowrap;">
+          <cover-view class="{{item.classStr}} wxParse-li-text" >
             <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
               <template is="wxParse2_Cover" data="{{item}}" />
             </block>
@@ -358,7 +358,7 @@
 
     <!--a类型-->
     <block wx:elif="{{item.tag == 'a'}}">
-      <cover-view bindtap="wxParseTagATap" class="wxParse-inline {{item.classStr}} wxParse-{{item.tag}}" data-src="{{item.attr.href}}" style="{{item.styleStr}};white-space:normal nowrap;">
+      <cover-view bindtap="wxParseTagATap" class="wxParse-inline {{item.classStr}} wxParse-{{item.tag}}" data-src="{{item.attr.href}}" style="{{item.styleStr}}">
         <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
           <template is="wxParse2_Cover" data="{{item}}" />
         </block>
@@ -370,7 +370,7 @@
     </block>
     <!--其他块级标签-->
     <block wx:elif="{{item.tagType == 'block'}}">
-      <cover-view class="{{item.classStr}} wxParse-{{item.tag}}" style="{{item.styleStr}};white-space:normal nowrap;">
+      <cover-view class="{{item.classStr}} wxParse-{{item.tag}}" style="{{item.styleStr}}">
         <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
           <template is="wxParse2_Cover" data="{{item}}" />
         </block>
@@ -378,7 +378,7 @@
     </block>
 
     <!--内联标签-->
-    <cover-view wx:else class="{{item.classStr}} wxParse-{{item.tag}} wxParse-{{item.tagType}}" style="{{item.styleStr}};white-space:normal nowrap;">
+    <cover-view wx:else class="{{item.classStr}} wxParse-{{item.tag}} wxParse-{{item.tagType}}" style="{{item.styleStr}}">
       <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
         <template is="wxParse2_Cover" data="{{item}}" />
       </block>
@@ -484,12 +484,12 @@
     </block>
     <!--li类型-->
     <block wx:elif="{{item.tag == 'li'}}">
-      <cover-view class="{{item.classStr}} wxParse-li" style="{{item.styleStr}};white-space:normal nowrap;">
-        <cover-view class="{{item.classStr}} wxParse-li-inner" style="white-space:normal nowrap;">
-          <cover-view class="{{item.classStr}} wxParse-li-text" style="white-space:normal nowrap;">
-            <cover-view class="{{item.classStr}} wxParse-li-circle" style="white-space:normal nowrap;"></cover-view>
+      <cover-view class="{{item.classStr}} wxParse-li" style="{{item.styleStr}}">
+        <cover-view class="{{item.classStr}} wxParse-li-inner" >
+          <cover-view class="{{item.classStr}} wxParse-li-text" >
+            <cover-view class="{{item.classStr}} wxParse-li-circle" ></cover-view>
           </cover-view>
-          <cover-view class="{{item.classStr}} wxParse-li-text" style="white-space:normal nowrap;">
+          <cover-view class="{{item.classStr}} wxParse-li-text" >
             <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
               <template is="wxParse3_Cover" data="{{item}}" />
             </block>
@@ -510,7 +510,7 @@
 
     <!--a类型-->
     <block wx:elif="{{item.tag == 'a'}}">
-      <cover-view bindtap="wxParseTagATap" class="wxParse-inline {{item.classStr}} wxParse-{{item.tag}}" data-src="{{item.attr.href}}" style="{{item.styleStr}};white-space:normal nowrap;">
+      <cover-view bindtap="wxParseTagATap" class="wxParse-inline {{item.classStr}} wxParse-{{item.tag}}" data-src="{{item.attr.href}}" style="{{item.styleStr}}">
         <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
           <template is="wxParse3_Cover" data="{{item}}" />
         </block>
@@ -522,7 +522,7 @@
     </block>
     <!--其他块级标签-->
     <block wx:elif="{{item.tagType == 'block'}}">
-      <cover-view class="{{item.classStr}} wxParse-{{item.tag}};white-space:normal nowrap;" style="{{item.styleStr}}">
+      <cover-view class="{{item.classStr}} wxParse-{{item.tag}}" style="{{item.styleStr}}">
         <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
           <template is="wxParse3_Cover" data="{{item}}" />
         </block>
@@ -530,7 +530,7 @@
     </block>
 
     <!--内联标签-->
-    <cover-view wx:else class="{{item.classStr}} wxParse-{{item.tag}} wxParse-{{item.tagType}}" style="{{item.styleStr}};white-space:normal nowrap;">
+    <cover-view wx:else class="{{item.classStr}} wxParse-{{item.tag}} wxParse-{{item.tagType}}" style="{{item.styleStr}}">
       <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
         <template is="wxParse3_Cover" data="{{item}}" />
       </block>
