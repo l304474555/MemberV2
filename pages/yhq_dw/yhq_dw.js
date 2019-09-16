@@ -425,6 +425,7 @@ Page({
               let pages = getCurrentPages();
               let page = pages[pages.length - 2];
               let brandDayInfo = page.data.brandDayInfo;
+              let img;
 
               if (brandDayInfo != null) {
                 img = brandDayInfo.PageBgImage;
@@ -488,6 +489,7 @@ Page({
             let pages = getCurrentPages();
             let page = pages[pages.length - 2];
             let brandDayInfo = page.data.brandDayInfo;
+            let img;
             
             if (brandDayInfo != null) {
               img = brandDayInfo.PageBgImage;

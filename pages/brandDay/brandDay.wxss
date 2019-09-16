@@ -16,8 +16,11 @@ page {
 }
 
 .modal_fa2 cover-view {
-  /* white-space: normal nowrap; */
-  white-space: normal;
+  /* white-space: normal nowrap; *//* white-space: normal; */
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre-line;
+  display: block;
 }
 
 .returnHomePage {
@@ -36,22 +39,36 @@ page {
 }
 
 .memberCard {
-  position: relative;
+  /* position: relative;
   background-repeat: no-repeat;
   background-position: center;
   height: 380rpx;
+  border-radius: 8px; */
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: center;
   border-radius: 8px;
+  margin-top: 20rpx;
 }
 
 .memberCard>image {
-  width: 100%;
+  /* width: 100%;
   vertical-align: top;
   max-height: 200px;
   position: absolute;
-  height: 190px;
+  height: 190px; */
+  width: 100%;
+  vertical-align: top;
+  height: 180px;
 }
 
 .memberCard>.memberCode {
+  /* position: absolute;
+  text-align: center;
+  vertical-align: middle;
+  right: 10rpx;
+  z-index: 1;
+  bottom: 20rpx; */
   position: absolute;
   text-align: center;
   vertical-align: middle;
@@ -74,7 +91,7 @@ page {
 
 .memberCard>.position {
   position: absolute;
-  top: 20rpx;
+  top: 10rpx;
   right: 20rpx;
   z-index: 1;
 }
@@ -133,20 +150,29 @@ page {
 }
 
 .barCode {
-  margin: 48px 0 0 20px;
+  /* margin: 48px 0 0 20px;
   padding: 10px 10px 30px 10px;
   position: absolute;
   background-color: #fff;
   border-radius: 8px;
   width: 540rpx;
-  height: 160rpx;
-  /* height: 270rpx; */
+  height: 160rpx; *//* height: 270rpx; */
+  padding: 10px 10px 30px 0px;
+  position: absolute;
+  background-color: #fff;
+  border-radius: 8px;
+  width: 622rpx;
+  height: 186rpx;
+  top: 70rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
 }
 
 .barCode>.barCodeTitle {
   font-size: 30rpx;
   text-align: center;
-  padding: 8px;
+  /* padding: 8px; */
   color: #b2b2b2;
   /* margin-top: 20px; */
 }
@@ -156,9 +182,9 @@ page {
 }
 
 .barCode>.barCodePic>canvas {
-  width: 400rpx;
-  height: 100rpx;
-  margin: 0 auto;
+  width: 650rpx;
+  height: 160rpx;
+  /* margin: 0 auto; */
 }
 
 /*屏幕响应判断 iphone5 兼容 */
@@ -299,13 +325,13 @@ page {
 }
 
 .agreement checkbox {
-  transform: scale(0.6, 0.6);
+  transform: scale(0.9, 0.9);
 }
 
 .agreement>text {
   color: white;
   font-family: 'Alibaba';
-  font-size: 12px;
+  font-size: 35rpx;
 }
 
 .openBtn {
@@ -327,6 +353,7 @@ page {
 
 .rule {
   width: 100%;
+  color: white;
 }
 
 .rule>view {
@@ -377,3 +404,89 @@ button[class="modal_btn"]::after {
   pointer-events: none; */
 
 /* } */
+
+.brand-value {
+  position: relative;
+}
+
+.brand-bg-img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.brand-opened-img {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  border-radius: 0 5px 5px 0;
+}
+
+.brand-details {
+  position: absolute;
+  right: 120rpx;
+  top: 20rpx;
+  background-color: #565a66;
+  color: #f3dec6;
+  font-size: 24rpx;
+  padding: 10rpx 20rpx;
+  border-radius: 100px;
+}
+
+.brand-effectivedate {
+  position: absolute;
+  bottom: 20rpx;
+  right: 120rpx;
+  color: #78482f;
+  font-size: 28rpx;
+}
+
+.brand-equity {
+  text-align: right;
+  color: #fff;
+  font-size: 25rpx;
+  min-height: 55rpx;
+}
+
+.brand-equity font {
+  font-weight: bold;
+  color: #ebcd79;
+}
+
+.brand-checkbox {
+  position: absolute;
+  right: 16rpx;
+  top: 50%;
+  margin-top: -29rpx;
+  z-index: 2;
+}
+
+checkbox .wx-checkbox-input {
+  border-radius: 50%;
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.brand-value-tip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 3;
+  border-radius: 5px;
+}
+
+.back-index {
+  color: #fff;
+  font-size: 28rpx;
+  margin-top: 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-back {
+  width: 25rpx;
+  vertical-align: middle;
+}

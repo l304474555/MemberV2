@@ -113,5 +113,12 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+
+  /**
+   * 拒绝登录
+   */
+  refuseLogin(){
+    wx.navigateBack();
   }
 })

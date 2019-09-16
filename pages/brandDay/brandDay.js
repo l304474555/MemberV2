@@ -106,13 +106,37 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function() {
+    wx.showNavigationBarLoading();
 
+    // page.setData({
+    //   brandAmount: 0, //品牌金额
+    //   checkStatus: [], //品牌勾选列表
+    // });
+    this.data.isBrandCheck = false;
+    this.setData({
+      isBrandCheck: false,
+      brandAmount: 0,
+      checkStatus: [],
+      isBrandCheck: false,
+      isCodeError: false, //会员条形码是否加载错误
+      barCodeNum: '', //会员条形码编码
+      isShowBarCode: false, //是否展示会员码
+      isShowDetails: false, //是否查看详情弹框
+      isBrandMember: false,
+      brandList: [],
+    });
+    clearTimeout(this.data.brandOrderStatusTimeOutId);
+    wx.hideLoading();
+    this.onLoad();
+    wx.hideNavigationBarLoading(); //完成停止加载
+    wx.stopPullDownRefresh(); //停止下拉刷新
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function() {
+
 
   },
 
@@ -211,12 +235,17 @@ Page({
               self.setData({
                 isSelectCity: true
               });
+              wx.hideLoading();
             }
           });
         },
         fail(res) {
+          wx.hideLoading();
           self.setData({
             isSelectCity: false
+          });
+          wx.navigateTo({
+            url: '/pages/yhq_dw/yhq_dw?target=brandDay'
           });
         }
       });
@@ -239,7 +268,7 @@ Page({
       // self.setData({
       //   defaultAvatar: user.userInfo.avatarUrl
       // });
-      debugger
+
       myjCommon.callApi({
         interfaceCode: isMember_interface,
         biz: {
@@ -294,7 +323,6 @@ Page({
           sessionId: user.sessionId
         },
         success(res) {
-          
           console.log('调用WxMiniProgram.Service.GetBrandDayInfo成功');
 
           if (res.Code == '-1') {
@@ -355,8 +383,9 @@ Page({
     let brandId = event.currentTarget.dataset.id;
     let state = event.currentTarget.dataset.state;
     let isFull = event.currentTarget.dataset.isfull;
+    let isOpen = event.currentTarget.dataset.isopen;
 
-    if (state == 3 || isFull == 1) {
+    if (state == 3 || (isFull == 1 && isOpen != 1)) {
       return;
     }
     myjCommon.callApi({
@@ -619,7 +648,7 @@ Page({
           return brandIds.push(self.data.brandList[i].Id);
         }
       });
-      
+
       myjCommon.callApi({
         interfaceCode: openBrand_interface,
         biz: {
@@ -697,7 +726,7 @@ Page({
    */
   prePay(orderNo, sessionId, brandIds) {
     let self = this;
-debugger
+
     myjCommon.callApi({
       interfaceCode: prePay_interface,
       biz: {
@@ -729,9 +758,16 @@ debugger
           });
           return;
         }
+        let obj = JSON.parse(res.Result);
+        obj.success = function() {
+          wx.showLoading({
+            title: '支付回调中',
+          });
+          self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 500, orderNo, brandIds, sessionId);
+        }
         wx.hideLoading();
-        wx.requestPayment(JSON.parse(res.Result));
-        self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 5000, orderNo, brandIds, sessionId);
+        wx.requestPayment(obj);
+
       },
       fail(msg) {
         console.error(`调用接口Prepay失败：${JSON.stringify(msg)}`);
@@ -745,7 +781,7 @@ debugger
    */
   checkBrandOrderStatus(orderNo, brandIds, sessionId) {
     let self = this;
-
+    debugger
     myjCommon.callApi({
       interfaceCode: checkBrandOrderStatus,
       biz: {
@@ -755,7 +791,7 @@ debugger
       },
       success(res) {
         if (res.Code != "0") {
-          self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 2000, orderNo, brandIds, sessionId);
+          self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 500, orderNo, brandIds, sessionId);
           return;
         }
         self.setData({
@@ -765,10 +801,17 @@ debugger
           isBrandCheck: false
         });
         clearTimeout(self.data.brandOrderStatusTimeOutId);
+        wx.hideLoading();
+        wx.showModal({
+          title: '支付成功',
+          content: '开通成功,你所开通的品牌权益将会在5分钟后生效.',
+          showCancel: false
+        })
         self.onLoad();
       },
       fail(msg) {
         console.error(`调用接口CheckBrandOrderStatus失败：${JSON.stringify(msg)}`);
+        wx.hideLoading();
       }
     });
   },
