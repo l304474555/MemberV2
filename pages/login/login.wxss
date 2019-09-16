@@ -1,12 +1,60 @@
 /* pages/login/login.wxss */
-page{background-color: #ffefb1;}
 
-.tip_txt{color: #f56d09; font-size: 38rpx; font-weight: bold; position: absolute; top:28%; left: 0; right: 0; text-align: center}
+page {
+  background-color: #ffefb1;
+}
 
-.tip_txt2{color: #545454; font-size: 30rpx;  position: absolute; top:38%; left: 0; right: 0; text-align: center}
+.tip_txt {
+  color: #f56d09;
+  font-size: 38rpx;
+  font-weight: bold;
+  position: absolute;
+  top: 28%;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
 
-.tip_txt3{color: #9b4000; font-size: 30rpx; text-align: center; margin-top: 10px;}
+.tip_txt2 {
+  color: #545454;
+  font-size: 30rpx;
+  position: absolute;
+  top: 38%;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
 
-.tip_btn{ background-color: #d1121a; color: #fff; border-radius: 5px; padding: 10px 0; width: 100%; line-height: normal;}
+.tip_txt3 {
+  color: #9b4000;
+  font-size: 30rpx;
+  text-align: center;
+  margin-top: 10px;
+}
 
-.tip_logo{position: absolute; bottom:10px; left: 0; right: 0; margin: 0 auto;}
+.tip_btn {
+  background-color: #d1121a;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 0;
+  width: 100%;
+  line-height: normal;
+}
+
+.refuse_btn {
+  background-color: #d1121a;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 0;
+  width: 100%;
+  line-height: normal;
+  margin-top: 10px;
+}
+
+.tip_logo {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}

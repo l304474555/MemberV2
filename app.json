@@ -1,6 +1,6 @@
 {
   "pages": [
-        
+    
     "pages/member_index/member_index",
 "pages/Basketball_integral/Basketball_integral",
     "pages/login/login",
@@ -31,7 +31,7 @@
     "pages/yhq_squa_zl/yhq_squa_zl",
     "pages/wetchat_payment/wetchat_payment",
     "pages/sign/sign",
-    "pages/brandDay/brandDay",
+        "pages/brandDay/brandDay",
     "pages/brandMemberAgreement/brandMemberAgreement"
   ],
   "window": {
