@@ -1125,14 +1125,14 @@ Page({
   /**新人礼包 2018.05.21 */
   GetGiftBagActivity: function (cityName) {
     var that = this;
-    // myjCommon.getLoginUser(function (user) {
-    //   if (!user.isLogin) {
-    //     that.setData({
-    //       isShowUserInfoBtn: true
-    //     });
-    //     return;
-    //   }
-    var user = myjCommon.getCurrentUser()
+    myjCommon.getLoginUser(function (user) {
+      if (!user.isLogin) {
+        that.setData({
+          isShowUserInfoBtn: true
+        });
+        return;
+      }
+    // var user = myjCommon.getCurrentUser()
     if (!user.isLogin) { return }
       myjCommon.callApi({
         interfaceCode: "WxMiniProgram.Service.GetGiftBagActivity",
@@ -1168,7 +1168,7 @@ Page({
 
       //新人送积分 先注释
       that.GivingNewMemberGC(cityName, user.sessionId);
-    // });
+    });
   },
   /**加载首页7个模块 2019.07.15 */
   GetMemberIndexModules: function () {
