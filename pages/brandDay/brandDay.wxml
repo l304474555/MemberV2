@@ -94,11 +94,11 @@
     <block wx:for="{{brandList}}">
       <view>
         <view class="brand-value">
-          <image src="{{item.BgImage}}" mode="widthFix" class="brand-bg-img" bindtap="viewDetails" data-id="{{item.Id}}" data-state="{{item.State}}" data-isFull="{{item.IsFull}}" wx:if="{{item.State!=3}}"></image>
-          <image src="../img/brandDay/brand_opened.png" mode="widthFix" class="brand-opened-img" wx:if="{{item.IsOpen==1 && item.State!=3}}" bindtap="viewDetails" data-id="{{item.Id}}" data-state="{{item.State}}" data-isFull="{{item.IsFull}}"></image>
+          <image src="{{item.BgImage}}" mode="widthFix" class="brand-bg-img" bindtap="viewDetails" data-id="{{item.Id}}" data-state="{{item.State}}" data-isFull="{{item.IsFull}}" wx:if="{{item.State!=3}}" data-isopen="{{item.IsOpen}}"></image>
+          <image src="../img/brandDay/brand_opened.png" mode="widthFix" class="brand-opened-img" wx:if="{{item.IsOpen==1 && item.State!=3}}" bindtap="viewDetails" data-id="{{item.Id}}" data-state="{{item.State}}" data-isFull="{{item.IsFull}}" data-isopen="{{item.IsOpen}}"></image>
           <image src="../img/brandDay/coming_soon-min.png" mode="widthFix" class="brand-bg-img" wx:if="{{item.State==3}}"></image>
           <image src="../img/brandDay/brand_tip.png" mode="widthFix" class="brand-value-tip" wx:if="{{item.IsFull==1&&item.IsOpen!=1}}"></image>
-          <image src="../img/brandDay/brand_choice.png" mode="widthFix" class="brand-opened-img" wx:if="{{item.State!=3&&item.IsOpen!=1}}" bindtap="viewDetails" data-id="{{item.Id}}" data-state="{{item.State}}" data-isFull="{{item.IsFull}}"></image>
+          <image src="../img/brandDay/brand_choice.png" mode="widthFix" class="brand-opened-img" wx:if="{{item.State!=3&&item.IsOpen!=1}}" bindtap="viewDetails" data-id="{{item.Id}}" data-state="{{item.State}}" data-isFull="{{item.IsFull}}" data-isopen="{{item.IsOpen}}"></image>
           <checkbox-group class="brand-checkbox" bindchange="checkboxChange" data-checkid="{{index}}" style="{{item.IsOpen==1||item.State==3?'display:none':'display:inline-block'}}">
             <checkbox></checkbox>
           </checkbox-group>
@@ -108,33 +108,8 @@
         <view class="brand-equity" wx:if="{{item.IsOpen==1&&item.State!=3&&item.IsFull!=1||item.IsOpen==1}}">每周{{item.DisountCnt.DayOfWeek}}可享受优惠
           <font>{{item.DisountCnt.DayCnt}}</font>次，今天还剩
           <font>{{item.DisountCnt.BalanceCnt}}</font>次</view>
-        <view class="brand-equity" wx:if="{{item.IsOpen!=1||item.State==3||item.IsFull==1}}"></view>
+        <view class="brand-equity" wx:if="{{item.IsOpen!=1||item.State==3||(item.IsFull==1&&item.IsOpen!=1)}}"></view>
       </view>
-
-
-
-      <!-- <view class="brandItem">
-        <view class="brandCheckbox">
-          <image src="../img/brandDay/brand_member_open-min.png" wx:if="{{item.IsOpen==1}}"></image>
-          <checkbox-group bindchange="checkboxChange" data-checkid="{{index}}" style="{{item.IsOpen==1?'display:none':'display:inline-block'}}">
-            <checkbox disabled="{{item.State==3 || item.IsFull==1}}" checked="{{item.isSelected}}"></checkbox>
-          </checkbox-group>
-        </view>
-
-        <view class="brandBody" bindtap="viewDetails" data-id="{{item.Id}}" data-state="{{item.State}}" data-isFull="{{item.IsFull}}">
-          <view class="shelter" wx:if="{{item.State==3 || item.IsFull==1}}">
-            <image wx:if="{{item.State==3}}" src="../img/brandDay/coming_soon-min.png" mode="widthFix"></image>
-            <image wx:if="{{item.IsFull==1}}" src="../img/brandDay/full-min.png" mode="widthFix"></image>
-          </view>
-          <text wx:if="{{item.State!=3}}" style="color: white;font-family: 'Alibaba';font-size: 12px;position: absolute;margin-left: 80px;display:flex;height:80px;align-items:center;">
-        <text style="font-size:14px;">查看详情</text> 
-        有效期至{{item.EndTime}}
-          </text>
-          <image src="{{item.BgImage}}"></image>
-          <view></view>
-        </view>
-      </view>
-      <view class="brandTip" wx:if="{{item.IsOpen==1}}">每周{{item.DisountCnt.DayOfWeek}}可享受优惠{{item.DisountCnt.DayCnt}}次，今天剩余{{item.DisountCnt.BalanceCnt}}次</view> -->
     </block>
 
   </view>

@@ -5,5 +5,6 @@
   "backgroundTextStyle": "light",
   "navigationBarBackgroundColor": "#3a373e",
   "navigationBarTitleText": "品牌日活动",
-  "navigationBarTextStyle": "white"
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh":true
 }
