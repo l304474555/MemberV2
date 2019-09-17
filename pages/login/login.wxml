@@ -4,7 +4,7 @@
 
 <view style='margin:10px;'>
   <button class='tip_btn' open-type='getUserInfo' bindgetuserinfo='getUserInfoBtnClick'>立即登录</button>
-  <button class="refuse_btn" bindtap="refuseLogin">暂不登录</button>
+  <button class="refuse_btn" bindtap="refuseLogin">取消登录</button>
   <!--<view class='tip_txt3'>请点击“确定”按钮重新登录</view> -->
 </view>
 
