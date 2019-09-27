@@ -1,0 +1,213 @@
+.hw_start {
+  width: 100%;
+  height: calc(100vh - 30px);
+  position: relative;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 70rpx;
+}
+
+.hw_start .go_back {
+  position: absolute;
+  left: 10rpx;
+  top: 52rpx;
+  width: 131rpx;
+  height: 54rpx;
+  z-index: 99999;
+  background-image: url(https://mimage.myj.com.cn/MicroMallFileServer/Files/Excel/UploadExcel/201807/92734cf5e91cbdc1.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.hw_start .music {
+  position: absolute;
+  right: 32rpx;
+  top: 32rpx;
+  height: 76rpx;
+  width: 76rpx;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.hw_start .rota {
+  animation: rota 1.5s linear infinite;
+}
+
+.hw_start .title {
+  position: relative;
+  margin: 0 auto;
+  width: 578rpx;
+  height: 318rpx;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  animation: shake 1.5s linear infinite;
+}
+
+.hw_start .titleWrap {
+  position: relative;
+  margin: 0 auto;
+  width: 578rpx;
+  height: 0;
+  transform: translateY(-318rpx);
+}
+
+.hw_start .titleWrap .rule {
+  position: relative;
+  width: 139rpx;
+  height: 121rpx;
+  margin-top: 46rpx;
+  margin-right: 17rpx;
+  float: right;
+  background-image: url(https://24haowan-cdn.shanyougame.com/dingzhi/myj21/images/icon_rule.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.hw_start .titleWrap .rule::after {
+  content: '';
+  position: absolute;
+  width: 100rpx;
+  height: 108rpx;
+  top: -67rpx;
+  left: -30rpx;
+  background-image: url(https://24haowan-cdn.shanyougame.com/dingzhi/myj21/images/icon_click.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.hw_start .titleWrap .ribbon {
+  position: absolute;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.hw_start .titleWrap .ribbon1 {
+  width: 67rpx;
+  height: 60rpx;
+  right: 0;
+  top: 230rpx;
+  background-image: url(https://24haowan-cdn.shanyougame.com/dingzhi/myj21/images/ribbon1.png);
+}
+
+.hw_start .titleWrap .ribbon2 {
+  width: 66rpx;
+  height: 60rpx;
+  left: 0rpx;
+  top: 270rpx;
+  background-image: url(https://24haowan-cdn.shanyougame.com/dingzhi/myj21/images/ribbon2.png);
+}
+
+.hw_start .titleWrap .ribbon3 {
+  width: 58rpx;
+  height: 32rpx;
+  left: 0;
+  top: 120rpx;
+  background-image: url(https://24haowan-cdn.shanyougame.com/dingzhi/myj21/images/ribbon3.png);
+}
+
+.hw_start .subtitle {
+  position: relative;
+  z-index: 1;
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 286rpx;
+  height: 205rpx;
+  margin: 0 auto;
+}
+
+.hw_start .start_game {
+  position: relative;
+  z-index: 1;
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url(https://24haowan-cdn.shanyougame.com/dingzhi/myj21/images/btn_start.png?v=2);
+  width: 349rpx;
+  height: 106rpx;
+  margin: 365rpx auto 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.hw_start .rule_wrap {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 33;
+}
+
+.hw_start .rule_wrap .rule_detail {
+  position: relative;
+  width: 100%;
+  z-index: 66;
+}
+
+.hw_start .rule_wrap .close {
+  position: relative;
+  z-index: 55;
+  width: 88rpx;
+  height: 88rpx;
+  position: relative;
+  margin: 36rpx auto 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url(https://24haowan-cdn.shanyougame.com/dingzhi/myj21/images/icon_close.png);
+}
+
+.hw_start .rule_wrap .close::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 100rpx;
+  border-left: 4rpx solid #fff4e1;
+  left: 43rpx;
+  bottom: 88rpx;
+  z-index: 44;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.1, 1.1);
+  }
+}
+
+@keyframes shake {
+  0%, 50% {
+    transform: rotateZ(0);
+  }
+  25% {
+    transform: rotateZ(3deg);
+  }
+  75% {
+    transform: rotateZ(-3deg);
+  }
+}
+
+@keyframes rota {
+  0% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

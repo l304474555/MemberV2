@@ -1,0 +1,216 @@
+/* pages/cardGame/components/cardGame/cardGame.wxss */
+.game_bg {
+    height: 1721rpx;
+    width: 750rpx;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.CardGame {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    padding: 0 20rpx;
+    box-sizing: border-box;
+    padding: 0 30rpx;
+}
+
+.btn_exchange,
+.btn_toLottery,
+.title,
+.btn_rule,
+.btn_home,
+.prize_center,
+.cards,
+.card {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.btn_exchange,
+.btn_toLottery {
+    display: inline-block;
+    line-height: 70rpx;
+    width: 216rpx;
+    margin: 10rpx;
+    color: #fff;
+    font-size: 15px;
+    text-align: center;
+    letter-spacing: 4rpx;
+}
+
+.btn_home {
+    position: absolute;
+    top: 0;
+    height: 52rpx;
+    width: 132rpx;
+    padding: 35rpx 40rpx;
+    align-self: flex-start;
+}
+
+.btn_rule {
+    align-self: flex-end;
+    justify-self: end;
+    width: 115rpx;
+    height: 80rpx;
+    margin-top: 10rpx;
+    padding: 0 20rpx;
+}
+
+.prize_center {
+    height: 85rpx;
+    line-height: 120rpx;
+    width: 110rpx;
+    padding: 0 20rpx;
+}
+
+/* 卡片 */
+.cards {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap-reverse;
+    flex: 1;
+    width: 750rpx;
+    height: 718rpx;
+    box-sizing: border-box;
+    background-position: right center;
+}
+
+.cardNum {
+    position: absolute;
+    right: 0;
+    bottom: -10rpx;
+    z-index: 1;
+    transform: rotate(-15deg);
+    width: fit-content;
+    min-width: 30rpx;
+    line-height: 30rpx;
+    padding: 0 6rpx 0 6rpx;
+    box-sizing: border-box;
+    border-radius: 30rpx;
+    background-color: rgb(65, 185, 241);
+    text-align: center;
+    color: #fff;
+    font-size: 10px;
+}
+
+.cards-5 {
+    justify-content: flex-end;
+    padding: 60rpx 0rpx 0rpx 60rpx;
+}
+
+.card {
+    position: relative;
+    margin: 20rpx 0;
+    transform: rotate(15deg);
+}
+
+.card-1 {
+    width: 300rpx;
+    height: 444rpx;
+}
+
+.card-2 {
+    width: 248rpx;
+    height: 366rpx;
+    margin-right: 50rpx;
+}
+
+.card-3 {
+    width: 165rpx;
+    height: 260rpx;
+    margin-right: 20rpx;
+}
+
+.card-4 {
+    width: 165rpx;
+    height: 260rpx;
+    margin: 20rpx 40rpx 10rpx 50rpx;
+}
+
+.card-5 {
+    width: 200rpx;
+    height: 230rpx;
+}
+
+.card-6 {
+    width: 200rpx;
+    height: 230rpx;
+}
+
+.card-7 {
+    width: 155rpx;
+    height: 180rpx;
+    transform: rotate(0deg);
+}
+
+.card-8 {
+    width: 155rpx;
+    height: 180rpx;
+    transform: rotate(0deg);
+}
+
+.cardNum-7,
+.cardNum-8 {
+    transform: rotate(0deg);
+}
+
+.cardNum-1,
+.cardNum-2 {
+    right: -15rpx;
+    min-width: 40rpx;
+    line-height: 40rpx;
+    font-size: 16px;
+}
+
+.cardNum-3,
+.cardNum-4 {
+    right: -10rpx;
+}
+
+.title {
+    width: 664rpx;
+    height: 210rpx;
+    margin-top: 50rpx;
+}
+
+.prizeSum {
+    color: black;
+    font-weight: 350;
+}
+
+.enterBtn {
+    text-decoration: underline;
+    color: red;
+}
+
+.prizeSum {
+    margin-top: 10rpx;
+}
+
+@keyframes scale {
+    0% {
+        transform: rotate(15deg)
+    }
+
+    100% {
+        transform: rotate(15deg) scale(1.1)
+    }
+}

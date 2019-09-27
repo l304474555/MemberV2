@@ -1,0 +1,77 @@
+<!--pages/index/index.wxml-->
+<view class="integral-page" style="background-image: url({{static.bg}})">
+    <view class="tab-wrap">
+        <view class="line"></view>
+        <view class="item"
+            bindtap="selectTab"
+            data-index="0">
+            <image
+                class="img"
+                src="{{tabBgList.itemGet[0]}}"
+                mode="widthFix"
+                style="opacity: {{tabIndex===0?1:0}}"></image>
+            <image
+                class="img"
+                src="{{tabBgList.itemGet[1]}}"
+                mode="widthFix"
+                style="opacity: {{tabIndex===1?1:0}}"></image>
+        </view>
+        <view class="item"
+            bindtap="selectTab"
+            data-index="1">
+            <image
+                class="img"
+                src="{{tabBgList.itemUse[0]}}"
+                mode="widthFix"
+                style="opacity: {{tabIndex===0?1:0}}"></image>
+            <image
+                class="img"
+                src="{{tabBgList.itemUse[1]}}"
+                mode="widthFix"
+                style="opacity: {{tabIndex===1?1:0}}"></image>
+        </view>
+    </view>
+    <scroll-view
+        class="list-content"
+        data-type="get"
+        scroll-y
+        lower-threshold="400"
+        bindscrolltolower="loadmore"
+        style="opacity: {{tabIndex===0?1:0}};z-index: {{tabIndex===0?1:-1}}">
+        <view
+            class="item"
+            style="background-image: url({{static.itemBg}})"
+            wx:for="{{list.lGet}}"
+            wx:for-index="gIdx"
+            wx:for-item="get"
+            wx:key="gIdx">
+            <image class="img" src="{{get.img}}" mode="widthFix"></image>
+            <view class="info">
+                <view class="num">活动分: <view class="green">+{{get.integral}}</view></view>
+                <view class="time">{{get.time}}</view>
+            </view>
+        </view>
+    </scroll-view>
+    <scroll-view
+        class="list-content"
+        data-type="consume"
+        scroll-y
+        lower-threshold="400"
+        bindscrolltolower="loadmore"
+        style="opacity: {{tabIndex===1?1:0}};z-index: {{tabIndex===1?1:-1}}">
+        <view
+            class="item"
+            style="background-image: url({{static.itemBg}})"
+            wx:for="{{list.lUse}}"
+            wx:for-index="uIdx"
+            wx:for-item="use"
+            wx:key="uIdx">
+            <image class="img" src="{{use.img}}" mode="widthFix"></image>
+            <view class="info">
+                <view class="num">活动分: <view class="green" style="color: #f63555">-{{use.integral}}</view></view>
+                <view class="time">{{use.time}}</view>
+            </view>
+        </view>
+    </scroll-view>
+    <image class="logo" src="{{static.logo}}" mode="widthFix"></image>
+</view>

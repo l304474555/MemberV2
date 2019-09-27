@@ -1,0 +1,102 @@
+/* pages/cepingGame/components/toast/toast.wxss */
+.toastWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  color: #e20053;
+  /* display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; */
+  transition: opacity 1s;
+}
+
+.mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 0;
+}
+
+.toast {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  width: 65vw;
+  height: auto;
+  min-height: 1rpx;
+  padding: 40rpx 40rpx;
+  border-radius: 50rpx;
+  transform: translate(-50%, -50%);
+  font-size: 32rpx;
+  background-color: #ffffff;
+  /* overflow: visible !important; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fade-animate 0.3s linear;
+}
+
+.toast .icon {
+  width: 82rpx;
+  height: 82rpx;
+  margin-bottom: 20rpx;
+}
+
+.toast .btns {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20rpx;
+}
+
+.btns .btn {
+  width: 25vw;
+  height: auto;
+  padding: 20rpx;
+  text-align: center;
+  background-color: #e20053;
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 20rpx;
+}
+
+.finish .close {
+  position: absolute;
+  width: 72rpx;
+  height: auto;
+  top: 0rpx;
+  right: 75rpx;
+  z-index: 2;
+  animation: fade-animate 0.3s linear;
+}
+
+.finish {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 76vw;
+  height: 21vh;
+  padding: 40rpx 40rpx;
+}
+
+.text {
+  margin: 5rpx 0;
+  /* background-color: rgb(245, 208, 209); */
+  color: rgb(214, 40, 93 );
+}
+
+.wrap {
+  white-space: pre-wrap;
+  text-align: center;
+}

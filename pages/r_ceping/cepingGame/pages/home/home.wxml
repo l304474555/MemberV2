@@ -1,0 +1,45 @@
+<!--pages/cepingGame/pages/home/home.wxml-->
+<view class='page' catch:tap="checkIsMember">
+  <image
+    class='bg'
+    mode="widthFix"
+    src="{{static.img_home_bg}}"></image>
+  <image
+    class='logo'
+    mode="widthFix"
+    src="{{static.img_logo}}"></image>
+  <button
+    class="start-btn"
+    open-type='getUserInfo'
+    lang='zh_CN'
+    catch:getuserinfo='handleStart'
+    catch:tap="stop"
+    plain="true"
+    style="animation-name: {{played && game_chance === 0 ? '' : 'scale'}};background-image: url({{played && game_chance === 0 ? static.img_btn_myPoster : static.img_btn_start}});">
+  </button>
+  <view class='btns' style="bottom: {{played ? '120rpx' : '50rpx'}}">
+    <image
+      class='btn'
+      catch:tap="showRule"
+      mode="widthFix"
+      src="{{static.img_btn_rule}}"></image>
+      <!-- data-toast="rule" -->
+      <image
+      class='btn'
+      catch:tap="toMyPrize"
+      mode="widthFix"
+      data-toast="myPrize"
+      src="{{static.img_btn_prize}}"></image>
+  </view>
+  <view class="lottery-tip" wx:if="{{played}}">
+    <view class='lotteryDes'>剩余抽奖次数{{lottery_chance}}次，</view>
+    <view class="lotteryBtn {{lottery_chance > 0 ? 'on' : 'off' }}" catch:tap="handleLottery">点击立即抽奖</view>
+  </view>
+  <view class="rule_wrapper" wx:if="{{isShowRule}}">
+    <scroll-view upper-threshold="0" class="rule" scroll-y style="animation-name: {{animationName}};border-color: {{static.color_toast_btn_bg}}">
+      <view class="rule_contain" style="background-image: url({{static.img_bg_rule}})"></view>
+    </scroll-view>
+    <view class="rule_down" style="opacity: {{iconOpacity}};background-image: url({{static.img_btn_down}});"></view>
+    <view class="rule_close" catch:tap="closeRule" style="opacity: {{iconOpacity}};background-image: url({{static.img_icon_close}});"></view>
+  </view>
+</view>

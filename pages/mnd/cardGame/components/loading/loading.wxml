@@ -1,0 +1,20 @@
+<view class="Loading">
+  <view class="logo" style="background-image: url({{static.logo}})"/>
+  <view class="progress" style="background-image: url({{static.bg_loading}})">
+    <view 
+      class="heart" 
+      wx:for="{{heart}}" wx:key="{{index}}"
+      style="background-image: url({{static[item.type]}});animation: {{item.animation}};left: {{item.left}};" >
+    </view>
+    <view class="bar" style="width: {{percentage}}%;background-image: url({{static.loading_bar}});"></view>
+  </view>
+
+  <block class="image-wrapper">
+    <image 
+      class='preload_images' 
+      wx:for="{{preloadImg}}" wx:key="{{index}}" 
+      src="{{item}}" 
+      bindload="imageOnLoad" binderror="imageOnLoad"
+    />
+  </block>
+</view>

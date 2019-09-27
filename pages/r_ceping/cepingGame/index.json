@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+  "toasts":"./components/toast/toast",
+  "home":"./pages/home/home",
+  "question":"./pages/question/question",
+  "poster":"./pages/poster/poster",
+  "loading":"./pages/loading/loading"
+  
+  }
+}

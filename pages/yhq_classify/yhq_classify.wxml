@@ -1,0 +1,142 @@
+<view class="title_bg">
+  <view class="title_img">
+    <image src="../img/y01.jpg" mode="aspectFit" style="width:130px; height:38px;"></image>
+  </view>
+
+
+
+  <view class="title_name">Allen_冯</view>
+  <view class="title_tx"><image src='../img/y02.jpg' style='width:30px; height:30px;border-radius:30px;'></image></view>
+</view>
+<view style="width:100%; height:40px;background-color: #fff;x"></view>
+
+<view class="tab_bg">
+  <view class="tab_list tab_list_select">全场优惠</view>
+  <view class="tab_list">饮料</view>
+  <view class="tab_list">熟食</view>
+  <view class="tab_list">零食</view>
+  <view class="tab_list">酸奶</view>
+</view>
+<view style="width:100%; height:50px;"></view>
+
+
+<view class="yhq_kf"><image src="../img/y_kf.png" style="width:50px; height:50px;"></image></view>
+
+
+
+<view class="yhq_fa">
+  <view class="yhq_body">
+    <view class="yhq_spot">
+      <text>●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t</text>
+    </view>
+    <view class="yhq_spot2">
+      <text>●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t</text>
+    </view>
+    <view class="yhq_spot3">
+      <text>●</text>
+    </view>
+    <view class="yhq_spot4">
+      <text>●</text>
+    </view>
+    <view class="yhq_btn">
+      <text class="yhq_btn_txt">未\n\t开\n\t始</text>
+    </view>
+    <view class="yhq_tpye"><image src="../img/y09.jpg" mode="widthFix"></image></view>
+    <view class="yhq_value_fa">
+      <view class="yhq_value"><text class="yhq_value1">全场商品满18元享8.5折券【广东所有门店适用，烟和便民除外】</text></view>
+      <view class="yhq_value" style="margin-top:0;"><text class="yhq_value2">8.5折</text><text class="yhq_value3">满18元使用</text></view>
+      <view class="yhq_value" style="margin-top:0;"><text class="yhq_value1">抢购时间：2017.01.01-09.18</text></view>
+    </view>
+</view>
+
+  <view class="yhq_body">
+    <view class="yhq_spot">
+      <text>●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t</text>
+    </view>
+    <view class="yhq_spot2">
+      <text>●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t</text>
+    </view>
+    <view class="yhq_spot3">
+      <text>●</text>
+    </view>
+    <view class="yhq_spot4">
+      <text>●</text>
+    </view>
+    <view class="yhq_btn yhq_bg_red">
+      <text class="yhq_btn_txt">未\n\t开\n\t始</text>
+    </view>
+    <view class="yhq_tpye yhq_bg_red"><image src="../img/y10.jpg" mode="widthFix"></image></view>
+    <view class="yhq_value_fa">
+      <view class="yhq_value"><text class="yhq_value1">全场商品满18元享8.5折券【广东所有门店适用，烟和便民除外】</text></view>
+      <view class="yhq_value" style="margin-top:0;"><text class="yhq_value2 yhq_red_txt">8.5折</text><text class="yhq_value3 yhq_red_txt">满18元使用</text></view>
+      <view class="yhq_value" style="margin-top:0;"><text class="yhq_value1">抢购时间：2017.01.01-09.18</text></view>
+    </view>
+</view>
+
+
+<view class="yhq_body">
+    <view class="yhq_spot">
+      <text>●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t</text>
+    </view>
+    <view class="yhq_spot2">
+      <text>●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t</text>
+    </view>
+    <view class="yhq_spot3">
+      <text>●</text>
+    </view>
+    <view class="yhq_spot4">
+      <text>●</text>
+    </view>
+    <view class="yhq_btn yhq_bg_red">
+      <text class="yhq_btn_txt">未\n\t开\n\t始</text>
+    </view>
+    <view class="yhq_tpye yhq_bg_red"><image src="../img/y10.jpg" mode="widthFix"></image></view>
+    <view class="yhq_value_fa">
+      <view class="yhq_value"><text class="yhq_value1">全场商品满18元享8.5折券【广东所有门店适用，烟和便民除外】</text></view>
+      <view class="yhq_value" style="margin-top:0;"><text class="yhq_value2 yhq_red_txt">8.5折</text><text class="yhq_value3 yhq_red_txt">满18元使用</text></view>
+      <view class="yhq_value" style="margin-top:0;"><text class="yhq_value1">抢购时间：2017.01.01-09.18</text></view>
+    </view>
+</view>
+
+  <view class="yhq_body">
+    <view class="yhq_spot">
+      <text>●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t</text>
+    </view>
+    <view class="yhq_spot2">
+      <text>●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t●\n\t</text>
+    </view>
+    <view class="yhq_spot3">
+      <text>●</text>
+    </view>
+    <view class="yhq_spot4">
+      <text>●</text>
+    </view>
+    <view class="yhq_btn yhq_bg_gray">
+      <text class="yhq_btn_txt">未\n\t开\n\t始</text>
+    </view>
+    <view class="yhq_tpye yhq_bg_gray"><image src="../img/y11.jpg" mode="widthFix"></image></view>
+    <view class="yhq_value_fa">
+      <view class="yhq_value"><text class="yhq_value1">全场商品满18元享8.5折券【广东所有门店适用，烟和便民除外】</text></view>
+      <view class="yhq_value" style="margin-top:0;"><text class="yhq_value2 yhq_gray_txt">8.5折</text><text class="yhq_value3 yhq_gray_txt">满18元使用</text></view>
+      <view class="yhq_value" style="margin-top:0;"><text class="yhq_value1">抢购时间：2017.01.01-09.18</text></view>
+    </view>
+
+    
+</view>
+  
+</view>
+
+
+<!--领取成功提示框
+<view class="modal_bg"></view>
+<view class="modal_fa2">
+  <view style="padding:30px 10px;">
+    <image src="../img/y16.png" mode="widthFix"  class="modal_close"></image>
+    <image src="../img/y14.png" mode="widthFix" style="width:50px;"></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <text>领取成功！\n\t到店使用微信支付即可</text>
+    </view>
+    <button class='modal_btn' style='margin-top:30px;'>查看</button>
+  </view>
+</view>
+-->

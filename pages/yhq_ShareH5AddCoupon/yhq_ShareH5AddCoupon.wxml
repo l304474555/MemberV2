@@ -1,0 +1,53 @@
+
+<import src="../../wxParse/wxParse.wxml" />
+
+<view class='shareimg'>
+  <image src='{{activityInfo.ImageUrl}}' mode="widthFix"></image>
+</view>
+
+<form bindsubmit='addH5ShareCoupon'>
+  <view class='share_value' >
+    <input placeholder="输入手机号领取优惠券" name="mobile" class='share_input' style='margin-top:10px;'  type='number'/>
+    <button form-type='submit' class='share_btn' style='margin-top:10px;' disabled='{{disabled}}'>领取</button>
+  </view>
+</form>
+
+<view class='rule_fa' hidden='{{activityInfo.ActivityRule==null}}'>
+<view class=''></view>
+<template is="wxParse" data="{{wxParseData:article.nodes}}" />
+</view>
+
+<!-- 获取用户信息组件 -->
+<view class="modal_bg"  hidden='true'></view>
+<view class='modal_fa2' hidden='true'>
+  <view style="padding:30px 10px;">
+    <view class="modal_txt" style="margin-top:10px; color:#666; font-size:16px;">无法获取您的用户信息，请授权给我们应用以正常使用本应用的相关功能。</view>
+    <button class='modal_btn' style='margin-top:30px; font-size:16px;' open-type='getUserInfo' bindgetuserinfo='getUserInfoBtnClick'>确定</button>
+  </view>
+</view>
+<!-- 获取用户信息组件 -->
+
+<!--查看卡券弹框-->
+<view class="modal_bg" hidden='{{!isSuccess}}'></view>
+<view class="modal_fa2" hidden='{{!isSuccess}}'>
+  <view style="padding:12px 10px 20px 10px;">
+    <view class='modal_close3_new' bindtap='closeTask'>
+      <image src="../img/y_close2.png" mode="widthFix" style="margin-left: 0;margin-top: 10px;width: 22px;height: 22px;"  bindtap="closeTast"></image>
+    </view>
+
+    <view class="modal_title">温馨提示</view>
+    <view class='modal_value_txt_ot_fa'>
+     <view class='modal_value_txt_ot'>
+    恭喜您！获得美宜佳大礼包，请扫下面的二维码去查看。
+    </view>
+      <view class='modal_value_txt_ot'>
+      <image src="{{activityInfo.QRCodeImgLink}}" mode="widthFix" style="margin-left: 0;margin-top: 10px;width: 100%" bindtap='previewimg' data-src="{{activityInfo.QRCodeImgLink}}"></image>
+      </view>
+
+    </view>
+    <view class="modal_btn_fa">
+        <button class='modal_btn' style="margin-top:20px;display:inline-block;background-color: #d1121b;color:white;" bindtap="closeTast" >确定</button>
+    </view>
+  </view>
+</view>
+<!--查看卡券弹框-->

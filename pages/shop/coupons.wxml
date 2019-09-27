@@ -1,0 +1,212 @@
+
+
+<button bindtap='returnindex' class='foot_btn'>  返回首页</button>
+<view class='title_city' style='color:#d1121a;width:100%;height:40px;background-color:#fff;text-align:center;margin-bottom:10px;padding-top:10px;' hidden='{{storeCode==""?true:false}}'>{{storeCode}}{{storeName}}</view>
+
+
+<view class="yhq_fa" id="card_list_container" style="min-height:{{mainMinHeight}}px;float:left;margin:0 2.5%;">
+  <!--新版优惠券列表-->
+  <view class="yhq_body" wx:for="{{CouponList}}">
+    <view class="yhq_spot">
+      <image src="../img/spot.png" mode="widthFix" style="width:5px;"></image>
+    </view>
+    <view class="yhq_spot2">
+      <image src="../img/spot.png" mode="widthFix" style="width:5px;"></image>
+    </view>
+    <view class="r_yhq_spot3">
+      <image src="../img/r_spot.png" mode="widthFix" style="width:25rpx;"></image>
+    </view>
+    <view class="r_yhq_spot4">
+      <image src="../img/r_spot.png" mode="widthFix" style="width:25rpx;"></image>
+    </view>
+
+    <view class="yhq_tpye" bindtap='opencoupe' data-id="{{item.ActivityId}}">
+      <image src="{{item.ActivityTicketImgUrl}}" mode="widthFix" class='ticket_fa'></image>
+    </view>
+    <view class="r_yhq_value_fa" bindtap='opencoupe' data-id="{{item.ActivityId}}" data-datatype="1">
+      <view class="yhq_value" style='height:36px;'>
+        <text class="yhq_value1">【{{storeCode}}专属】{{item.ActivityTitle}}</text>
+      </view>
+      <view class="yhq_value" style="margin-top:0;">
+        <text class="yhq_value2">会员价{{item.TicketPrice}}元</text>
+        <!-- <text class="yhq_value3">会员价{{item.TicketPrice}}</text> -->
+      </view>
+      <view class="yhq_value" style="margin-top:0;">
+
+        <text class="yhq_value1">抢购时间：{{item.BuyBeginTime}}-{{item.BuyEndDate}}</text>
+
+
+      </view>
+    </view>
+
+    <view class="r_yhq_button_fa">
+      <!--未开始-->
+       <block wx:if="{{item.CardStatus=='未开始'}}">
+        <view class='r_btn_txt' style='margin-top:45rpx;'>距开抢还剩</view>
+        <view class='r_btn_value_fa' style='margin-top:6rpx'>
+          <view class='r_btn_time'>{{item.hour}}</view>
+          <view class='r_btn_mh'>:</view>
+          <view class='r_btn_time'>{{item.minute}}</view>
+          <view class='r_btn_mh'>:</view>
+          <view class='r_btn_time'>{{item.second}}</view>
+          <button class='{{item.CardStatus=="未开始"?".r_btn_yellow":"r_btn_red"}} mt5'>{{item.CardStatus}}</button>
+        </view>
+      </block>
+      <!--未开始-->
+
+      <!--立即领取-->
+      <block wx:if="{{item.CardStatus=='立即领取'}}">
+        <cprocess percent="{{item.Process}}" />
+        <form report-submit="true" bindsubmit='getCard'>
+          <view class='r_btn_red_fa'>
+            <button class='r_btn_red' form-type="submit" hover-stop-propagation="true" data-cardid="{{item.ActivityId}}" data-companycode="{{item.CompanyCode}}">立即领取</button>
+          </view>
+        </form>
+      </block>
+      <!--立即领取-->
+
+      <!--已领取-->
+      <block wx:if="{{item.CardStatus=='已领取'}}">
+        <image src="../img/r_lq.png" mode="widthFix" style="width:80%" class='r_btn_tip'></image>
+      </block>
+      <!--已领取-->
+
+      <!--已抢光-->
+      <block wx:if="{{item.CardStatus=='已抢光'}}">
+        <image src="../img/r_qg.png" mode="widthFix" style="width:80%" class='r_btn_tip'></image>
+      </block>
+      <!--已抢光-->
+
+    </view>
+  </view>
+</view>
+
+
+<!--查看卡券弹框-->
+<view class="modal_bg"  hidden='{{isCoupondtlTast?false:true}}'></view>
+<view class="modal_fa2"  hidden='{{isCoupondtlTast?false:true}}' style="top:50%; margin-top:-210px;text-align:left; width:85%;">
+  <view style="padding:12px 10px 20px 10px;">
+    <view class='modal_close3_new' bindtap='closeTask'>
+      <image src="../img/y_close2.png" mode="widthFix" style="margin-left: 0;margin-top: 10px;width: 22px;height: 22px;"></image>
+    </view>
+
+    <view class="modal_title">美宜佳优惠券</view>
+    <view class='modal_value_txt_ot_fa'>
+      <view class='modal_value_txt' style="text-align: center;">{{objcoupe.Name}}</view>
+      <view class='modal_value_txt_ot' style='display:none;'>使用时间：{{objcoupe.UseBeginTime}} 至 {{objcoupe.UseEndTime}}</view>
+      <view class='modal_value_txt_ot' style='color:red;'>本优惠券只需到店购物时，直接微信支付即可自动抵扣！</view>
+
+      <view class='modal_value_desc'>
+        1、优惠：会员价{{objcoupe.TicketPrice}}元
+      </view>
+      <view class='modal_value_desc'>
+        2、商品国际条码：{{objcoupe.BarCode}}
+      </view>
+      <view class='modal_value_desc'>
+        3、张数：每人限领1张
+      </view>
+      <view class='modal_value_txt_ot'>
+        使用规则：
+      </view>
+      <view class='modal_value_desc'>
+        1、范围：该券仅限在你领取的门店使用
+      </view>
+      <view class='modal_value_desc'>
+        2、流程：领券→选取对应商品→出示微信付款码→店员扫码，支付成功，自动减去优惠金额
+      </view>
+      <view class='modal_value_desc'>
+        3、限制：每次支付仅限使用1张优惠券
+      </view>
+      <view class='modal_value_desc'>
+        4、其他：本券只限购买对应商品时作抵扣金额用，不设找零或兑换现金
+      </view>
+      <view class='modal_value_desc'>
+        5、凡是含有可用优惠券的订单，不能拆开支付方式，只能使用整单微信支付，否则会出现无法使用优惠券的情况
+      </view>
+      <view class='modal_value_txt_ot'>
+        券使用顺序：
+      </view>
+      <view class='modal_value_desc'>
+        1、优先使用“优惠金额”最大的券
+      </view>
+      <view class='modal_value_desc'>
+        2、若优惠金额相同，优先使用“截止日期”较近的券
+      </view>
+      <view class='modal_value_desc'>
+        3、若上两级条件相同，优先使用“领取时间”较早的券
+      </view>
+
+    </view>
+    <view class="modal_btn_fa">
+      <!--优惠券-->
+      <block wx:if="{{objcoupe.CardStatus=='立即领取'}}">
+        <form report-submit="true" bindsubmit='getCard'>
+          <button form-type="submit" hover-stop-propagation="true" class='modal_btn' style="margin-top:20px;display:inline-block;background-color: #d1121b;color:white;" data-cardid="{{objcoupe.ActivityId}}" data-companycode="{{objcoupe.CompanyCode}}">{{objcoupe.CardStatus}}</button>
+        </form>
+      </block>
+      <!--优惠券-->
+
+      <block wx:if="{{objcoupe.CardStatus=='未开始'}}">
+        <button class='modal_btn' style="margin-top:20px;display:inline-block;background-color: #ffb71c;color:white;" bindtap="getCard" disabled='true' data-cardid="{{objcoupe.ActivityId}}">{{objcoupe.CardStatus}}</button>
+      </block>
+      <block wx:if="{{objcoupe.CardStatus=='已领取'}}">
+        <form report-submit="true" bindsubmit='getMemberCard'>
+          <button class='modal_btn' form-type="submit" hover-stop-propagation="true" style="margin-top:20px;display:inline-block;background-color: #50a837;color:white;" data-cardid="{{objcoupe.ActivityId}}">打开微信支付</button>
+        </form>
+      </block>
+      <block wx:if="{{objcoupe.CardStatus=='已抢光'}}">
+        <button class='modal_btn' style="margin-top:20px;display:inline-block;background-color: #D3D3D3;color:white;" disabled='true' data-cardid="{{objcoupe.ActivityId}}">{{objcoupe.CardStatus}}</button>
+      </block>
+
+    </view>
+  </view>
+</view>
+
+
+<!-- 获取用户信息组件 -->
+<view class="modal_bg" style="{{isShowUserInfoBtn?'display:block':'display:none'}}"></view>
+<view class='modal_fa2' style="{{isShowUserInfoBtn?'display:block':'display:none'}}">
+  <view style="padding:30px 10px;">
+    <view class="modal_txt" style="margin-top:10px; color:#666; font-size:16px;">无法获取您的用户信息，请授权给我们应用以正常使用本应用的相关功能。</view>
+    <button class='modal_btn' style='margin-top:30px; font-size:16px;' open-type='getUserInfo' bindgetuserinfo='getUserInfoBtnClick'>确定</button>
+  </view>
+</view>
+<!-- 获取用户信息组件 -->
+
+<!--非会员-->
+<view class="modal_bg" style="{{noMemberTask?'display:block':'display:none'}}"></view>
+<view class="modal_fa2" style="{{noMemberTask?'display:block':'display:none'}}">
+  <view style="padding:30px 10px;">
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close3" bindtap='closeTask'></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <!--<text>领取成功，可在"我的券"页面中查看，到店使用微信支付即可核销</text>-->
+      <text>您还不是会员,点击[马上成为会员]注册会员以享受更多优惠哦~
+</text>
+    </view>
+
+    <form bindsubmit="getMemberCard" report-submit='true'>
+      <button form-type="submit" class='modal_btn' style='margin-top:30px;'>马上成为会员</button>
+    </form>
+  </view>
+</view>
+<!--非会员-->
+
+
+<!--领取成功弹出框-->
+ <view class="modal_bg"  hidden='{{isSucessTask?false:true}}'></view>
+<view class="modal_fa_ew" style="top:50%; margin-top:-120px;" hidden='{{isSucessTask?false:true}}'>
+  <view style="padding:20px 0 10px 0;">
+    <view class="modal_txt">
+      <text style='font-size:18px;'>领取成功</text>
+    </view>
+    <view class="modal_txt" style="margin-top:15px;padding:0 10px;">
+      <text style='font-size:14px;color:#9a9a9a;'>券将在3分钟内派发到您的账户上，请在“我的券”查看券信息，谢谢！</text>
+    </view>
+    <view class="modal_txt" style="margin-top:15px;border-top:1px solid #ddd;padding-top:10px;">
+      <form bindsubmit="closeTask" report-submit='true'>
+        <button form-type="submit" class='modal_btn' style='background-color:transparent;border:0;color:#3dc61f;font-size:17px;'>确定</button>
+      </form>
+    </view>
+  </view>
+</view> 
+<!--领取成功弹框-->

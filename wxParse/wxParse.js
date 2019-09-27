@@ -38,7 +38,7 @@ function wxParse(bindName = 'wxParseData', type='html', data='<div class="color:
     var converter = new showdown.Converter();
     var html = converter.makeHtml(data);
     transData = HtmlToJson.html2json(html, bindName);
-    //console.log(JSON.stringify(transData, ' ', ' '));
+    console.log(JSON.stringify(transData, ' ', ' '));
   }
   transData.view = {};
   transData.view.imagePadding = 0;
@@ -84,12 +84,6 @@ function calMoreImageInfo(e, idx, that, bindName) {
   var temImages = temData.images;
   //因为无法获取view宽度 需要自定义padding进行计算，稍后处理
   var recal = wxAutoImageCal(e.detail.width, e.detail.height,that,bindName); 
-  // temImages[idx].width = recal.imageWidth;
-  // temImages[idx].height = recal.imageheight; 
-  // temData.images = temImages;
-  // var bindData = {};
-  // bindData[bindName] = temData;
-  // that.setData(bindData);
   var index = temImages[idx].index
   var key = `${bindName}`
   for (var i of index.split('.')) key+=`.nodes[${i}]`

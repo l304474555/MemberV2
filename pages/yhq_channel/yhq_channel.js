@@ -1,8 +1,9 @@
+
 // pages/yhq_index/yhq.js
 var app = getApp();
 var myjCommon = require("../../utils/myjcommon.js");
 var WxParse = require('../../wxParse/wxParse.js');
-
+var QQMapWX = require('../../map/qqmap-wx-jssdk.js');
 Page({
 
   /**
@@ -33,10 +34,87 @@ Page({
     channel: 1, //投放渠道
     GiftBag: "", //活动大礼包
     currGiftBagId: "", //当前礼包活动列表Id
-    isBag: false,
-    isBagsucess: false,  //礼包领取成功弹出框
-    isNoMember: false,//不是会员弹出框 礼包
-    currAppid: "wxc94d087c5890e1f8" //当前小程序appid
+    isOpenPage: false,
+    currAppid: "wx55595d5cf709ce79", //当前小程序的appid
+    clock: '',
+    hr: 0, //倒计时：时。分。秒
+    minite: 0,
+    second: 0,
+    isShowUserInfoBtn:false,
+    isSending:false,
+    /*专题页可放积分兑换功能需求 add by 黎梅芳 20190715*/
+    currCity:'',//当前定位的城市
+    LoadingDesc:'',
+    isSelectCity:false,
+    key: "WJFBZ-QVMWX-DKE4Y-7R7MN-TZN7H-3GFBP",
+    isEnave: false, //积分不足弹框
+    isChange: false, //确认是否兑换弹框
+    disabled: false,
+    cardinfo: null, //券信息
+    deducContent: '',
+    forwardCnt: 0,
+    province:'',
+    isSucessTask:false
+  },
+  /**定位用户所在的城市 add by 黎梅芳 20190715 */
+  location:function()
+  {
+   //先判断全局城市有没有如果有直接取全局城市，没有则重新定位
+    if (app.globalData.currCity != '' && app.globalData.currProvince != '')
+   {
+     this.setData({
+       currCity: app.globalData.currCity,
+       province: app.globalData.currProvince
+     });
+   }else
+   {
+     let that=this;
+     //调用微信api获取用户所在的经纬度，通过经纬度调用腾讯地图获得用户所在的城市
+      wx.getLocation({
+        type: 'wgs84',
+        success: function (res) {
+          var latitude = res.latitude
+          var longitude = res.longitude
+          // 调用接口 根据经纬度去获取所在城市
+          that.setData({
+            LoadingDesc: "城市定位中，请稍候……"
+          });
+          var demo = new QQMapWX({
+            key: that.data.key // 必填
+          });
+          demo.reverseGeocoder({
+            location: {
+              latitude: latitude,
+              longitude: longitude
+            },
+            success: function (res) {
+              that.setData({
+                LoadingDesc: "",
+                currCity: res.result.address_component.city,
+                province: res.result.address_component.province
+              });
+              app.globalData.currCity = res.result.address_component.city;
+              app.globalData.currProvince = res.result.address_component.province;
+              app.globalData.latitude = res.result.address_component.latitude;
+              app.globalData.longitude = res.result.address_component.longitude;
+            },
+            fail: function (res) { 
+              that.setData({
+                LoadingDesc: "",
+                isSelectCity: true
+              });
+            },
+            complete: function (res) {}
+          });
+        },
+        fail: function (res) {
+          that.setData({
+            isSelectCity:true
+          });
+         },
+        complete: function (res) { }
+      });
+   }
   },
   backIndex: function ()//返回首页
   {
@@ -48,36 +126,89 @@ Page({
   //显示banner跳转----
   renderBannerDialog: function (event) {
     var that=this;
-    //类型：0.不跳转  1.跳转链接  2.优惠券小程序 3.会员小程序 4.外卖小程序
+    //类型： 1：不跳转 2：跳转小程序 3：跳转频道页  4：跳转链接
     var typeid = event.currentTarget.dataset.ptype;
+    //typeid=5;
     var bannerUrl = event.currentTarget.dataset.jumpurl;
-    var url = event.currentTarget.dataset.url;
+    //appid
     var appid = event.currentTarget.dataset.appid;
-    if (typeid == 4) {
-      wx.navigateTo({
-        url: '../bannerWeb/bannerWeb?bannerUrl=' + bannerUrl
-      })
-    } else if (typeid == 2) {
-      if (appid == that.data.currAppid) //跳转到当前小程序的其他页面
-      {
-        wx.reLaunch({
-          url: url,
-        })
-      } else //跳转到其他小程序
-      {
-        wx.navigateToMiniProgram({
-          appId: appid,
-          path: url,
-          envVersion: 'release',
-          success(res) {
+    //跳转页面路径
+    var url = event.currentTarget.dataset.url;
+    //0：广告图 1：视频
+    var bannertype = event.currentTarget.dataset.bannertype;
+    //bannertype=1;
+    //视频链接
+    var videoUrl = event.currentTarget.dataset.videourl;
+    //视频封面图片
+    var poster = event.currentTarget.dataset.imageurl;
+    //bannerId
+    var bannerId = event.currentTarget.dataset.id;
+    //频道id
+    var channelid = event.currentTarget.dataset.channelid;
+
+    //bannertype :0广告图 1:视频
+    if (bannertype == 0) {
+      myjCommon.getLoginUser(function (user) {
+        if (!user.isLogin) {
+          that.setData({
+            isShowUserInfoBtn: true
+          });
+          return;
+        }
+        myjCommon.callApi({
+          interfaceCode: "WxMiniProgram.Service.BannerCount",
+          biz: { sessionId: user.sessionId, bannerId: bannerId },
+          success: function (res) {
+            console.log(res)
+          },
+          fail: function (msg) {
+            console.log("计算浏览人数失败：" + JSON.stringify(msg));
+          },
+          complete: function (res) {
           }
-        });
-      }
-    } else if (typeid == 3) {
-      wx.navigateTo({
-        url: '../yhq_channel/yhq_channel?channelId=' + channelid
-      })
+        })
+
+
+        if (typeid > 1) {
+          if (typeid == 4) {//跳转到网页
+            wx.navigateTo({ url: '../bannerWeb/bannerWeb?bannerUrl=' + bannerUrl })
+          } else if (typeid == 3)//频道页
+          {
+            app.channelId = channelid;
+            wx.redirectTo({ 
+              url: '../yhq_channel/yhq_channel',
+              success:function()
+              {
+                console.log("哈哈哈")
+              }
+            });
+            
+          }
+          else if (typeid == 2) {//跳转到小程序
+            if (appid == that.data.currAppid) //跳转到当前小程序的其他页面
+            {
+              wx.reLaunch({
+                url: url,
+              })
+            } else //跳转到其他小程序
+            {
+              wx.navigateToMiniProgram({
+                appId: appid,
+                path: url,
+                envVersion: 'release',
+                success(res) {
+                }
+              });
+            }
+          }
+        }
+
+      });
+
+    } else if (bannertype == 1){
+      wx.navigateTo({ url: '../yhq_video/yhq_video?videoId=' + bannerId })
     }
+
   },
 
   closeBannerDialog: function () {
@@ -103,11 +234,69 @@ Page({
   getCard: function (event) {
     var cardId = event.detail.target.dataset.cardid;
     var formId = event.detail.formId;
-    var cardInfo = this.getCardInfo(cardId);
+
+    //劵类型 0：支付劵 1：优惠劵 2：广告区
+    var coupontype = event.detail.target.dataset.coupontype;
+    // 跳转方式：跳转小程序，跳转频道页，跳转链接
+    var jump = event.detail.target.dataset.jump;
+    //跳转小程序的Appid
+    var appid = event.detail.target.dataset.appid;
+    //跳转小程序的页面路径
+    var pagepath = event.detail.target.dataset.pagepath;
+    if (pagepath != undefined) {
+      pagepath = pagepath.trim();
+    }
+
+    //频道Id
+    var channelpageId = event.detail.target.dataset.channelpageid;
+    //跳转网页链接
+    var bannerUrl = event.detail.target.dataset.jumplink;
+    var that=this;
+    var cardInfo = that.getCardInfo(cardId);
+    
     console.log(cardInfo.CardStatus)
     if (cardInfo.CardStatus != "立即领取") {
       return;
     }
+    if (coupontype == 2) { //广告区
+      that.data.isSending = false;
+      if (jump == "跳转小程序") {
+        if (appid == that.data.currAppid) //跳转到当前小程序的其他页面
+        {
+          wx.reLaunch({
+            url: pagepath,
+            success: function () {
+              console.log("success")
+            }
+          })
+        } else //跳转到其他小程序
+        {
+          wx.navigateToMiniProgram({
+            appId: appid,
+            path: pagepath,
+            envVersion: 'release',
+            success(res) { }
+          });
+        }
+
+      }
+      if (jump == "跳转频道页") {
+        that.setData({
+          isHowtast: false
+        });
+        wx.navigateTo({
+          url: '../yhq_channel/yhq_channel?channel=' + channelpageId
+        })
+      }
+      if (jump == "跳转链接") {
+        that.setData({
+          isHowtast: false
+        });
+        wx.navigateTo({
+          url: '../bannerWeb/bannerWeb?bannerUrl=' + bannerUrl
+        })
+      }
+    } else {
     wx.showLoading({
       title: '正在提交……',
       mask: true
@@ -115,11 +304,6 @@ Page({
     var that = this;
     myjCommon.getLoginUser(function (user) {
       if (!user.isLogin) {
-        //wx.showModal({
-        //  title: '提示',
-        //  content:"登录失败，请稍后重试。",
-        //  showCancel:false
-        //});
         that.setData({
           isShowUserInfoBtn: true
         });
@@ -127,19 +311,31 @@ Page({
         return false;
       }
       var mflag = "0";
-      //if (!wx.navigateToMiniProgram){
-      //  mflag = "1";
-      //}
       myjCommon.callApi({
         interfaceCode: "WxMiniProgram.Service.AddUserCard",
-        biz: { cardId: cardId, sessionId: user.sessionId, mflag: mflag, source: 1, formId: formId },
+        biz: { 
+          cardId: cardId, 
+          sessionId: user.sessionId,
+          mflag: mflag, 
+          source: 1, 
+          formId: formId },
         success: function (res) {
           if (res.Code == "0") {
-            wx.showModal({
-              title: '领取成功',
-              content: "请直接使用微信支付核销，每次支付仅限使用1张优惠券，此券仅限购买本品使用 。",
-              showCancel: false
-            });
+            if (cardInfo.GiftType==2)//兑换码
+            {
+              wx.showModal({
+                title: '领取成功',
+                content: '请在美宜佳会员小程序--积分换券--礼品的“兑换记录”查看您的兑奖码',
+                showCancel: false
+              });
+            }else
+            {
+              wx.showModal({
+                title: '领取成功',
+                content: "券将在3分钟内派发到您的账户上，请在“我的券”查看券信息，谢谢！",
+                showCancel: false
+              });
+            }
             that.setData({
               isHowtast: false
             });
@@ -158,7 +354,6 @@ Page({
               showCancel: false
             });
           }
-          if (parseInt(res.Result, 10) < 1) {
             cardInfo.CardStatus = "已领取";
             if (that.data.objcoupe != null && that.data.objcoupe.Id == cardInfo.Id) {
               that.data.objcoupe.CardStatus = "已领取";
@@ -167,7 +362,6 @@ Page({
               cardList: that.data.cardList,
               objcoupe: that.data.objcoupe
             });
-          }
         },
         fail: function (msg) {
           console.log("优惠券领取失败：" + JSON.stringify(msg));
@@ -183,6 +377,7 @@ Page({
       });
 
     });
+    }
   },
   //关闭会员卡对话框
   closeGetCardModal: function () {
@@ -225,16 +420,20 @@ Page({
     that.setData({
       objcoupe: null,
       isHowtast: false,
-      isBagsucess: false,
-      isNoMember: false,
-      isBag: false
-
+      isChange:false,
+      isSucessTask:false
     })
   },
   //载入券列表
   loadCardList: function () {
     var that = this;
-    var curUser = myjCommon.getCurrentUser();
+    myjCommon.getLoginUser(function (user) {
+      if (!user.isLogin) {
+        that.setData({
+          isShowUserInfoBtn: true
+        });
+        return;
+      }
     if (that.data.pageIndex == 1) {
       that.setData({
         cardList: []
@@ -242,13 +441,19 @@ Page({
     }
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.GetChannelCoupons",//获取频道券列表
-      biz: { channelId: app.channelId, pageSize: that.data.pageSize, pageIndex: that.data.pageIndex, sessionId: curUser.sessionId },
+      biz: { 
+        channelId: app.channelId, 
+        pageSize: that.data.pageSize, 
+        pageIndex: that.data.pageIndex, 
+        sessionId: user.sessionId 
+        },
       success: function (res) {
         console.log(res);
         var list = that.data.cardList.concat(res.Data);
         that.setData({
           cardList: list
         });
+        that.countdown("");
         //是否加载完
         var pCount = parseInt(res.Total / that.data.pageSize);
         if (res.Total % that.data.pageSize > 0) {
@@ -261,22 +466,14 @@ Page({
         }
       },
       fail: function (msg) {
-        console.log("加载失败：" + JSON.stringify(msg));
-        /*
-        wx.showModal({
-          title: '页面加载失败',
-          content: "目前太多人了﹋o﹋请稍后再试！",
-          showCancel: false
-        });
-        */
+        console.log("GetChannelCoupons失败：" + JSON.stringify(msg));
       },
       complete: function (res) {
-
-        //console.log("testApi完成：" + JSON.stringify(res));
         that.setData({
           isLoading: false
         });
       }
+    });
     });
   },
 
@@ -284,8 +481,6 @@ Page({
   //获取页面配置（广告）
   loadPageConfig: function () {
     var that = this;
-    console.log("pp")
-    console.log(that.data.channelId)
     wx.getSystemInfo({
       success: function (res) {
         console.log(res);
@@ -299,15 +494,21 @@ Page({
       interfaceCode: "WxMiniProgram.Service.GetChannelBanner",//获取频道Banner
       biz: { channelId: app.channelId },
       success: function (res) {
-        console.log(4546)
-        console.log(res)
+        console.log(res);
+        /**禁止转发 2018.05.23 */
+        if(res.length > 0)
+        {
+          if (res[0].IsNoForward) {
+            wx.hideShareMenu()
+          }
+        }
         that.setData({
           bannerList: res,
         });
         that.getLoginUserAndLoad();
       },
       fail: function (msg) {
-        console.log("获取页面配置失败：" + JSON.stringify(msg));
+        console.log("GetChannelBanner失败：" + JSON.stringify(msg));
 
         wx.hideLoading();
       },
@@ -331,9 +532,6 @@ Page({
           userInfo: user.userInfo,
           isShowUserInfoBtn: false
         });
-
-        //    that.loadCardList();
-
       }
     });
 
@@ -345,131 +543,64 @@ Page({
     }
   },
 
-  //弹出礼包活动 
-  GetGiftBagActivity: function () {
-    var that = this;
-    myjCommon.getLoginUser(function (user) {
-      if (!user.isLogin) {
-        //wx.showModal({
-        //  title: '提示',
-        //  content: "登录失败，请稍后重试。",
-        //  showCancel: false
-        //});
-        that.setData({
-          isShowUserInfoBtn: true
-        });
-        return;
-      }
-      myjCommon.callApi({
-        interfaceCode: "WxMiniProgram.Service.GetGiftBagActivity",
-        biz: { sessionId: user.sessionId, channel: that.data.channel },
-        success: function (res) {
-          console.log("新人礼包")
-          console.log(res);
-          /*if (res.Code != null) {
-            //不是会员，弹出“成为会员”弹出框
-            if (res.Code == "301") {
-              that.setData({
-                isShowGetCardInfo: true
-              })
-              return;
-            }
-          }*/
-
-          if (res.Result != null) {
-            console.log(666)
-            if (res.Result.length > 0) {
-              that.setData({
-                GiftBag: res.Result[0].ActivityName,
-                currGiftBagId: res.Result[0].Id,
-                isBag: true
-              });
-            }
-          }
-
-        },
-        fail: function (msg) {
-          console.log("礼包加载失败：" + JSON.stringify(msg));
-          /*
-          wx.showModal({
-            title: '提示',
-            content: "加载失败，请重试或与客服联系。" + JSON.stringify(msg),
-            showCancel: false
-          });
-          */
-        },
-        complete: function (res) {
-          console.log("礼包加载完成：" + JSON.stringify(res));
-        }
-      });
-    });
-  },
-  //领取礼包
-  getBag: function (e) {
-    var fromId = e.detail.formId;
-    var that = this;
-    myjCommon.getLoginUser(function (user) {
-      if (!user.isLogin) {
-        //wx.showModal({
-        //  title: '提示',
-        //  content: "登录失败，请稍后重试。",
-        //  showCancel: false
-        //});
-        that.setData({
-          isShowUserInfoBtn: true
-        });
-        return;
-      }
-      myjCommon.callApi({
-        interfaceCode: "WxMiniProgram.Service.AddMemberGiftBag",
-        biz: { sessionId: user.sessionId, channel: that.data.channel, giftBagId: that.data.currGiftBagId, formId: fromId },
-        success: function (res) {
-          console.log(res);
-          if (res.Code != null) {
-            //不是会员，弹出“成为会员”弹出框
-            if (res.Code == "301") {
-              that.setData({
-                isNoMember: true,
-                isBag: false
-              })
-              return;
-            }
-          }
-
-          if (res.Result.msg == "成功") {
-            that.setData({
-              isBag: false,
-              isBagsucess: true
-            })
-          }
-        },
-        fail: function (msg) {
-          console.log("领取失败：" + JSON.stringify(msg));
-          wx.showModal({
-            title: '领取失败',
-            content: "目前太多人了﹋o﹋请稍后再试。",
-            showCancel: false
-          });
-        },
-        complete: function (res) {
-          console.log("礼包领取完成：" + JSON.stringify(res));
-
-        }
-      });
-    });
-  },
-
-
-
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log("channelId:" + options.channel);
-    //options.channel ="t432327716";
+    //测试
+   // app.channelId = "f1300590148";
+    console.log(options.channel)
     //获取频道参数:频道ID；
     if (options.channel != undefined) {
       app.channelId = options.channel;
+    }
+    /**加载广告图 */
+    this.loadPageConfig();
+    /**定位 */
+    this.location();
+  },
+  setTicketStatus: function () {
+    if (this.data.isOpenPage) {
+      var list = this.data.cardList;
+      var isChanged = false;
+      for (var i = 0; i < list.length; i++) {
+        var item = list[i];
+        if (item.CardStatus != "未开始" && item.CardStatus != "立即领取") {
+          continue;
+        }
+        var spArr = item.HBeginTime.split('T');
+        var spDate = spArr[0].split('-');
+        var spTime = spArr[1].split(':');
+        var begin = new Date(spDate[0], spDate[1] - 1, spDate[2], spTime[0], spTime[1], spTime[2]).getTime();
+
+        var now = new Date().getTime();
+        if (item.CardStatus == "未开始") {
+          if (begin <= now) {
+            item.CardStatus = "立即领取";
+            isChanged = true;
+            //console.log("状态改变");
+          }
+        }
+        else{
+          var spArr1 = item.HEndTime.split('T');
+          var spDate1 = spArr1[0].split('-');
+          var spTime1 = spArr1[1].split(':');
+          var end = new Date(spDate1[0], spDate1[1] - 1, spDate1[2], spTime1[0], spTime1[1], spTime1[2]).getTime(); //new Date(item.HEndTime).getTime();
+          if(end <= now){
+            item.CardStatus = "已结束";
+            isChanged = true;
+          }
+        }
+      }
+      if (isChanged) {
+        this.setData({
+          cardList: list
+        });
+      }
+      var that = this;
+      setTimeout(function () {
+        that.setTicketStatus();
+      }, 1000);
     }
   },
 
@@ -484,7 +615,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.data.isOpenPage = true;
     this.setData({
       currentType: 0,
       pageIndex: 1,
@@ -492,20 +623,27 @@ Page({
       isLoading: true,
       isCompleted: false
     });
-    this.loadPageConfig();
-    this.GetGiftBagActivity();
-    //this.getLoginUserAndLoad();
     console.log("index onShow");
+    console.log(app.channelId);
     if (app.channelId != undefined) {
       this.loadCardList();
+      this.setTicketStatus();
     }
-
+    if (app.currCity)
+    {
+      this.setData({
+        currCity: app.currCity,
+        province: app.currProvince
+      });
+    }
+  
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
+    this.data.isOpenPage = false;
     console.log("onHide");
   },
 
@@ -513,6 +651,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
+    this.data.isOpenPage = false;
     console.log("onUnload");
   },
 
@@ -574,6 +713,273 @@ Page({
   bindchange: function (e) {
     this.setData({ current: e.detail.current })
   },
+  /**倒计时 */
+  /* 毫秒级倒计时 */
+  countdown: function (total_micro_second) {
+    var that = this;
+    var data = that.data.cardList;
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].CardStatus == "立即领取" && data[i].CouponType !=2) {
+        //计算百分比进度条
+        if (((data[i].Stocks - data[i].ReStocks) / data[i].Stocks) * 100 < 1) {
+          data[i].Process = 1;
+        } else {
+          data[i].Process = parseInt(((data[i].Stocks - data[i].ReStocks) / data[i].Stocks) * 100)
+        }
+      }
+
+      if (data[i].CardStatus == "未开始") {
+        var begintime_ms = Date.parse(new Date(that.getcurDate().replace(/-/g, '/'))); //begintime 为开始时间
+        var endtime_ms = Date.parse(new Date(data[i].BeginTime.replace(/-/g, '/')));   // endtime 为结束时间 
+        var timeJ = endtime_ms - begintime_ms;
+        var timestr = that.dateformat(timeJ);
+        data[i].hour = timestr.substring(0, 2);
+        data[i].minute = timestr.substring(3, 5);
+        data[i].second = timestr.substring(6, 8);
+        total_micro_second = timeJ;
+      }
+
+    }
+    that.setData({
+      cardList: data
+    });
+
+    // 渲染倒计时时钟
+    that.setData({
+      clock: that.dateformat(total_micro_second)
+    });
+
+    if (total_micro_second <= 0) {
+      that.setData({
+        clock: "00:00:00",
+        hr: 0,
+        minite: 0,
+        second: 0
+      });
+      // timeout则跳出递归
+      return;
+    }
+    setTimeout(function () {
+      // 放在最后--
+      //total_micro_second -= 10;
+      that.countdown(total_micro_second);
+    }
+      , 1000);
+    return that.dateformat(total_micro_second);
+  },
+
+  // 时间格式化输出，如3:25:19 86。每10ms都会调用一次
+  dateformat: function (micro_second) {
+    // 秒数
+    var second = Math.floor(micro_second / 1000);
+    // 小时位
+    var hr = Math.floor(second / 3600) < 10 ? '0' + Math.floor(second / 3600) : Math.floor(second / 3600);
+    // 分钟位
+    var min = Math.floor((second - hr * 3600) / 60) < 10 ? '0' + Math.floor((second - hr * 3600) / 60) : Math.floor((second - hr * 3600) / 60);
+    // 秒位
+    var sec = (second - hr * 3600 - min * 60) < 10 ? '0' + (second - hr * 3600 - min * 60) : (second - hr * 3600 - min * 60) < 10 ? '0' + (second - hr * 3600 - min * 60) < 10 ? '0' + (second - hr * 3600 - min * 60) : (second - hr * 3600 - min * 60) : (second - hr * 3600 - min * 60) < 10 ? '0' + (second - hr * 3600 - min * 60) : (second - hr * 3600 - min * 60);  // equal to => var sec = second % 60;
+    // 毫秒位，保留2位
+    var micro_sec = Math.floor((micro_second % 1000) / 10);
+    return hr + ":" + min + ":" + sec;
+  },
+  getcurDate: function () {
+    var timestamp =
+      Date.parse(new Date());
+    //返回当前时间毫秒数
+    timestamp = timestamp / 1000;
+    //获取当前时间
+    var n = timestamp *
+      1000;
+    var date = new Date(n);
+    //年
+    var Y =
+      date.getFullYear();
+    //月
+    var M = (date.getMonth()
+      + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+    //日
+    var D = date.getDate()
+      < 10 ? '0' + date.getDate() :
+      date.getDate();
+    var hr = date.getHours();
+    var minite = date.getMinutes();
+    var secnde = date.getSeconds();
+    return Y + "-" + M + "-" + D + " " + hr + ":" + minite + ":" + secnde;
+  },
+  /**查看兑换码--跳到会员小程序礼品兑换记录页查看 */
+  sdeepcode: function () {
+    wx.navigateToMiniProgram({
+      appId: 'wxc94d087c5890e1f8',
+      path: 'pages/member_gift/member_gif'
+    });
+  },
+  /**积分换券 */
+  intergalex: function (event) {
+    /**记录fromid */
+    if (event.detail.formId != undefined || event.detail.formId != '') {
+      myjCommon.logFormId(event.detail.formId);
+    }
+    //获取券信息
+    let cardinfo = event.detail.target.dataset.cardinfo;
+    //1、弹出确认是否兑换弹框
+    this.setData({
+      isHowtast: false,
+      isChange: true,
+      cardinfo: cardinfo,
+      deducContent: '兑换此券需抵扣' + cardinfo.Integral + '积分\n\t请确认是否抵扣？'
+    });
+  },
+  /**确认兑换 */
+  yesExcange: function (e) {
+    //2、是-检查积分是否足够
+    //3、足够-兑换
+    var that = this;
+    if (that.data.exinteget) {
+      wx.showToast({
+        title: '正在兑换中...请勿重复操作哦',
+        icon: 'none'
+      });
+      return;
+    } else {
+      that.setData({
+        exinteget: true
+      });
+    }
+    myjCommon.getLoginUser(
+      function (user) {
+        if (!user.isLogin) {
+          wx.showModal({
+            title: '提示',
+            content: '登录失败，晴稍后重试。',
+            showCancel: false
+          });
+          that.setData({
+            disabled: false
+          });
+          return;
+        }
+        var cardInfo = that.data.cardinfo;
+        // var cardInfo = that.getCardInfo(that.data.cardinfo.Id); //根据id获取券对象
+        if (cardInfo == null) {
+          wx.showModal({
+            title: '提示',
+            content: '兑换暂不能兑换，请稍后再来兑换哦！',
+            showCancel: false
+          });
+        } else {
+          //开始兑换
+          myjCommon.callApi({
+            interfaceCode: "WxMiniProgram.Service.GCChangeMPCoupon",
+            biz: {
+              sessionId: user.sessionId,
+              cardId: that.data.cardinfo.Id,
+              GCCnt: that.data.cardinfo.Integral,
+              source: 1, //1 优惠券小程序；2 会员小程序
+              cityName: that.data.province,
+              formId: that.data.formId
+            }, //source:来源：1 优惠券小程序；2 会员小程序  formId:表单Id
+            success: function (res) {
+              console.log(res)
+              if (res.Code == "301") //非会员
+              {
+                that.setData({
+                  isNoMember: true
+                });
+              } else if (res.Code == "306") //金币不够
+              {
+                that.setData({
+                  isEnave: true,
+                  isChange: false
+                });
+
+              } else if (res.Code == "0") //兑换成功
+              {
+                if (cardInfo.GiftType == 2) //兑换码
+                {
+                  that.setData({
+                    isHowtast: false,
+                    isChange: false
+                  });
+                  wx.showModal({
+                    title: '领取成功',
+                    content: '请在美宜佳会员小程序--积分换券--礼品的“兑换记录”查看您的兑奖码',
+                    showCancel: false
+                  });
+
+                } else //非兑换码
+                {
+                  that.setData({
+                    isSucessTask: true,
+                    isChange: false,
+                    isHowtast: false,
+                    isChange: false
+                  });
+                }
+
+                if (parseInt(res.Result) <= 0) {
+                  cardInfo.CardStatus = "已领取";
+                  if (that.data.objcoupe != null && that.data.objcoupe.Id == cardInfo.Id) {
+                    that.data.objcoupe.CardStatus = "已领取";
+                  }
+                  that.setData({
+                    cardList: that.data.cardList,
+                    objcoupe: that.data.objcoupe
+                  });
+                }
+              } else //已达到领取上限 ||  对不起，券已被抢光 || 卡券活动不存在或已被删除
+              {
+                that.setData({
+                  isHowtast: false,
+                  isChange: false
+                });
+                wx.showModal({
+                  title: '领取提示',
+                  content: res.Msg
+                })
+              }
+            },
+            fail: function (msg) {
+              console.log("GCChangeMPCoupon失败：" + JSON.stringify(msg));
+              that.setData({
+                isChange: false,
+                disabled: false,
+                exinteget: false
+              });
+              wx.showModal({
+                title: '温馨提示',
+                content: '系统出错了，请稍后再来兑换。',
+                showCancel: false
+              });
+            },
+            complete: function (res) {
+              that.setData({
+                disabled: false,
+                exinteget: false
+              });
+
+            }
+          });
+        }
+
+      }
+    );
+  },
+  ncloseTast:function()
+  {
+    this.setData({
+      isEnave:false,
+      isJfCoupons:false
+    });
+  },
+  //切换当前城市：跳转到选择城市列表
+  changeCity: function () {
+    this.setData({
+      isSelectCity: false
+    });
+    wx.navigateTo({
+      url: '../yhq_dw/yhq_dw?target=cahnnel'
+    })
+  }
 
 
 })

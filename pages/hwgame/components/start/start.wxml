@@ -1,0 +1,22 @@
+<view class='hw_start' style="background-image: url({{bg_start}})">
+  <view class='go_back' catchtap='goBack'></view>
+  <view class="music {{rota ? 'rota' : ''}}" style="background-image: url({{musicBg}})" catchtap="triggerMusic"></view>
+  <view class="title" style="background-image: url({{title}})"></view>
+  <view class="titleWrap">
+    <view class='rule pulse' bindtap='showRule'></view>
+    <view class="ribbon ribbon1"></view>
+    <view class="ribbon ribbon2"></view>
+    <view class="ribbon ribbon3"></view>
+  </view>
+  <view class="subtitle" style="background-image: url({{bgSubtitle}})"></view>
+  <view class='start_game' bindtap='goGame'></view>
+  <view wx:if="{{isRule}}" class="rule_wrap">
+    <image class="rule_detail" mode="widthFix" src="{{bg_rule}}"></image>
+    <view class="close" catchtap="hideRule"></view>
+  </view>
+  <!--<view class="adaptor"
+    style="left:{{x}}px;top:{{y}}px;width:{{bgWidth}}px;height:{{bgHeight}}px"
+  >
+    
+  </view> -->
+</view>

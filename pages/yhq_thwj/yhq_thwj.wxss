@@ -1,0 +1,45 @@
+page{ 
+  /* background-color: #420c7a;  */
+overflow: hidden;}
+
+.t_bg{ width: 100%; position: fixed; top: 0; left: 0; right: 0;z-index: 1;}
+
+.t_foot{ width: 100%; position: fixed; bottom: 0; left: 0; right: 0;z-index: 2;}
+
+.head{ position: fixed; top: 3%; left: 0; right: 0; width: 100%; z-index: 10; text-align: center;}
+
+.total{ box-shadow: 0 0 15px #ffdc8a; background-color: #f20300; border: 2px solid #ffd062; color: #fff; font-size: 25rpx; border-radius: 100px; padding: 8rpx 30rpx; width: auto; display: inline-block;}
+
+.t_banner{ width: 95%; margin-top: 20rpx;}
+
+.t_tx{ vertical-align: middle; width: 40rpx; border-radius: 100px; display: inline-block;}
+
+.t_username{vertical-align: middle;font-size: 26rpx; display: inline-block;}
+
+.user{box-shadow: 0 0 15px #ffdc8a; background-color: #f20300; border: 2px solid #ffd062; color: #fff;  display: inline-block; padding: 5rpx 15rpx; border-radius: 100px; }
+
+.t_h5{ position: fixed; bottom: 11%; right: 0; z-index:5; width:43%; }
+
+.t_h4{ position: fixed; bottom: 11%; left: 0; z-index:5; width:38%; }
+
+.t_h3{ position: fixed; bottom: 12%; left: 29%;  z-index:4; width:48%; }
+
+.t_h2{ position: fixed; bottom: 16%; right: 0;  z-index:2; width:41%; }
+
+.t_h1{ position: fixed; bottom: 36%; left: 0;  z-index:2; width:50%; }
+
+
+
+
+
+
+/*iphoneX*/
+@media (min-width:375px) and (min-height:700px){
+
+.t_h1{ position: fixed; bottom: 33%; left: 0;  z-index:2; width:50%; }
+
+.head{ position: fixed; top: 8%; left: 0; right: 0; width: 100%; z-index: 10; text-align: center;}
+}
+
+
+

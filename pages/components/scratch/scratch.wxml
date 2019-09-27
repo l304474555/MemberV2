@@ -1,0 +1,6 @@
+<template name="scratch" >
+	<view class="scratch_wp" style="position:relative;width: {{scratch.width}}px; height: {{scratch.height}}px;margin: 0 auto;" >
+		<canvas style="margin: 0 auto;width: {{scratch.width}}px; height: {{scratch.height}}px; background: transparent" canvas-id="scratch" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd" disable-scroll ="{{isScroll}}"></canvas>
+	</view>
+  <view class="scratch_txt">{{scratch.awardTxt}}</view>
+</template> 

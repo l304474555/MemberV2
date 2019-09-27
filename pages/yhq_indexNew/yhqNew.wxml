@@ -1,0 +1,839 @@
+<import src="../../wxParse/wxParse.wxml" />
+<!--改版后的头部-->
+<view class='r_nav' style='display:block;'>
+  <view class='r_nav_input_fa'>
+    <view style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;width:98%;padding-left:2%;'>
+
+      <block wx:if="{{currStoreInfo.storeName!=''}}">
+        <view class='inline' style='padding-right:3px;' bindtap='moreStore'>
+          <image src="https://mimage.myj.com.cn/MicroMallFileServer/Files/CouponBanner/201906/c5ffd8ce6625e358.png" mode="widthFix" class='va_m' style="width:32rpx;"></image>
+          <view class='inline r_shop va_m'>{{currStoreInfo.storeName}}</view>
+          <image src="../img/r_search_hb.png" mode="widthFix" class='va_m' style='width:70rpx'></image>
+        </view>
+      </block>
+
+      <block wx:if="{{currStoreInfo.storeName==''}}">
+        <view class='inline va_m' style='padding-right:3px;' bindtap='moreStore'>
+          <image src="https://mimage.myj.com.cn/MicroMallFileServer/Files/CouponBanner/201906/c5ffd8ce6625e358.png" mode="widthFix" class='va_m' style="width:32rpx;"></image>
+          <view class='inline r_shop va_m'>定位中...</view>
+          <image src="../img/r_search_hb.png" mode="widthFix" class='va_m' style='width:70rpx'></image>
+        </view>
+      </block>
+
+      <view class='inline' style='width:61%;'>
+        <input class='r_nav_input va_m' placeholder='{{MadeWords}}' value='{{inputValue}}' bindconfirm='searchData' confirm-type="search"></input>
+      </view>
+    </view>
+  </view>
+
+
+  <view class='r_nav_in' bindtap='more'>
+    <view class='r_nav_fa'>
+      <image src="https://mimage.myj.com.cn/MicroMallFileServer/Files/CouponBanner/201906/97d7c70fa20247a8.png" mode="widthFix" style='width:32px'></image>
+
+    </view>
+  </view>
+
+</view>
+<!--改版后的头部-->
+
+
+<!--点击“更多”显示这部分-->
+<view class='r_more_fa' hidden='{{!searchModel}}'>
+  <view class='r_triangle'></view>
+  <view class='r_detail_fa'>
+    <view class='r_detail_list' catchtap='scan'>
+      <image src="../img/more_icon1.png" mode="widthFix" class='va_m' style='width:32rpx;margin-right:5px;'></image>
+      <text class='va_m'>扫商品</text>
+    </view>
+    <view class='r_detail_list r_space_line' catchtap='href_search'>
+      <image src="../img/more_icon2.png" mode="widthFix" class='va_m' style='width:32rpx;margin-right:5px;'></image>
+      <text class='va_m'>搜索</text>
+    </view>
+    <view class='r_detail_list'>
+      <image src="../img/more_icon3.png" mode="widthFix" class='va_m' style='width:32rpx;margin-right:5px;'></image>
+      <button open-type='contact' class='r_kf_btn'>客服</button>
+
+    </view>
+  </view>
+</view>
+<!--点击“更多”显示这部分-->
+<!--Banner广告区-->
+<view>
+  <view>
+    <swiper class='swiper {{swiperitcss}}' bindchange="bindchange" style="height:{{imgheights[current]}}rpx;width:100%;" indicator-dots="true" autoplay="true" interval="3000" duration="600" current="{{bannerCurrent}}">
+      <swiper-item wx:for="{{bannerList}}" wx:key="Id">
+        <!--刘秋芳 2017-12-21 增加广告跳转（小程序、网页）功能-->
+        <image bindload="imageLoad" src="{{item.ImageUrl}}" style="height:{{imgheights[current]}}rpx;width:100%;" data-ptype="{{item.Jump}}" data-jumpurl="{{item.JumpUrl}}" data-url="{{item.PagePath}}" data-appid="{{item.appid}}" data-id="{{item.Id}}" data-bannertype="{{item.BannerType}}"
+          data-imageurl="{{item.ImageUrl}}" data-channelid="{{item.ChannelPageId}}" data-couponno="{{item.ActivityNo}}" bindtap='renderBannerDialog' />
+      </swiper-item>
+    </swiper>
+  </view>
+</view>
+<!--Banner广告区-->
+
+
+<!--圆弧分类区域-->
+<view class='r_function_fa' hidden='{{serviceItems.length<=0}}'>
+  <image src="../img/r_ad_space.png" mode="widthFix" style="width:100%;float:left;"></image>
+  <view style='background-color:#fff;width:100%;float:left'>
+    <view class='r_function_list_fa'>
+      <image src="../img/r_f_l.png" mode="widthFix" style="width:20px;display: inline-block; vertical-align: middle;" bindtap='returnscorll'></image>
+
+      <!--服务项目-->
+      <view class='r_function_list'>
+        <scroll-view scroll-x style="" scroll-left="{{scrollHeight}}">
+          <view class='r_fl' wx:for="{{serviceItems}}" catchtap='href_service' data-appid="{{item.AppId}}" data-action="{{item.Action}}" data-pageurl="{{item.PageUrl}}" data-channelid="{{item.ChannelId}}" data-linkurl="{{item.LinkUrl}}">
+            <image src="{{item.IconUrl}}" mode="widthFix" style="width:80rpx; height:80rpx;"></image>
+            <view>{{item.ServiceName}}</view>
+          </view>
+        </scroll-view>
+      </view>
+      <image src="../img/r_f_r.png" mode="widthFix" style="width:20px;display: inline-block;vertical-align: middle;" catchtap='roll'></image>
+    </view>
+  </view>
+</view>
+<!--圆弧分类区域-->
+
+
+<!--广告图-->
+<view class='h_list_fa' >
+  <view class='h_list_fa2' wx:for="{{advertList}}">
+  <image src="{{item.ImageUrl}}" mode="widthFix"  data-ptype="{{item.Jump}}" data-jumpurl="{{item.JumpUrl}}" data-url="{{item.PagePath}}" data-appid="{{item.appid}}" data-id="{{item.Id}}" data-bannertype="{{item.BannerType}}"
+          data-imageurl="{{item.ImageUrl}}" data-channelid="{{item.ChannelPageId}}" data-couponno="{{item.ActivityNo}}" catchtap ='renderBannerDialog'  ></image>
+  </view>
+</view>
+<!--广告图-->
+
+
+<!--新分类-->
+<view class="r_list_fl_c">
+  <scroll-view class="scroll-view_H" scroll-x style="width: 100%">
+    <view class='r_fl_c_fa'>
+      <view class="r_fl_c {{item.Id == currentType ? 'tab-act':''}}" wx:for="{{cardTypeList}}" data-type="{{item.Id}}" data-navtype="0" bindtap="switchType" wx:key="Id" data-isall="{{item.IsAll}}">
+        <view class="r_fl_c_name">
+          <!--展示文字 展示方式[‘展示图片’:1,'展示文字':2]-->
+          <!-- <block wx:if="{{item.ShowType!=1}}"> -->
+          <text class='{{(item.Id == currentType || (currentType==0 && item.IsAll )) ? "r_name_act":""}}'>{{item.TypeName}}</text>
+          <!-- </block> -->
+          <!--展示文字-->
+
+          <!--展示图标-->
+          <!-- <block wx:if="{{item.ShowType==1}}">
+            <image src="{{item.UnselectedIcon}}" mode="widthFix" style="width:36px;"></image>
+        </block> -->
+          <!--展示图标-->
+        </view>
+      </view>
+    </view>
+
+  </scroll-view>
+</view>
+<!--新分类-->
+
+
+
+<!--改版后,向下滑动时悬浮头部-->
+<view class='r_nav2_fa' style='{{isShowMiniNav?"display:inline-block":"display:none"}}'>
+  <view class='r_nav2'>
+    <view class='r_nav_input_fa2'>
+      <view style='display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;width:98%;padding-left:2%;'>
+        <view class='inline' style='padding-right:3px;' bindtap='moreStore'>
+          <image src="https://mimage.myj.com.cn/MicroMallFileServer/Files/CouponBanner/201906/c5ffd8ce6625e358.png" mode="widthFix" class='va_m' style="width:32rpx;"></image>
+          <view class='inline r_shop va_m'>{{currStoreInfo.storeName}}</view>
+          <image src="../img/r_search_hb.png" mode="widthFix" class='va_m' style='width:70rpx'></image>
+        </view>
+        <view class='inline' style='width:61%;'>
+          <input class='r_nav_input va_m' placeholder='{{MadeWords}}' value='{{inputValue}}' bindconfirm='searchData' confirm-type="search"></input>
+        </view>
+      </view>
+    </view>
+
+    <!--更多-->
+    <view class='r_nav_in2' bindtap='more'>
+      <view class='r_nav_fa' style='top:2px;'>
+        <image src="../img/f_more.png" mode="widthFix" style='width:32px'></image>
+      </view>
+    </view>
+    <!--更多-->
+  </view>
+  <!--改版后,向下滑动时悬浮头部-->
+
+  <!--下拉悬浮分类-->
+  <view class="r_list_fl_c">
+    <view class='r_fl_c_fa'>
+      <view class="r_fl_c  {{item.Id == currentType ? 'tab-act':''}}" wx:for="{{cardTypeList}}" data-type="{{item.Id}}" data-navtype="0" bindtap="switchType" data-isall="{{item.IsAll}}" wx:key="Id">
+        <view class="r_fl_c_name ">
+          <!--展示文字 展示方式[‘展示图片’:1,'展示文字':2]-->
+          <!-- <block wx:if="{{item.ShowType==2}}"> -->
+          <text class='{{(item.Id == currentType || (currentType==0 && item.IsAll )) ? "r_name_act":""}}'>{{item.TypeName}}</text>
+          <!-- </block> -->
+          <!--展示文字-->
+
+          <!--展示图标-->
+          <!-- <block wx:if="{{item.ShowType==1}}">
+         <image src="../img/all.png" mode="widthFix" style="width:36px;"></image>
+        </block> -->
+          <!--展示图标-->
+        </view>
+      </view>
+    </view>
+  </view>
+  <!--下拉悬浮分类-->
+</view>
+<!--改版后,向下滑动时悬浮头部-->
+
+  <!--新版优惠券列表-->
+<view class="yhq_fa" id="card_list_container" style="min-height:{{mainMinHeight}}px;float:left;margin:0 2.5%;">
+ <!--轻松点上报商品数据-->
+  <easy-report wx:for="{{cardList}}" wx:key="{{item.Id}}" type="{{currentType==126?'ITEM':'NONE'}}" scene="none" uid="{{item.Id}}"  category="猜你喜欢" position="{{index}}">
+   <!--轻松点上报商品数据-->
+  <!-- <view class="yhq_body" wx:for="{{cardList}}" wx:key="{{item.Id}}"> -->
+  <view class="yhq_body" >
+    <view class='yhq_dq_q_icon' hidden='{{item.Integral>0?false:true}}'></view>
+    <view class='yhq_dq_q_icon_txt' hidden='{{item.Integral>0?false:true}}'>兑</view>
+    <image src='../img/dui.png' style="position: absolute;left: 5px;top: 0;height:24px;width:23px;margin-top:3px;" mode='widthFix' hidden='true'></image>
+    <view class="yhq_spot">
+      <image src="../img/spot.png" mode="widthFix" style="width:5px;"></image>
+    </view>
+    <view class="yhq_spot2">
+      <image src="../img/spot.png" mode="widthFix" style="width:5px;"></image>
+    </view>
+    <view class="r_yhq_spot3">
+      <image src="../img/r_spot.png" mode="widthFix" style="width:25rpx;"></image>
+    </view>
+    <view class="r_yhq_spot4">
+      <image src="../img/r_spot.png" mode="widthFix" style="width:25rpx;"></image>
+    </view>
+
+    <view class="yhq_tpye" bindtap='opencoupe' data-id="{{item.Id}}">
+      <image src="{{item.ImageUrl}}" mode="widthFix" class='ticket_fa'></image>
+    </view>
+    <view class="r_yhq_value_fa" bindtap='opencoupe' data-id="{{item.Id}}" data-datatype="1">
+      <view class="yhq_value" style='height:36px;'>
+        <text class="yhq_value1">{{item.Name}}</text>
+      </view>
+      <view class="yhq_value" style="margin-top:0;">
+        <text class="yhq_value2">{{item.MDescription}}</text>
+        <text class="yhq_value3">{{item.SDescription}}</text>
+      </view>
+      <view class="yhq_value" style="margin-top:0;">
+        <block wx:if="{{item.Integral<=0}}">
+          <text class="yhq_value1">抢购时间：{{item.BuyBeginTime}}-{{item.BuyEndTime}}</text>
+        </block>
+        <block wx:if="{{item.Integral>0}}">
+          <text class="yhq_value1">兑换时间：{{item.BuyBeginTime}}-{{item.BuyEndTime}}</text>
+        </block>
+      </view>
+    </view>
+    <view class="r_yhq_button_fa">
+      <!--未开始-->
+      <block wx:if="{{item.CardStatus=='未开始'}}">
+        <view class='r_btn_txt' style='margin-top:45rpx;'>距开抢还剩</view>
+        <view class='r_btn_value_fa' style='margin-top:6rpx'>
+          <view class='r_btn_time'>{{item.hour}}</view>
+          <view class='r_btn_mh'>:</view>
+          <view class='r_btn_time'>{{item.minute}}</view>
+          <view class='r_btn_mh'>:</view>
+          <view class='r_btn_time'>{{item.second}}</view>
+          <button class='{{item.CardStatus=="未开始"?".r_btn_yellow":"r_btn_red"}} mt5'>{{item.CardStatus}}</button>
+        </view>
+      </block>
+      <!--未开始-->
+
+      <!--轻松点--喜欢/不喜欢--上报-->
+      <easy-report type="{{(currentType==126 && item.CouponType==1)?'LIKE':'NONE'}}" scene="none" uid="{{item.Id}}" category="猜你喜欢">
+      <!--轻松点--喜欢/不喜欢--上报-->
+      <!--立即领取-->
+      <block wx:if="{{item.CardStatus=='立即领取'}}">
+        <!--非积分换券-->
+        <block wx:if="{{item.Integral<=0}}">
+          <block wx:if="{{item.CardStatus=='立即领取' && item.CouponType!=2}}">
+            <cprocess percent="{{item.Process}}" />
+          </block>
+          <form report-submit="true" bindsubmit='getCard'>
+            <view class=' {{item.CouponType!=2?"r_btn_red_fa":"r_btn_red_fa_defualt"}}'>
+              <button class='r_btn_red' form-type="submit" hover-stop-propagation="true" data-cardid="{{item.Id}}" data-jump="{{item.AdInfo.Jump}}" data-appid="{{item.AdInfo.appid}}" data-pagepath="{{item.AdInfo.PagePath}}" data-channelpageId="{{item.AdInfo.ChannelPageId}}"
+                data-jumplink="{{item.AdInfo.JumpLink}}" data-coupontype="{{item.CouponType}}">{{item.CardStatus}}</button>
+            </view>
+          </form>
+        </block>
+        <!--非积分换券-->
+
+        <!--积分换券-->
+        <view style='position:absolute;left:0;top:5rpx; right:0'>
+          <image src='../img/jifen_icon.png' mode='widthFix' style='width:90rpx;' hidden='{{item.Integral>0?false:true}}'></image>
+        </view>
+
+        <block wx:if="{{item.Integral>0}}">
+          <form report-submit="true" bindsubmit='intergalex'>
+            <view style="font-size:26rpx;color:#d1121b;position: absolute;top: 19%;width: 100%;line-height: 15px;">
+              <text style="font-size:20rpx;color:#d1121b;margin-top:6rpx;">积分\n\t{{item.Integral}}</text>
+            </view>
+            <view>
+            </view>
+
+
+            <view style='position:absolute;left:0;bottom:10rpx; right:0;text-align:center; width:100%;line-height:15px;'>
+              <button class='r_btn_red' form-type="submit" hover-stop-propagation="true" style='margin-top:0px;float:left;margin-left:10%;' data-cardinfo="{{item}}" >立即兑换</button>
+              <view style="float:left; text-align:center;font-size:20rpx;color:#d1121b;padding-top:5px;width:100%;text-align:center;">已抢 {{item.Process}}%</view>
+            </view>
+          </form>
+
+        </block>
+        <!--积分换券-->
+
+      </block>
+      <!--立即领取-->
+      </easy-report>
+
+
+      <!--已领取-->
+      <block wx:if="{{item.CardStatus=='已领取' && item.Integral<=0}}">
+        <image src="../img/r_lq.png" mode="widthFix" style="width:80%" class='r_btn_tip'></image>
+      </block>
+      <!--已领取-->
+      <!--积分换券-已领取-->
+      <block wx:if="{{item.CardStatus=='已领取' && item.Integral>0}}">
+        <image src="../img/exchange.png" mode="widthFix" style="width:80%" class='r_btn_tip'></image>
+      </block>
+      <!--积分换券-已领取-->
+
+      <!--已抢光-->
+      <block wx:if="{{item.CardStatus=='已抢光'}}">
+        <image src="../img/r_qg.png" mode="widthFix" style="width:80%" class='r_btn_tip'></image>
+      </block>
+      <!--已抢光-->
+    </view>
+  </view>
+  </easy-report>
+  <view class="loading" style="padding-top:65px;" hidden='{{!isLoading}}'>{{LoadingDesc}}</view>
+  <block wx:if="{{!isMoreEntance}}">
+  <view class="loading complete" hidden='{{(!isCompleted||cardList.length<4)}}'>已加载全部</view>
+  </block>
+
+
+ <block wx:if="{{isMoreEntance}}">
+  <view class="loading complete" style='color:#969191;font-size:26rpx;' catchtap='switchType' data-isall="true" data-type="0" >查看更多优惠券>></view>
+  </block>
+
+</view>
+  <!--新版优惠券列表-->
+
+<!--点击广告弹框-->
+<view class="modal_bg" hidden='{{!sShowBannerInfo}}'></view>
+<view class="modal_fa" hidden='{{!sShowBannerInfo}}'>
+  <view style="padding:30px 10px;">
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close3" bindtap='closeBannerDialog'></image>
+    <image src="{{actBanner.ImageUrl}}" mode="widthFix" style="width:100%;"></image>
+
+    <view class="modal_txt" style="margin-top:30px;text-align: left;">
+
+      <view class="modal_txt" style="margin-top:30px; text-align: left;">
+
+        <!--<rich-text nodes="{{actBanner.Contents}}"></rich-text>-->
+        <template is="wxParse" data="{{wxParseData:bannerImg.nodes}}" />
+      </view>
+    </view>
+  </view>
+</view>
+<!--点击广告弹框 -->
+
+<view class="modal_bg" hidden='{{!isShowGetCardInfo}}'></view>
+<view class="modal_fa2" hidden='{{!isShowGetCardInfo}}'>
+  <view style="padding:30px 10px;">
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close3" bindtap="closeGetCardModal"></image>
+    <image src="../img/y15.png" mode="widthFix" style="width:50px;"></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <text>抱歉！本券仅限会员领取\n\t点击“领取”马上成为会员！</text>
+    </view>
+    <form report-submit="true" bindsubmit='getMemberCard'>
+      <button class='modal_btn' form-type="submit" hover-stop-propagation="true" style='margin-top:30px;'>领取</button>
+    </form>
+  </view>
+</view>
+
+<!--查看卡券弹框-->
+<view class="modal_bg" style="{{isHowtast?'display:block':'display:none'}}"></view>
+<view class="modal_fa2" style="top:50%; margin-top:-210px;text-align:left; width:85%;{{isHowtast?'display:block':'display:none'}}">
+ <!--轻松点上报商品数据-->
+  <easy-report type="{{(currentType==126 && objcoupe.CouponType==1)?'ITEM':'NONE'}}" scene="none" uid="{{objcoupe.Id}}"  category="猜你喜欢" position="{{index}}">
+   <!--轻松点上报商品数据-->
+  <view style="padding:12px 10px 20px 10px;">
+    <view class='modal_close3_new' bindtap='closeTask'>
+      <image src="../img/y_close2.png" mode="widthFix" style="margin-left: 0;margin-top: 10px;width: 22px;height: 22px;"></image>
+    </view>
+
+    <view class="modal_title">美宜佳优惠券</view>
+    <view class='modal_value_txt_ot_fa'>
+      <view class='modal_value_txt' style="text-align: center;">{{objcoupe.Name}}</view>
+      <view class='modal_value_txt_ot' style='display:none;'>使用时间：{{objcoupe.UseBeginTime}} 至 {{objcoupe.UseEndTime}}</view>
+      <view class='modal_value_txt_ot' style='color:red;' hidden='true'>本优惠券只需到店购物时，直接微信支付即可自动抵扣！</view>
+
+      <view class='modal_value_txt_ot'>
+        <template is="wxParse" data="{{wxParseData:article.nodes}}" />
+      </view>
+
+    </view>
+    <view class="modal_btn_fa">
+      <view style='margin-top:20px; font-size:28rpx;' hidden='{{objcoupe.Integral>0?false:true}}'>兑换此券需要
+        <font style="color:#d1121b;">{{objcoupe.Integral}}积分</font>
+      </view>
+
+      <!--优惠券-->
+      <!--轻松点--喜欢/不喜欢--上报-->
+      <easy-report type="{{(currentType==126 && objcoupe.CouponType==1)?'LIKE':'NONE'}}" scene="none" uid="{{objcoupe.Id}}" category="猜你喜欢">
+      <!--轻松点--喜欢/不喜欢--上报-->
+      <block wx:if="{{objcoupe.CardStatus=='立即领取' && (objcoupe.Integral<=0 || objcoupe.Integral==null)}}">
+        <form report-submit="true" bindsubmit='getCard'>
+          <button form-type="submit" hover-stop-propagation="true" class='modal_btn' style="margin-top:20px;display:inline-block;background-color: #d1121b;color:white;" data-cardid="{{objcoupe.Id}}" data-jump="{{objcoupe.AdInfo.Jump}}" data-appid="{{objcoupe.AdInfo.appid}}"
+            data-pagepath="{{objcoupe.AdInfo.PagePath}}" data-channelpageid="{{objcoupe.AdInfo.ChannelPageId}}" data-jumplink="{{objcoupe.AdInfo.JumpLink}}" data-coupontype="{{objcoupe.CouponType}}">{{objcoupe.CardStatus}}</button>
+        </form>
+      </block>
+      </easy-report>
+      <!--优惠券-->
+
+      <!--积分换券-->
+       <!--轻松点--喜欢/不喜欢--上报-->
+      <easy-report type="{{(currentType==126 && objcoupe.CouponType==1)?'LIKE':'NONE'}}" scene="none" uid="{{objcoupe.Id}}" category="猜你喜欢">
+      <!--轻松点--喜欢/不喜欢--上报-->
+      <block wx:if="{{objcoupe.Integral>0 && objcoupe.CardStatus=='立即领取'}}">
+        <form report-submit="true" bindsubmit='intergalex'>
+          <button class='r_btn_red' form-type="submit" hover-stop-propagation="true" class='modal_btn' style='margin-top:20px;display:inline-block;background-color: #d1121b;color:white;' data-cardinfo="{{objcoupe}}" >立即兑换</button>
+        </form>
+      </block>
+      </easy-report>
+      <!--积分换券-->
+
+
+      <block wx:if="{{objcoupe.CardStatus=='未开始'}}">
+        <button class='modal_btn' style="margin-top:20px;display:inline-block;background-color: #ffb71c;color:white;" bindtap="getCard" disabled='true' data-cardid="{{objcoupe.Id}}">{{objcoupe.CardStatus}}</button>
+      </block>
+      <block wx:if="{{objcoupe.CardStatus=='已领取' && objcoupe.CouponType<=1}}">
+        <form report-submit="true" bindsubmit='url_wxpay'>
+          <button class='modal_btn' form-type="submit" hover-stop-propagation="true" style="margin-top:20px;display:inline-block;background-color: #50a837;color:white;" data-cardid="{{objcoupe.Id}}">打开微信支付</button>
+        </form>
+      </block>
+ <!--查看兑换码-->
+      <block wx:if="{{objcoupe.CardStatus=='已领取' && objcoupe.GiftType==2}}">
+        <form report-submit="true">
+          <button class='modal_btn' form-type="submit" hover-stop-propagation="true" style="margin-top:20px;display:inline-block;background-color: #D3D3D3;color:black;" data-cardid="{{objcoupe.Id}}">已领取</button>
+
+            <button class='modal_btn' catchtap='sdeepcode' hover-stop-propagation="true" style="margin-top:20px;margin-left:25px; display:inline-block;background-color: #D3D3D3;color:black;">查看兑换码</button>
+        </form>
+      </block>
+      <!--查看兑换码-->
+      
+
+      <block wx:if="{{objcoupe.CardStatus=='已抢光'}}">
+        <button class='modal_btn' style="margin-top:20px;display:inline-block;background-color: #D3D3D3;color:white;" disabled='true' data-cardid="{{objcoupe.Id}}">{{objcoupe.CardStatus}}</button>
+      </block>
+
+      <block wx:if="{{objcoupe.GiftType!=2}}">
+        <!--查看参与商品按钮-->
+        <form report-submit="true" bindsubmit='seeothergoods'>
+          <button class='modal_btn' form-type="submit" hover-stop-propagation="true" style="margin-top:20px;margin-left:25px; display:inline-block;background-color: #D3D3D3;color:black;" data-crmno="{{objcoupe.ActivityId}}">查看参与商品</button>
+        </form>
+        <!--查看参与商品按钮-->
+      </block>
+
+    </view>
+  </view>
+   </easy-report>
+</view>
+<!--查看卡券弹框-->
+
+<!-- 获取用户信息组件 -->
+<view class="modal_bg" style="{{isShowUserInfoBtn?'display:block':'display:none'}}"></view>
+<view class='modal_fa2' style="{{isShowUserInfoBtn?'display:block':'display:none'}}">
+  <view style="padding:30px 10px;">
+    <view class="modal_txt" style="margin-top:10px; color:#666; font-size:16px;">无法获取您的用户信息，请授权给我们应用以正常使用本应用的相关功能。</view>
+    <button class='modal_btn' style='margin-top:30px; font-size:16px;' open-type='getUserInfo' bindgetuserinfo='getUserInfoBtnClick'>确定</button>
+  </view>
+</view>
+<!-- 获取用户信息组件 -->
+
+<!--新人大礼包弹框 -->
+<view class="modal_bg" style="{{isBag?'display:block':'display:none'}}"></view>
+<view class='add_popup' style="{{isBag?'display:block':'display:none'}}">
+  <image src="../img/h_lb.png" mode="widthFix" style="width:500rpx;"></image>
+  <form bindsubmit="getBag" report-submit='true'>
+    <view class='add_popup_txt'>{{GiftBag}}</view>
+
+    <button class='add_popup_btn' form-type='submit'></button>
+  </form>
+  <view class='add_popup_close'>
+    <image bindtap='closeTask' src="../img/add_btn.png" mode="widthFix" style="width:60rpx;"></image>
+  </view>
+</view>
+
+<!--新人大礼包提示成为会员弹出框-->
+<view class="modal_bg" style='{{isNoMember?"display:block":"display:none"}}'></view>
+<view class="modal_fa2" style='{{isNoMember?"display:block":"display:none"}}'>
+  <view style="padding:30px 10px;">
+    <image src="../img/y_close2.png" bindtap='closeTask' mode="widthFix" class="modal_close3" bindtap="closeGetCardModal"></image>
+    <image src="../img/y15.png" mode="widthFix" style="width:50px;"></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <text>抱歉哦，本礼包仅限会员领取！</text>
+    </view>
+    <form bindsubmit="getMemberCard" report-submit='true'>
+      <button form-type="submit" class='modal_btn' style='margin-top:30px;'>马上成为会员</button>
+    </form>
+  </view>
+</view>
+
+
+<!--新人大礼包领取成功弹出框-->
+<view class="modal_bg" style="{{isBagsucess?'display:block':'display:none'}}"></view>
+<view class='add_popup' style="{{isBagsucess?'display:block':'display:none'}}">
+  <image src="{{isBagsucessImg}}" mode="widthFix" style="width:500rpx;" bindtap='urlJump'></image>
+
+  <view class='add_popup_close2'>
+    <image bindtap='closeTask' src="https://mimage.myj.com.cn/MicroMallFileServer/Files/ProductSmallPic/201807/1bd40886f3a2b6c1.png" mode="widthFix" style="width:60rpx;"></image>
+  </view>
+</view>
+
+
+<!--注册成为会员弹出框-->
+<view class="modal_bg" style="{{noMemberTask?'display:block':'display:none'}};z-index:999992;"></view>
+<view class="modal_fa2" style="{{noMemberTask?'display:block':'display:none'}};z-index:999992">
+  <view style="padding:30px 10px;">
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close3" bindtap='closeTask'></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <!--<text>领取成功，可在"我的券"页面中查看，到店使用微信支付即可核销</text>-->
+      <text>您还不是会员,点击[马上成为会员]注册会员以享受更多优惠哦~
+</text>
+    </view>
+
+    <form bindsubmit="getMemberCard" report-submit='true'>
+      <button form-type="submit" class='modal_btn' style='margin-top:30px;'>马上成为会员</button>
+    </form>
+  </view>
+</view>
+<!--注册成为会员弹出框-->
+
+<!--领取成功弹出框-->
+<view class="modal_bg" style='{{isSucessTask?"display:block;":"display:none;"}}'></view>
+<view class="modal_fa_ew" style="top:50%; margin-top:-120px;{{isSucessTask?'display:block;':'display:none;'}}">
+  <view style="padding:20px 0 10px 0;">
+    <view class="modal_txt">
+      <text style='font-size:18px;'>领取成功</text>
+    </view>
+    <view class="modal_txt" style="margin-top:15px;padding:0 10px;">
+      <text style='font-size:14px;color:#9a9a9a;'>券将在3分钟内派发到您的账户上，请在“我的券”查看券信息，谢谢！</text>
+    </view>
+    <view class="modal_txt" style="margin-top:15px;border-top:1px solid #ddd;padding-top:10px;">
+      <form bindsubmit="closeTask" report-submit='true'>
+        <button form-type="submit" class='modal_btn' style='background-color:transparent;border:0;color:#3dc61f;font-size:17px;'>确定</button>
+      </form>
+    </view>
+  </view>
+</view>
+<!--领取成功弹框-->
+
+<!--定位失败提示框-->
+<view class="modal_bg" style='{{isSelectCity?"display:block;":"display:none;"}}'></view>
+<view class="account_popup_smo" style="top:50%; margin-top:-120px;text-align:left; width:60%;z-index:999999;{{isSelectCity?'display:block;':'display:none;'}}">
+  <view class='account_popup_smo_title'>温馨提示</view>
+  <view style="padding:20px 20px 20px 20px;">
+    <view class="modal_txt" style='text-align: center;'>
+      定位失败，请选择当前城市以享受更多优惠哦~
+    </view>
+    <button class='modal_btn' style='margin-top:20px;background-color:#d1121a;' bindtap='changeCity'>选择城市</button>
+  </view>
+</view>
+
+
+<!--账号已经绑定其他账号提示 -->
+<view class="modal_bg" style="{{isbind?'display:block':'display:none'}}"></view>
+<view class="modal_fa2" style="top:60%; margin-top:-210px;text-align:left; width:70%;{{isbind?'display:block':'display:none'}}">
+  <view style="padding:12px 10px 20px 10px;">
+    <view class='modal_close3_new' bindtap='closeTask'>
+      <image src="../img/y_close2.png" mode="widthFix" style="margin-left: 0;margin-top: 10px;width: 22px;height: 22px;"></image>
+    </view>
+
+    <view class="modal_title">温馨提示</view>
+    <view class='modal_value_txt_ot'>
+      同一手机号只能在一个微信上领取和使用美宜佳的券。点击“绑定”按钮，用新手机号完成绑定。
+    </view>
+    <view class="modal_btn_fa">
+      <button class='modal_btn' style='margin-top:20px;background-color:#d1121a;' bindtap='bindMemberinfo'>绑定</button>
+    </view>
+  </view>
+</view>
+
+<!--公告-->
+<view class="modal_bg" style='{{noticeTask?"display:block":"display:none"}};z-index:99999;'></view>
+<view class="account_popup_smo" style="top:50%; margin-top:-120px;text-align:left; width:85%;z-index:99999;{{noticeTask?'display:block':'display:none'}}">
+  <view class='account_popup_smo_title' style='font-size:18px;'>{{noticeobj.Title}}</view>
+  <view style="padding:20px 20px 20px 20px;">
+    <view class="modal_txt" style='text-align: center;font-size:18px;line-height:20px;line-height:30px;'>
+      {{noticeobj.UpdateNote}}
+    </view>
+  </view>
+</view>
+<!--公告-->
+<game-component></game-component>
+
+
+<!--优惠券首页改版-->
+<!--定位失败提示框-->
+<view class="modal_bg" style='{{isShowSelectSore?"display:block;":"display:none;"}}'></view>
+<view class="account_popup_smo" style="top:50%; margin-top:-120px;text-align:left; width:60%;z-index:999999;{{isShowSelectSore?'display:block;':'display:none;'}}">
+  <view class='account_popup_smo_title'>温馨提示</view>
+  <view style="padding:20px 20px 20px 20px;">
+    <view class="modal_txt" style='text-align: center;'>
+      定位失败，请选择门店以享受更多优惠哦~
+    </view>
+    <button class='modal_btn' style='margin-top:20px;background-color:#d1121a;' bindtap='changeStore'>选择门店</button>
+  </view>
+</view>
+
+
+<!--参与商品提示框-->
+<view class="modal_bg" style='{{isentyGoods?"display:block":"display:none"}}'></view>
+<view class="modal_fa2" style="top:50%; margin-top:-180px;text-align:left; width:85%;">
+  <view style="padding:50px 10px 10px 10px;{{isentyGoods?'display:block':'display:none'}}">
+    <view class='modal_title_add'>提示信息</view>
+    <image src="../img/y_close2.png" mode="widthFix" bindtap='closeTask' class="modal_close_add"></image>
+    <view class="modal_txt" style="line-height: 20px; max-height:250px; overflow:auto;">
+      <image src="../img/s_pro.png" mode="widthFix" style='width:60px;'></image>
+      <view style='font-size:33rpx;font-weight: bold;width:100%; padding:8px 0;'>参与商品</view>
+    </view>
+
+    <view class='modal_value'>商品代码：{{seeOthergoodObj.ProductCode}}</view>
+    <view class='modal_value'>国际条码：{{seeOthergoodObj.Code2}}</view>
+    <view class='modal_value'>商品名称：{{seeOthergoodObj.ProductName}}</view>
+
+    <view class="modal_btn_fa">
+      <form report-submit="true" bindsubmit='url_wxpay'>
+        <button class='modal_btn_green' form-type="submit" style='margin-top:20px;display:inline-block;'>打开微信支付</button>
+      </form>
+    </view>
+
+  </view>
+</view>
+<!--参与商品提示框-->
+
+
+
+
+<!--非参与商品提示框-->
+<view class="modal_bg" style='{{isnotentyGoods?"display:block":"display:none"}}'></view>
+<view class="modal_fa2" style="top:50%; margin-top:-180px;text-align:left; width:85%;">
+  <view style="padding:50px 10px 10px 10px;{{isnotentyGoods?'display:block':'display:none'}}">
+    <view class='modal_title_add'>提示信息</view>
+    <image src="../img/y_close2.png" mode="widthFix" bindtap='closeTask' class="modal_close_add"></image>
+    <view class="modal_txt" style="line-height: 20px; max-height:250px; overflow:auto;">
+      <image src="../img/f_pro.png" mode="widthFix" style='width:60px;'></image>
+      <view style='font-size:33rpx;font-weight: bold;width:100%; padding:8px 0;'>非参与商品</view>
+    </view>
+
+    <view class='modal_value'>商品代码：{{seeOthergoodObj.ProductCode}}</view>
+    <view class='modal_value'>国际条码：{{seeOthergoodObj.Code2}}</view>
+    <view class='modal_value'>商品名称：{{seeOthergoodObj.ProductName}}</view>
+
+    <view class="modal_btn_fa">
+      <form report-submit="true" bindsubmit='url_wxpay'>
+        <button form-type='submit' class='modal_btn_green' style='margin-top:20px;display:inline-block;'>打开微信支付</button>
+      </form>
+    </view>
+  </view>
+</view>
+<!--非参与商品提示框-->
+
+<!--开屏图提示框{{showadimginfo[0].OpenImageUrl}}-->
+<view style="position: relative;width:85%;height:auto;margin:0 auto;">
+  <view class='tip_bg' style='{{isShowScreen?"display:block":"display:none"}}'></view>
+  <view class='tip_fa2' style='width:75%;left:0;right:0;margin:-330rpx auto 0 auto;{{isShowScreen?"display:block":"display:none"}}'>
+    <image src="{{showadimginfo[0].OpenImageUrl}}" mode="widthFix" style="width:100%;" catchtap='renderBannerDialog' data-ptype="{{showadimginfo[0].Jump}}" data-jumpurl="{{showadimginfo[0].JumpUrl}}" data-url="{{showadimginfo[0].PagePath}}" data-appid="{{showadimginfo[0].appid}}"
+      data-id="{{showadimginfo[0].Id}}" data-bannertype="{{showadimginfo[0].BannerType}}" data-imageurl="{{showadimginfo[0].ImageUrl}}" data-channelid="{{showadimginfo[0].ChannelPageId}}" data-couponno="{{showadimginfo[0].ActivityNo}}"></image>
+      <view style='position:absolute; top:-80rpx; right:-45rpx;'>
+<image src='../img/f_y_close.png' mode='widthFix' style='width:60rpx;' catchtap='closeshowoimg'></image>
+</view>
+
+<!--开屏礼包领取按钮-->
+<view style='position:absolute; bottom:40rpx; left:0; right:0;text-align: center;' >
+<block wx:if="{{!addOpenscreensucess && opengiftbagCoupons.length>0}}">
+  <view class='tip_btn' style='display:inline-block' catchtap='addopenScreenGiftBag'>{{opengiftbagInfo.ExchangeIntegralCount>0?opengiftbagInfo.ExchangeIntegralCount+"积分兑换":"领取"
+}}</view>
+</block>
+
+<block wx:if="{{addOpenscreensucess}}">
+  <view class='tip_btn' style='display:inline-block' catchtap='tousecoupon'>去使用</view>
+</block>
+
+</view>
+<!--开屏礼包领取按钮-->
+  </view>
+
+  
+<!--开屏礼包券内容-->
+<view style='position: fixed;width:70%; top:400rpx; left:0 ;right:0; margin:0 auto;z-index:999991;{{isShowScreen?"display:block":"display:none"}}'>
+<view style=' wdith:100%;height:376rpx;overflow:auto'>
+  <view class="f_yhq_body" wx:for="{{opengiftbagCoupons}}" >
+    <view class="f_yhq_spot">
+      <image src="../img/f_spot.png" mode="widthFix" style="width:5px;"></image>
+    </view>
+    <view class="f_yhq_spot2">
+      <image src="../img/f_spot.png" mode="widthFix" style="width:5px;"></image>
+    </view>
+    <view class="yhq_tpye"><image src="{{item.ImageUrl}}" mode="widthFix"></image></view>
+    <view class="f_yhq_value_fa">
+      <view class="yhq_value"><text class="yhq_value1">{{item.Name}}</text></view>
+      <view class="yhq_value" style="margin-top:0;"><text class="yhq_value2">{{item.MDescription}}</text><text class="yhq_value3">{{item.SDescription}}</text></view>
+      <view class="yhq_value" style="margin-top:0;"><text class="yhq_value1">抢购时间：{{item.BuyBeginTime}}-{{item.BuyEndTime}}</text></view>
+    </view>
+    
+</view>
+</view>
+<view style='text-align:center;' hidden='{{opengiftbagCoupons.length<=2?true:false}}'><image src="../img/f_yhq_jt.png" mode="widthFix" style='width:20px;'></image></view>
+
+</view>
+</view>
+<!--开屏礼包券内容-->
+
+<!--开屏图提示框-->
+
+
+<!--开屏图提示框{{showadimginfo[0].OpenImageUrl}}-->
+<view style="position: relative;width:85%;height:auto;margin:0 auto;">
+  <view class='tip_bg' style='{{isShowopenimg?"display:block":"display:none"}}'></view>
+  <view class='tip_fa2' style='width:75%;left:0;right:0;margin:-330rpx auto 0 auto;{{isShowopenimg?"display:block":"display:none"}}'>
+    <image src="{{showadimginfo[0].OpenImageUrl}}" mode="widthFix" style="width:100%;" catchtap='renderBannerDialog' data-ptype="{{showadimginfo[0].Jump}}" data-jumpurl="{{showadimginfo[0].JumpUrl}}" data-url="{{showadimginfo[0].PagePath}}" data-appid="{{showadimginfo[0].appid}}"
+      data-id="{{showadimginfo[0].Id}}" data-bannertype="{{showadimginfo[0].BannerType}}" data-imageurl="{{showadimginfo[0].ImageUrl}}" data-channelid="{{showadimginfo[0].ChannelPageId}}" data-couponno="{{showadimginfo[0].ActivityNo}}"></image>
+      <view style='position:absolute; top:-80rpx; right:-45rpx;'>
+<image src='../img/f_y_close.png' mode='widthFix' style='width:60rpx;' catchtap='closeshowoimg'></image>
+</view>
+
+  </view>
+
+  
+<!--开屏礼包券内容-->
+<view style='position: fixed;width:70%; top:400rpx; left:0 ;right:0; margin:0 auto;z-index:99991;{{isShowopenimg?"display:block":"display:none"}}'>
+<view style=' wdith:100%;height:376rpx;overflow:auto'>
+  <view class="f_yhq_body" wx:for="{{opengiftbagCoupons}}" >
+    <view class="f_yhq_spot">
+      <image src="../img/f_spot.png" mode="widthFix" style="width:5px;"></image>
+    </view>
+    <view class="f_yhq_spot2">
+      <image src="../img/f_spot.png" mode="widthFix" style="width:5px;"></image>
+    </view>
+    <view class="yhq_tpye"><image src="{{item.ImageUrl}}" mode="widthFix"></image></view>
+    <view class="f_yhq_value_fa">
+      <view class="yhq_value"><text class="yhq_value1">{{item.Name}}</text></view>
+      <view class="yhq_value" style="margin-top:0;"><text class="yhq_value2">{{item.Description}}</text><text class="yhq_value3">{{item.SDescription}}</text></view>
+      <view class="yhq_value" style="margin-top:0;"><text class="yhq_value1">抢购时间：{{item.BuyBeginTime}}-{{item.BuyEndTime}}</text></view>
+    </view>
+    
+</view>
+</view>
+<view style='text-align:center;' hidden='{{opengiftbagCoupons.length<=2?true:false}}'><image src="../img/f_yhq_jt.png" mode="widthFix" style='width:20px;'></image></view>
+
+</view>
+</view>
+<!--开屏礼包券内容-->
+
+<!--开屏图提示框-->
+
+
+<!--悬浮浮标-->
+<view>
+  <movable-area style="height:{{tuodongheight}}px;width: {{tuodongwidth}}px;'">
+    <!--x值，y值控制初始值的位置{{showadimginfo[0].FloatImageUrl}}-->
+    <movable-view direction="all" out-of-bounds="true" style="background: blue;z-index:9999999;" x="10" y="{{floatheight}}">
+      <view class='fun_icon ' style='{{(showadimginfo[0].ShowType==1 || showadimginfo[0].ShowType==3)?"display:block":"display:none"}};'>
+        <image src="{{showadimginfo[0].FloatImageUrl}}" mode="widthFix" bindtap="renderBannerDialog" style='height: 40px; width: 60px; z-index: 99999999;' data-ptype="{{showadimginfo[0].Jump}}" data-jumpurl="{{showadimginfo[0].JumpUrl}}" data-url="{{showadimginfo[0].PagePath}}"
+          data-appid="{{showadimginfo[0].appid}}" data-id="{{showadimginfo[0].Id}}" data-bannertype="{{showadimginfo[0].BannerType}}" data-imageurl="{{showadimginfo[0].ImageUrl}}" data-channelid="{{showadimginfo[0].ChannelPageId}}" data-couponno="{{showadimginfo[0].ActivityNo}}"></image>
+      </view>
+    </movable-view>
+  </movable-area>
+</view>
+<!--悬浮浮标-->
+
+<!--积分换券相关提示框-->
+
+<!--确认是否要兑换此券 弹出框-->
+<view class="modal_bg" style="{{isChange?'display:block':'display:none'}}"></view>
+<view class="modal_fa2" style="top:50%; margin-top:-150px;text-align:left; width:85%;{{isChange?'display:block':'display:none'}}">
+  <view style="padding:40px 10px 20px 10px;">
+    <view class='modal_title_add'>抵扣积分</view>
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close_add" bindtap='closeTask'></image>
+
+    <view class="modal_txt" style="margin:30px 0;text-align:left;line-height: 20px; max-height:250px; overflow:auto;text-align:center;font-size:30rpx;">
+      <text>{{deducContent}}</text>
+    </view>
+    <button class="modal_btn" bindtap="yesExcange" disabled='{{exinteget}}'>确定</button>
+  </view>
+</view>
+<!--确认是否要兑换此券 弹出框-->
+
+<!--积分不足弹框-->
+<view class="modal_bg" style="{{isEnave?'display:block':'display:none'}}"></view>
+<view class="modal_fa2" style="top:50%; margin-top:-150px;text-align:left; width:85%;{{isEnave?'display:block':'display:none'}}">
+  <view style="padding:40px 10px 20px 10px;">
+    <view class='modal_title_add'>抱歉</view>
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close_add" bindtap='ncloseTast'></image>
+
+    <view class="modal_txt" style="margin:30px 0;text-align:left;line-height: 20px; max-height:250px; overflow:auto;text-align:center;">
+      <text style='font-size:30rpx;'>您的积分余额不足，暂不能兑换此券!</text>
+    </view>
+    <button class="modal_btn" bindtap='ncloseTast'>朕知道了</button>
+  </view>
+</view>
+<!--积分不足弹框-->
+
+<!--按手机号发放优惠券成功弹框-->
+<view class="modal_bg" style="{{isSuccessAddCouponByMobile?'display:block':'display:none'}}"></view>
+<view class="modal_fa2" style="top:50%; margin-top:-150px;text-align:left; width:85%;{{isSuccessAddCouponByMobile?'display:block':'display:none'}}">
+  <view style="padding:14px 10px 20px 10px;">
+    <!-- <view class='modal_title_add'></view> -->
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close_add" bindtap='ncloseTast'></image>
+
+    <view class="modal_txt" style="margin:30px 0;text-align:left;line-height: 20px; max-height:250px; overflow:auto;text-align:center;">
+      <text style='font-size:30rpx;'>恭喜您获得{{addCouponByMobileCount}}张优惠券，请到“我的券”页面或美宜佳会员小程序--积分换券"兑换记录"查看详情</text>
+    </view>
+    <button class="modal_btn" bindtap='ncloseTast'>朕知道了</button>
+  </view>
+</view>
+<!--按手机号发放优惠券成功弹框-->
+
+<!--积分换券相关提示框-->
+
+<!--佳纷会员权益发券-->
+<view class="modal_bg" hidden='{{!isJfCoupons}}' ></view>
+<view class="modal_fa2"  hidden='{{!isJfCoupons}}' style="top:50%; margin-top:-150px;text-align:left; width:85%;">
+  <view style="padding:14px 10px 20px 10px;">
+    <!-- <view class='modal_title_add'></view> -->
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close_add" bindtap='ncloseTast'></image>
+
+    <view class="modal_txt" style="margin:30px 0;text-align:left;line-height: 20px; max-height:250px; overflow:auto;text-align:center;">
+      <text style='font-size:30rpx;'>赠送您佳纷会员专属券，请在”我的券“中查看。</text>
+    </view>
+    <button class="modal_btn" bindtap='ncloseTast'>朕知道了</button>
+  </view>
+</view>
+<!--佳纷会员权益发券-->
+
+<!-- 黎梅芳 20190513 优惠券到账提醒弹框-->
+<view class="modal_bg"  hidden='{{!couponRemindTast}}'></view>
+<view class="modal_fa2" style="top:50%; margin-top:-150px;text-align:left; width:85%;">
+  <view style="padding:40px 10px 20px 10px;" hidden='{{!couponRemindTast}}'>
+    <view class='modal_title_add'>{{couponsRemindInfo.RemindTitle}}</view>
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close_add" catchtap='closeTask'></image>
+
+    <view class="modal_txt" style="margin:30px 0;text-align:left;line-height: 20px; max-height:250px; overflow:auto;text-align:center;">
+      <text style='font-size:30rpx;'>{{couponsRemindInfo.RemindContent}}</text>
+    </view>
+   <button class='modal_btn' style="display:inline-block;margin-left:85rpx;" catchtap='urlPagePath' hidden='true' >查看
+   </button>
+    <button class='modal_btn' style="margin-left:201rpx; display:inline-block;" catchtap='closeTask' >朕知道了
+    </button>
+  </view>
+</view>
+<!-- 黎梅芳 20190513 优惠券到账提醒弹框--->
+
+
+<game-component></game-component>
+<authorize/>
+

@@ -8,7 +8,7 @@ Page({
    */
   data: {
     isCompleted: false,
-    isOpenning:false,
+    isOpenning: false,
     isShowUserInfoBtn: false, //button组件获取用户信息
     hideCardInfo: true,
     isCodeSending: false,
@@ -20,41 +20,114 @@ Page({
     Birthday: '',
     encryptCode: "",
     pubOpenId: "",
+    ttPage: "",
     isMobileExistsModal: false,
-    isUnbindOldAccount: 0
+    isUnbindOldAccount: 0,
+    activityid: 0,
+    shareMemberId: 0
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     console.log("会员卡onLoad");
+    var jump = options.jumpPage
+    this.setData({
+      ttPage: jump
+    });
+    if (options.activityid != undefined) //九宫格活动号
+    {
+      this.setData({
+        activityid: options.activityid
+      });
+    }
+    if (options.shareMemberId != undefined) //九宫格分享者id
+    {
+      this.setData({
+        shareMemberId: options.shareMemberId
+      });
+    }
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
-  
+  onReady: function() {
+
   },
-  back:function(){
-    wx.switchTab({ url: "/pages/member_index/member_index" });
+  back: function() {
+    // wx.switchTab({ url: "/pages/yhq_index/yhq" });
+    if (this.data.ttPage == "2") {
+      wx.redirectTo({
+        url: '../yhq_channel/yhq_channel',
+      })
+    } else if (this.data.ttPage == "3") {
+      wx.redirectTo({
+        url: '../r_game/r_game',
+      })
+    } else if (this.data.ttPage == "111") { //九宫格抽奖
+      wx.redirectTo({
+        url: '../yhq_ninebox/yhq_ninebox',
+      })
+    } else if (this.data.ttPage == "112") { //九宫格抽奖-助力
+      if (this.data.activityid > 0 && this.data.shareMemberId > 0) {
+        wx.redirectTo({
+          url: '../yhq_squa_zl/yhq_squa_zl?activityId=' + this.data.activityid + '&shareMemberId' + this.data.shareMemberId,
+        })
+      } else {
+        wx.redirectTo({
+          url: '../yhq_ninebox/yhq_ninebox',
+        })
+      }
+    } else {
+      wx.switchTab({
+        url: "/pages/yhq_index/yhq"
+      });
+    }
   },
-  showMsg:function(msg, isBack){
+  showMsg: function(msg, isBack) {
     wx.showModal({
       title: '提示',
       content: msg,
       showCancel: false,
-      success:function(){
-        if(isBack){
-          wx.switchTab({ url: '/pages/member_index/member_index'});
+      success: function() {
+        if (isBack) {
+          //wx.switchTab({ url: '/pages/yhq_index/yhq'});
+          if (this.data.ttPage == "2") {
+            wx.redirectTo({
+              url: '../yhq_channel/yhq_channel',
+            })
+          } else if (this.data.ttPage == "3") {
+            wx.redirectTo({
+              url: '../r_game/r_game',
+            })
+          } else if (this.data.ttPage == "111") { //九宫格抽奖
+            wx.redirectTo({
+              url: '../yhq_ninebox/yhq_ninebox',
+            })
+          } else if (this.data.ttPage == "112") { //九宫格抽奖-助力
+            if (this.data.activityid > 0 && this.data.shareMemberId > 0) {
+              wx.redirectTo({
+                url: '../yhq_squa_zl/yhq_squa_zl?activityId=' + this.data.activityid + '&shareMemberId' + this.data.shareMemberId,
+              })
+            } else {
+              wx.redirectTo({
+                url: '../yhq_ninebox/yhq_ninebox',
+              })
+            }
+          } else {
+            wx.switchTab({
+              url: "/pages/yhq_index/yhq"
+            });
+          }
         }
       }
     });
   },
   //快速开卡
-  quickGetCard:function(){
-    if (!wx.navigateToMiniProgram){
+  quickGetCard: function() {
+    if (!wx.navigateToMiniProgram) {
       this.showMsg("当前微信版本较低，无法使用该功能，请升级到最新版本后重试。", true);
       return false;
     }
@@ -66,8 +139,11 @@ Page({
     var cardId = myjCommon.myjConfig.cardId;
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.GetMemberCardParams",
-      biz: { cardId: cardId, outer_str:"member_mp"},
-      success: function (res) {
+      biz: {
+        cardId: cardId,
+        outer_str: "ticket_mp"
+      },
+      success: function(res) {
         console.log(res);
         if (res != null && res.errcode == 0) {
           //快速开卡
@@ -80,36 +156,35 @@ Page({
           console.log("开卡");
           console.log(extData);
           that.data.isOpenning = true;
-          
+
           wx.navigateToMiniProgram({
             appId: "wxeb490c6f9b154ef9",
             extraData: extData,
             //envVersion: "trial",
-            success:function(mRes){
+            success: function(mRes) {
               console.log("调用开卡组件成功：");
               console.log(mRes);
             },
-            fail:function(err){
+            fail: function(err) {
               console.log("调用开卡组件错误：");
               console.log(err);
             }
           });
-        }
-        else {
+        } else {
           wx.hideLoading();
           that.showMsg("服务器繁忙，请一会再试。", true);
         }
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("testApi失败：" + JSON.stringify(msg));
         that.showMsg("网络异常，请检查您的网络后重试。", true);
       },
-      complete: function (res) {
+      complete: function(res) {
         wx.hideLoading();
       }
     });
   },
-  addWxMemberCard:function(sessionId){
+  addWxMemberCard: function(sessionId) {
     var that = this;
     wx.showLoading({
       title: '正在载入……',
@@ -118,7 +193,7 @@ Page({
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.GetMemberCardExt",
       biz: {},
-      success: function (res) {
+      success: function(res) {
         console.log(res);
         if (res != null) {
           //that.back();
@@ -131,90 +206,86 @@ Page({
           }];
           wx.addCard({
             cardList: cardList, // 需要添加的卡券列表
-            success: function (res) {
+            success: function(res) {
               console.log(res);
               //var cardList = res.cardList; // 添加的卡券列表信息
             },
-            fail: function (res) {
+            fail: function(res) {
               console.log(res);
               //that.showMsg("启动会员卡失败", true);
             },
-            complete:function(){
+            complete: function() {
               //that.back();
             }
           });
-          
+
           //wx.reLaunch({ url: "/pages/yhq_index/yhq" });
-        }
-        else {
+        } else {
           wx.hideLoading();
           that.showMsg("服务器繁忙，请一会再试。", true);
         }
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("testApi失败：" + JSON.stringify(msg));
         that.showMsg("网络异常，请检查您的网络后重试。", true);
       },
-      complete: function (res) {
+      complete: function(res) {
         wx.hideLoading();
       }
     });
   },
-  openUserWxMemberCard:function(sessionId){
+  openUserWxMemberCard: function(sessionId) {
     var that = this;
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.GetUserWxMemberCard",
-      biz: {sessionId: sessionId },
-      success: function (res) {
-        console.log("结果")
+      biz: {
+        sessionId: sessionId
+      },
+      success: function(res) {
         console.log(res);
         if (res.Code == "0") {
           that.data.isOpenning = true;
           wx.openCard({
-            cardList: [
-              {
-                cardId: myjCommon.myjConfig.cardId,
-                code: res.Result
-              }
-            ],
-            success: function (res) {
+            cardList: [{
+              cardId: myjCommon.myjConfig.cardId,
+              code: res.Result
+            }],
+            success: function(res) {
               console.log(res);
-              
+
               //wx.reLaunch({ url: "/pages/yhq_index/yhq" });
             },
-            fail:function(msg){
+            fail: function(msg) {
               console.log(msg);
               that.showMsg("查看会员卡失败。", true);
             },
-            complete:function(){
+            complete: function() {
               //that.back();
             }
           });
-          
-        }
-        else if (res.Code == "-100" || res.Code == "4014"){
+
+        } else if (res.Code == "-100" || res.Code == "4014") {
           //已领卡但未获得开卡资料
           that.initBirthday();
           that.setData({
-            hideCardInfo:false
+            hideCardInfo: false
           });
-        }
-        else {
+        } else {
           //that.addWxMemberCard(sessionId);
           that.quickGetCard();
         }
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("GetUserWxMemberCard失败：" + JSON.stringify(msg));
         that.showMsg("网络异常，请检查您的网络后重试。", true);
       },
-      complete: function (res) {
-        
+      complete: function(res) {
+
         wx.hideLoading();
       }
     });
   },
-  toWxMemberCard:function(){
+  toWxMemberCard: function() {
     //this.quickGetCard();
     //return;
     var that = this;
@@ -222,22 +293,21 @@ Page({
       title: '正在载入……',
       mask: true
     });
-    myjCommon.getLoginUser(function (user) {
+    myjCommon.getLoginUser(function(user) {
+      //console.log("测试登录信息", user);
       if (user.isLogin) {
-        //that.quickGetCard();
         that.openUserWxMemberCard(user.sessionId);
-      }
-      else {
+      } else {
         wx.hideLoading();
         that.setData({
           isShowUserInfoBtn: true
         });
         //that.quickGetCard();
       }
-    });
-    
+    }, true);
+
   },
-  getUserInfoBtnClick: function (e) {
+  getUserInfoBtnClick: function(e) {
     console.log(e);
     if (e.detail.errMsg == "getUserInfo:ok") {
       this.setData({
@@ -246,37 +316,37 @@ Page({
       this.toWxMemberCard();
     }
   },
-  mobileInput: function (e) {
+  mobileInput: function(e) {
     this.setData({
       UserMobile: e.detail.value
     });
   },
-  bindVerifyCodeInput: function (e) {
+  bindVerifyCodeInput: function(e) {
     this.setData({
       VerifyCode: e.detail.value
     });
   },
-  bindGenderChange: function (e) {
+  bindGenderChange: function(e) {
     this.setData({
       GenderIndex: e.detail.value
     });
   },
-  bindBirthdayChange: function (e) {
+  bindBirthdayChange: function(e) {
     this.setData({
       Birthday: e.detail.value
     });
   },
-  initBirthday: function () {
+  initBirthday: function() {
     var d = new Date();
     var str = d.getFullYear().toString() + '-' + (d.getMonth() + 1).toString() + "-" + d.getDate();
     this.setData({
       Birthday: str
     });
   },
-  setValifyCodeSending: function () {
+  setValifyCodeSending: function() {
     var s = 60;
     var that = this;
-    var setSendingData = function () {
+    var setSendingData = function() {
       that.setData({
         isCodeSending: true,
         CodeBtnText: s.toString() + "秒后重新获取",
@@ -284,11 +354,10 @@ Page({
       s--;
 
       if (s > 0) {
-        setTimeout(function () {
+        setTimeout(function() {
           setSendingData();
         }, 1000);
-      }
-      else {
+      } else {
         that.setData({
           isCodeSending: false,
           CodeBtnText: "获取验证码",
@@ -298,7 +367,7 @@ Page({
     };
     setSendingData();
   },
-  getMobileVerifyCode: function () {
+  getMobileVerifyCode: function() {
     if (this.data.isCodeSending) {
       return false;
     }
@@ -314,31 +383,34 @@ Page({
     var that = this;
     myjCommon.callApi({
       interfaceCode: "ConsumerApp.Service.SendMobileValidateMessage",
-      biz: { mobile: this.data.UserMobile, supplyType: "A", codeType: 1 },
-      success: function (res) {
-        console.log(res);
+      biz: {
+        mobile: this.data.UserMobile,
+        supplyType: "A",
+        codeType: 1
+      },
+      success: function(res) {
         wx.hideLoading();
-       /* wx.showToast({
+        /*wx.showToast({
           title: res.Msg,
           icon: 'success',
           duration: 2000
         });*/
       },
-      fail: function (msg) {
+      fail: function(msg) {
         wx.hideLoading();
         console.log("调用api失败" + JSON.stringify(msg));
         //that.showMsg("发送失败，请一会重试。");
       },
     });
   },
-  unbindOldAccount: function (e) {
+  unbindOldAccount: function(e) {
     this.setData({
       isMobileExistsModal: false,
       isUnbindOldAccount: 1
     });
     this.submitOpenCardData(e);
   },
-  cancelSubmit: function (e) {
+  cancelSubmit: function(e) {
     this.setData({
       isMobileExistsModal: false,
       isUnbindOldAccount: 0,
@@ -346,7 +418,7 @@ Page({
       VerifyCode: ""
     });
   },
-  submitOpenCardData: function (e) {
+  submitOpenCardData: function(e) {
     if (!this.checkCardData()) {
       return false;
     }
@@ -356,7 +428,7 @@ Page({
       mask: true
     });
     var that = this;
-    myjCommon.getLoginUser(function (user) {
+    myjCommon.getLoginUser(function(user) {
       if (!user.isLogin) {
         that.showMsg("登录授权失败，请一会重试。");
         wx.hideLoading();
@@ -372,52 +444,48 @@ Page({
           birthday: that.data.Birthday,
           unbind: that.data.isUnbindOldAccount
         },
-        success: function (res) {
+        success: function(res) {
           wx.hideLoading();
           if (res.Code == "0") {
             wx.showModal({
               title: '激活成功',
               content: "会员卡激活成功。",
               showCancel: false,
-              success: function () {
+              success: function() {
                 wx.reLaunch({
                   url: '/pages/member_card/index'
                 });
               }
             });
-          }
-          else if (res.Code == "305") {
+          } else if (res.Code == "305") {
             //手机号已经存在
             that.setData({
               isMobileExistsModal: true,
               isUnbindOldAccount: 0,
             });
-          }
-          else {
+          } else {
             wx.showModal({
               title: '激活失败',
               content: res.Msg,
               showCancel: false,
-              success: function () {
-              }
+              success: function() {}
             });
           }
         },
-        fail: function (msg) {
+        fail: function(msg) {
           wx.hideLoading();
           console.log("激活失败：" + JSON.stringify(msg));
           wx.showModal({
             title: '激活失败',
             content: "网络异常，请检查您的网络后重试。",
             showCancel: false,
-            success: function () {
-            }
+            success: function() {}
           });
         },
       });
     }, true);
   },
-  checkCardData: function () {
+  checkCardData: function() {
     if (!/^1\d{10}$/.test(this.data.UserMobile)) {
       this.showMsg("请输入正确的手机号。");
       return false;
@@ -431,50 +499,48 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
     console.log("会员卡onShow");
-    if(this.data.isOpenning){
+    if (this.data.isOpenning) {
       this.data.isOpenning = false;
       this.back();
-    }
-    else{
+    } else {
       this.toWxMemberCard();
     }
- 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
-  
+  onHide: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
-  
+  onUnload: function() {
+
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
-  
+  onPullDownRefresh: function() {
+
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
-  
+  onReachBottom: function() {
+
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-  
+  onShareAppMessage: function() {
+
   }
 })

@@ -1,0 +1,38 @@
+/* pages/cardGame/components/rule/rule.wxss */
+.Rule {
+    height: 100vh;
+    width: 100vw;
+}
+
+.Rule,
+.close {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.close {
+    position: absolute;
+    top: -20rpx;
+    left: -30rpx;
+    width: 250rpx;
+    height: 70rpx;
+    padding: 50rpx;
+    background-origin: content-box;
+    background-color: transparent;
+}
+
+.ruleWrapper {
+    position: absolute;
+    top: 51%;
+    left: 50%;
+    height: 900rpx;
+    width: 600rpx;
+    transform: translate(-50%, -50%);
+    overflow-y: scroll
+}
+
+.text {
+    width: 600rpx;
+    height: 1185rpx;
+}

@@ -109,16 +109,16 @@ function html2json(html, bindName) {
                     var name = attr.name;
                     var value = attr.value;
                     if (name == 'class') {
-                        //console.dir(value);2018.4.14
-                         // value = value.join("")
-                       node.classStr = value;//2018.06.22 根据富文本编辑器设置的格式显示 ：比如居中还是靠右
+                        //console.dir(value); 2018.04.02
+                        //  value = value.join("")
+                        //node.classStr = value; 2018.04.02
                     }
                     // has multi attibutes
                     // make it array of attribute
                     if (name == 'style') {
-                        //console.dir(value);2018.4.14
-                         //value = value.join("")
-                      node.styleStr = value;//2018.06.22 根据富文本编辑器设置的格式显示 ：比如居中还是靠右
+                        //console.dir(value);  2018.04.02
+                        //  value = value.join("")
+                        //node.styleStr = value;
                     }
                     if (value.match(/ /)) {
                         value = value.split(' ');
@@ -132,11 +132,9 @@ function html2json(html, bindName) {
                             // already array, push to last
                             pre[name].push(value);
                         } else {
-                            // single value, make it array
                             pre[name] = [pre[name], value];
                         }
                     } else {
-                        // not exist, put it
                         pre[name] = value;
                     }
 
@@ -184,9 +182,6 @@ function html2json(html, bindName) {
             }
             
             if (unary) {
-                // if this tag dosen't have end tag
-                // like <img src="hoge.png"/>
-                // add to parents
                 var parent = bufArray[0] || results;
                 if (parent.nodes === undefined) {
                     parent.nodes = [];
@@ -197,8 +192,6 @@ function html2json(html, bindName) {
             }
         },
         end: function (tag) {
-            //debug(tag);
-            // merge into parent tag
             var node = bufArray.shift();
             if (node.tag !== tag) console.error('invalid state: mismatch end tag');
 
@@ -219,7 +212,6 @@ function html2json(html, bindName) {
             }
         },
         chars: function (text) {
-            //debug(text);
             var node = {
                 node: 'text',
                 text: text,
@@ -240,25 +232,12 @@ function html2json(html, bindName) {
             }
         },
         comment: function (text) {
-            //debug(text);
-            // var node = {
-            //     node: 'comment',
-            //     text: text,
-            // };
-            // var parent = bufArray[0];
-            // if (parent.nodes === undefined) {
-            //     parent.nodes = [];
-            // }
-            // parent.nodes.push(node);
         },
     });
     return results;
 };
 
 function transEmojiStr(str){
-  // var eReg = new RegExp("["+__reg+' '+"]");
-//   str = str.replace(/\[([^\[\]]+)\]/g,':$1:')
-  
   var emojiObjs = [];
   //如果正则表达式为空
   if(__emojisReg.length == 0 || !__emojis){

@@ -1,0 +1,3 @@
+/* pages/r_game/r_game.wxss */
+/*加上的样式*/
+.loading{font-size:14px; text-align:center; color:#999; padding:5px 0px 15px 0px;}

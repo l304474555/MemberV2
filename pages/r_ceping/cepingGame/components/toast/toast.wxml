@@ -1,0 +1,101 @@
+<!--pages/cepingGame/components/toast/toast.wxml-->
+
+<cover-view
+  class='toastWrapper'
+  wx:if="{{show}}"
+  style="color: {{static.color_toast_text}};opacity: {{opacity}}">
+
+  <cover-view class='mask' catch:tap="close" data-type="mask"/>
+
+  <!-- 无测评次数 -->
+  <cover-view  class='toast noChance' wx:if="{{showType === 'nochance'}}">
+    <cover-image
+      class='icon'
+      mode="widthFix"
+      src="{{static.img_icon_nochance}}"/>
+    <cover-view class="text">很抱歉,当前测评次数已用完</cover-view>
+  </cover-view>
+
+  <!-- 注册引导 -->
+  <cover-view  class='toast registerGuide' wx:if="{{showType === 'registerGuide'}}">
+    <cover-image
+      class='icon'
+      mode="widthFix"
+      src="{{static.img_icon_nomember}}"/>
+    <cover-view class="text">很抱歉,您还不是美宜佳会员</cover-view>
+    <cover-view class="text">注册会员即可参与活动赢取大奖</cover-view>
+    <cover-view class="text">赶紧注册吧</cover-view>
+    <cover-view class="btns">
+      <cover-view class='btn' catch:tap="close">取消</cover-view>
+      <cover-view class='btn' catch:tap="toRegister">立即注册</cover-view>
+    </cover-view>
+  </cover-view>
+
+  <!-- 活动结束 -->
+  <cover-view class="toast over" wx:if="{{showType === 'over'}}">
+    <cover-image
+      class='icon'
+      mode="widthFix"
+      src="{{static.img_icon_over}}"/>
+    <cover-view class="text">活动已结束,无法参与</cover-view>
+    <cover-view class="text">下次手速要更快一点噢</cover-view>
+  </cover-view>
+
+  <!-- 上传照片 -->
+  <cover-view class="toast chooseImg" wx:if="{{showType === 'chooseImg'}}">
+    <cover-image
+      class='icon'
+      mode="widthFix"
+      src="{{static.img_icon_upload}}"/>
+    <cover-view class="text">赶紧戳下方上传您的美照吧</cover-view>
+    <cover-view class="btns">
+      <cover-view
+        class='btn'
+        catch:tap="chooseImg"
+        data-type="camera"
+        style="background-color: {{static.color_toast_btn_bg}}">立刻拍摄</cover-view>
+      <cover-view
+        class='btn'
+        catch:tap="chooseImg"
+        data-type="album"
+        style="background-color: {{static.color_toast_btn_bg}}">相册选图</cover-view>
+    </cover-view>
+  </cover-view>
+
+  <!-- 测评完成 -->
+  <cover-view class="finish" wx:if="{{showType === 'finish'}}">
+    <cover-view class="toast" >
+      <cover-image
+        class='icon'
+        mode="widthFix"
+        src="{{static.img_icon_tip_raffle}}"/>
+      <cover-view wx:for="{{static.description}}" wx:key="{{index}}" class="text nowarp">{{item}}</cover-view>
+    </cover-view>
+    <cover-image
+      class='close'
+      catch:tap="close"
+      mode="widthFix"
+      src="{{static.img_icon_close}}"/>
+  </cover-view>
+
+  <!-- 保存提示 -->
+  <cover-view  class='toast saved' wx:if="{{showType === 'saved'}}">
+    <cover-image
+      class='icon'
+      mode="widthFix"
+      src="{{static.img_icon_success}}"/>
+    <cover-view class="text">海报已经躺在你的手机相册啦</cover-view>
+    <!-- <cover-view class="text">赶紧去朋友圈炫耀下吧！</cover-view> -->
+  </cover-view>
+
+  <!-- 活动规则 -->
+  <!-- <cover-view  class='toast rule' wx:if="{{showType === 'rule'}}">
+    <cover-view class="rule_contain" style="background-image: url({{static.img_bg_rule}})"/>
+    <cover-image
+      class='close'
+      catch:tap="close"
+      mode="widthFix"
+      src="{{static.img_btn_down}}"/>
+  </cover-view> -->
+
+</cover-view>

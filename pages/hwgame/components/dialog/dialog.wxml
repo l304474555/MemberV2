@@ -1,0 +1,47 @@
+<!--pages/hwgame/components/dialog/dialog.wxml-->
+<view class='hw_dialog' wx:if="{{shown}}">
+  <block>
+    <!-- 恭喜获得弹窗 -->
+    <view class='content winPrize' wx:if="{{type === 'win'}}">
+        <view class="title {{type}}-title"></view>
+        <view class='poster' style="{{poster ? 'background-image: url('+poster+')' : ''}}"></view>
+        <view class='tips'>
+            已经放入我的券了哦
+        </view>
+        <view class="control">
+            <view class="btn replay" catchtap="replay"></view>
+            <view class="btn share"></view>
+            <button class="btn opentype" open-type="share"></button>
+            <view class="btn ticket" catchtap="goTicket"></view>
+        </view>
+    </view>
+    <view class='content choose' wx:if="{{type === 'choose'}}">
+        <view class="title {{type}}-title"></view>
+        <view class='tips'>
+            请从以下优惠券中选择一张
+        </view>
+        <view class="prizeTable" style="width: {{tableW}}rpx">
+            <view 
+              class="card"
+              wx:for="{{data}}"
+              wx:for-item="item"
+              wx:for-index="key"
+              style="background-image: url({{item.gift_img}})"
+              data-uuid="{{item.uuid}}"
+              data-index="{{key}}"
+              catchtap="choose"
+            ></view>
+        </view>
+        
+    </view>
+    <view class='content fail' wx:if="{{type === 'runout' || type === 'fail'}}">
+        <view class="title {{type}}-title"></view>
+        <view class='poster {{type}}-poster'></view>
+        <view class='tips {{type}}-tips'>
+            {{data.length > 0 ? data[0] : (type === 'runout' ? '今天的中奖机会已经用完啦！' : '好可惜没有获得奖品...')}}
+        </view>
+        <view class="btn {{type}}-btn" catchtap="replay"></view>
+    </view>
+    <view class="close" catchtap="close"></view>
+  </block>
+</view>

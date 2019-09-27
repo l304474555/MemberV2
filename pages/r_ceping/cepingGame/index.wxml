@@ -1,0 +1,32 @@
+<view class="page"
+  bind:touchmove
+  style="background-color: {{static.color_page_bg}}">
+  <!-- pages --> 
+  <home
+    wx:if="{{router === 'home'}}"
+  />  
+  <question
+    wx:if="{{router === 'question'}}"
+  />
+  <poster
+    wx:if="{{router === 'poster'}}"
+  />
+
+  <image
+    class='back-btn'
+    catch:tap="back"
+    mode="widthFix"
+    src="{{static.img_icon_home}}"></image>
+  <!-- components -->
+  <toasts toast="{{toast}}" static="{{static.toast}}" router="{{router}}"/>
+  <loading
+    wx:if="{{router === 'loading'}}"
+  /> 
+  <view class="userInfo" wx:if="{{showGetUserInfo}}">
+    <view class="box">
+      <view>无法获取您的用户信息，请授权给我们应用以正常使用本应用的相关功能</view>
+      <button open-type='getUserInfo' lang='zh_CN' class="box-button" wx:if="{{canIUse}}" bindgetuserinfo="bindGetUserInfo">授权登录</button>
+      <view wx:else>请升级微信版本</view>
+    </view>
+  </view>
+</view>

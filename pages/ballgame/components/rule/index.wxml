@@ -1,0 +1,18 @@
+<!--pages/index/index.wxml-->
+<view class="rule-page" wx:if="{{show}}">
+    <view
+        class="mask"
+        style="background-image: url({{static.bg}});animation: {{maskAnimcss}};"
+        animation="{{maskAnim}}"></view>
+    <view class="content-wrap" style="animation: {{dialogAnim}}">
+        <view class="content">
+            <view class="rule-bg" style="background-image: url({{static.rule_bg}})">
+                <view class="content">
+                    <image class="img" src="{{static.rule_content}}" mode="widthFix"></image>
+                </view>
+            </view>
+            <image class="btn-close" src="{{static.rule_close}}" mode="widthFix" bindtap="close"></image>
+            <image class="btn-know" src="{{static.rule_know}}" mode="widthFix" bindtap="close"></image>
+        </view>
+    </view>
+</view>

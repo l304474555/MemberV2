@@ -1,0 +1,11 @@
+<view class="modal_bg"  hidden='{{!isShowtast}}'></view>
+<view class="modal_fa2" style="top:50%; margin-top:-150px;text-align:left; width:85%;" hidden='{{!isShowtast}}'>
+  <view style="padding:14px 10px 20px 10px;">
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close_add" bindtap='ncloseTast' ></image>
+
+    <view class="modal_txt" style="margin:30px 0;text-align:left;line-height: 20px; max-height:250px; overflow:auto;text-align:center;">
+      <text style='font-size:30rpx;'>恭喜您获得一次抽奖机会！</text>
+    </view>
+        <button class='modal_btn'  style='margin-top:30px; font-size:16px;' bindtap='tolucttery'>立即抽奖</button>
+  </view>
+</view>

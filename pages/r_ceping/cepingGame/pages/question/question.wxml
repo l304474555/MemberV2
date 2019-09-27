@@ -1,0 +1,34 @@
+<!--pages/cepingGame/pages/question/question.wxml-->
+<view class='qa'>
+  <view
+    class="qa-wrap {{qaAnimClass}}">
+    <view class="qa-wrap-bg-top"
+      style="background-image: url({{static.img_qa_bg_top}});"></view>
+    <view class="qa-wrap-bg"
+      style="background-image: url({{static.img_qa_bg}});"></view>
+    <view class="qa-wrap-content">
+
+      <text class="title">{{qa[qIndex].question}}</text>
+      <view class="answer-wrap">
+        <view
+          class="answer-item"
+          wx:for="{{qa[qIndex].answer}}"
+          wx:key="{{item.text}}"
+          style="background-image: url({{aIndex === index ? static.img_answer_bg_selected : static.img_answer_bg}});"
+          catch:tap="selectAnswer"
+          data-index="{{index}}">
+          {{item.text}}
+        </view>
+      </view>
+      <view class="bottom-wrap">
+        <view class="tip" style="opacity: {{tip.show ? 1 : 0}}">{{tip.text}}</view>
+        <view
+          class="btn"
+          style="transform: scale({{scale}});background-image: url({{aIndex >= 0 ? static.img_btn_bg : static.img_btn_bg_disable}});"
+          catch:tap="next">
+          {{btnTip}}
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

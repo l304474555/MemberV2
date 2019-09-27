@@ -1,0 +1,26 @@
+<!--pages/cardGame/components/boostList/boostList.wxml-->
+<view class="BoostList">
+    <view class="breakline" style="background-image: url({{static.title_friends}})"/>
+    <view class="friendsList">
+        <view 
+            class="title_friendsList" 
+            style="background-image: url({{static.bg_friendsList}})"
+        >
+            共有{{boostList.length}}{{title}}
+        </view>
+        <view class="friendsWrapper">
+            <view 
+                class="friend" 
+                wx:for="{{boostList}}" wx:key="{{index}}"
+            >
+                <view class="avator" style="background-image: url({{item.help_head}})"/>
+                <view class="name">{{item.help_name}}</view>
+                <view class="time">{{item.updated_at}}</view>
+                <view class="cardWrapper">
+                    卡片<view class="card" style="background-image: url({{item.font_card_img}})"/>
+                </view>
+            </view>
+        </view>
+        <!-- <view wx:if="{{boostList.length === 0}}">暂无好友给你助力</view> -->
+    </view>
+</view>

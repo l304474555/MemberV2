@@ -1,0 +1,172 @@
+/* pages/cardGame/components/prizeCenter/prizeCenter.wxss */
+.PrizeCenter {
+    position: fixed;
+    top: 0;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+    text-align: center;
+}
+
+.mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .8)
+}
+
+.prizeCenterWarpper{
+    width: 600rpx;
+    height: 773rpx;
+}
+
+.bgPrize,
+.btnCheck,
+.btnAdmit,
+.close,
+.prizeCenterWarpper,
+.expressToast {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.prizeCenterWarpper,
+.expressToast {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.prizeCenterWarpper {
+    display: flex;
+    justify-content: center;
+    z-index: 1;
+}
+
+.myPrizesWarpper {
+    width: 480rpx;
+    height: 500rpx;
+    margin: 200rpx 0 0 12rpx;
+    overflow-y: scroll;
+}
+
+.expressToast {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 3;
+    top: 53.6%;
+    left: 51.2%;
+    width: 512rpx;
+    height: 653rpx;
+    padding-top: 225rpx;
+    box-sizing: border-box;
+    color: rgb(27, 182, 255);
+}
+
+.close,
+.expressToastCloseBtn {
+    position: absolute;
+    top: -20rpx;
+    right: -50rpx;
+    width: 45rpx;
+    height: 45rpx;
+    padding: 30rpx;
+}
+
+.expressToastCloseBtn {
+    top: 36rpx;
+    right: 5rpx;
+    width: 52rpx;
+    height: 52rpx;
+}
+
+.bgPrize {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 460rpx;
+    height: 70rpx;
+    margin: 0 0 15rpx 15rpx;
+    padding: 0 10rpx 0 20rpx;
+    box-sizing: border-box;
+    color: rgb(236, 64, 112);
+}
+
+.prizeWrapper {
+    width: 280rpx;
+    overflow: hidden;
+}
+
+.prizeName {
+    width: fit-content;
+    min-width: 280rpx;
+    font-size: 14px;
+    letter-spacing: 4rpx;
+    white-space: nowrap;
+    animation: scroll 2s linear infinite;
+    /* overflow-x: scroll; */
+}
+
+@keyframes scroll {
+    from {
+        transform: translate(0%)
+    }
+    70%, to {
+        transform: translate(calc(280rpx - 100%))
+    }
+}
+
+.btnCheck {
+    min-width: 150rpx;
+    line-height: 70rpx;
+    font-size: 13px;
+    letter-spacing: 3rpx;
+    color: rgb(51, 204, 255);
+    white-space: nowrap;
+}
+
+.btnAdmit {
+    width: 160rpx;
+    height: 62rpx;
+    margin: 0 0 10rpx 0;
+}
+
+.inputWrapper {
+    display: flex;
+    justify-content: space-around;
+    width: 430rpx;
+}
+
+.input {
+    flex: .8;
+    line-height: 50rpx;
+    margin-right: 10rpx;
+    padding: 0rpx 20rpx;
+    box-sizing: border-box;
+    text-align: left;
+    background-color: rgb(228, 249, 255);
+    border-radius: 5rpx;
+    color: #666;
+    font-weight: 400;
+}
+
+.address {
+    height: 150rpx;
+}
+
+.label {
+    flex: .2;
+    margin-top: 5rpx;
+    white-space: nowrap;
+}
+
+.addressTitle {
+    margin: 8rpx 0 10rpx 0;
+}
+

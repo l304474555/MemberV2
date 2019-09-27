@@ -25,8 +25,6 @@ var block = makeMap("a,address,code,article,applet,aside,audio,blockquote,button
 // Inline Elements - HTML 5
 var inline = makeMap("abbr,acronym,applet,b,basefont,bdo,big,br,button,cite,del,dfn,em,font,i,iframe,img,input,ins,kbd,label,map,object,q,s,samp,script,select,small,span,strike,strong,sub,sup,textarea,tt,u,var");
 
-// Elements that you can, intentionally, leave open
-// (and which close themselves)
 var closeSelf = makeMap("colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr");
 
 // Attributes that have their values filled in disabled="disabled"

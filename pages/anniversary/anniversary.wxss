@@ -1,0 +1,346 @@
+.d-bg{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+}
+.d-value{
+  position: fixed;
+  top: 10rpx;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 2;
+}
+
+.d-back{
+  float: left;
+  width: 60rpx;
+  margin-left: 30rpx;
+  position: relative;
+  z-index: 999;
+}
+.d-location{
+  float: right;
+  width: 60rpx;
+  margin-right: 10rpx;
+}
+.back{
+  float: left;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #430306;
+  margin-left: 10rpx;
+  margin-top: 10rpx;
+}
+.location{
+  float: right;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #430306;
+  margin-right: 30rpx;
+  margin-top: 10rpx;
+}
+.d-ad{
+  width: 90%;
+  margin-top: -20rpx;
+}
+.d-ad2{
+  width: 45%;
+}
+.mid{
+  position: relative;
+  margin-top: -30rpx;
+  width: 100%;
+}
+.d-mid-bg{
+  width: 90%;
+  vertical-align: top;
+}
+.state1{
+  position: absolute;
+  bottom: 60rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 2;
+}
+.d-gift{
+  width: 65%;
+}
+.state2{
+  position: absolute;
+  bottom: 65rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 2;
+}
+.d-prize{
+  width: 50%;
+}
+.state3{
+  position: absolute;
+  bottom: 65rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 2;
+}
+.state4{
+  position: absolute;
+  bottom: 65rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 2;
+}
+.d-txt{
+  position: absolute;
+  /* top: 80rpx; */
+  top:365rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  font-size: 30rpx;
+  color: #430306;
+  width: 50%;
+}
+.d-finger{
+  position: absolute;
+  top: 30rpx;
+  right: 150rpx;
+  width: 80rpx;
+  z-index: 1;
+}
+.foot{
+  position: fixed;
+  bottom: 15rpx;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  text-align: center;
+}
+
+.d-btn{
+display:inline-block;
+padding:0;
+background-color:transparent;
+line-height: normal;
+}
+.d-share{
+  float: left;
+  width: 200rpx;
+}
+
+.d-rule{
+  float: right;
+  width: 200rpx;
+}
+
+
+.guagua{
+  position: absolute;
+  top:280rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 10;
+}
+
+.scratch_wp{
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.scratch_txt{
+position:absolute;
+bottom:41%;
+left:0;
+right:0; 
+width: 60%;
+margin: 0 auto;
+text-align: center;
+z-index: -1;
+font-size:32rpx;
+font-weight:bold;
+color:#e84445;
+font-style:italic;
+border-radius:200px;
+}
+
+.d-eject-bg{
+position: fixed;
+top:0;
+left:0;
+right:0;
+z-index:3;
+background: rgba(0, 0, 0, .7); 
+width: 100%; 
+height: 100%;
+}
+
+.d-eject{
+  position: fixed;
+  top:20%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 70%;
+  z-index: 4;
+}
+.a_eject{
+  width: 100%;
+}
+.a-rule{
+  position: absolute;
+  top: 100rpx;
+  left: 0;
+  right: 0;
+  font-size: 28rpx;
+  width: 80%;
+  height: 65%;
+  overflow-y: auto;
+  margin: 0 auto;
+  z-index: 5;
+}
+.a_eject_btn{
+  position: absolute;
+  width: 35%;
+  bottom:40rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 5;
+}
+
+button[class="d-btn"]::after {
+  border: 0;
+} 
+
+/*iphoneX*/
+@media (max-width:375px) and (-webkit-device-pixel-ratio: 3){
+  .d-value{
+  position: fixed;
+  top: 30rpx;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 2;
+}
+.d-ad{
+  width: 90%;
+  margin-top: 20rpx;
+}
+.guagua{
+  position: absolute;
+  top:310rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 10;
+}
+.d-txt{
+  position: absolute;
+  top:410rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  font-size: 30rpx;
+  color: #430306;
+  width: 50%;
+}
+
+  .d-mid-bg{
+  width: 100%;
+  vertical-align: top;
+}
+.d-prize{
+  width: 60%;
+}
+.foot{
+  position: fixed;
+  bottom: 50rpx;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  text-align: center;
+}
+.d-share{
+  float: left;
+  width: 250rpx;
+}
+
+.d-rule{
+  float: right;
+  width: 250rpx;
+}
+.d-eject{
+  position: fixed;
+  top:25%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 70%;
+  z-index: 4;
+}
+}
+
+/*Nexus5*/
+@media (max-width:360px) and (-webkit-device-pixel-ratio: 3){
+.d-ad {
+width:90%;
+margin-top:-30rpx;
+}
+  .d-mid-bg{
+  width: 85%;
+  vertical-align: top;
+}
+.d-share{
+  float: left;
+  width: 220rpx;
+}
+
+.d-rule{
+  float: right;
+  width: 220rpx;
+}
+.state1{
+  position: absolute;
+  bottom: 40rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 2;
+}
+.foot{
+  position: fixed;
+  bottom: 25rpx;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  text-align: center;
+}
+.guagua{
+  position: absolute;
+  top:260rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 10;
+}
+.d-txt{
+  position: absolute;
+  top:340rpx;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  font-size: 30rpx;
+  color: #430306;
+  width: 50%;
+}
+.d-prize{
+  width: 50%;
+}
+}

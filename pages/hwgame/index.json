@@ -1,0 +1,9 @@
+{
+  "disableScroll": true,
+  "usingComponents": {
+    "start-component": "./components/start/start",
+    "dialog-component": "./components/dialog/dialog",
+    "game-component": "./components/game/game",
+    "loading-component": "./components/loading/loading"
+  }
+}

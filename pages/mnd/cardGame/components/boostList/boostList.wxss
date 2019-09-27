@@ -1,0 +1,92 @@
+/* pages/cardGame/components/boostList/boostList.wxss */
+.BoostList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: rgb(251, 96, 136);
+    font-size: 12px;
+    text-align: center;
+}
+
+.avator,
+.card,
+.breakline,
+.title_friendsList {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.breakline {
+    width: 692rpx;
+    height: 24rpx;
+    margin: 20rpx 0;
+}
+
+.title_friendsList {
+    position: sticky;
+    top: 10rpx;
+    width: 634rpx;
+    line-height: 52rpx;
+    padding-top: 10rpx;
+    font-size: 14px;
+    color: rgb(27, 182, 255);
+    letter-spacing: 4rpx;
+}
+.friendsWrapper {
+    height: 410rpx;
+    width: 666rpx;
+    overflow-y: scroll;
+}
+
+.friendsList {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 666rpx;
+    height: 471rpx;
+    border-radius: 5rpx;
+    box-sizing: border-box;
+    background-color: rgba(255, 228, 239, .7);
+    
+}
+
+.friend {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    line-height: 60rpx;
+    min-height: 60rpx;
+    margin: 18rpx 0;
+}
+
+.avator,
+.card {
+    display: inline-block;
+    width: 60rpx;
+    height: 60rpx;
+}
+.cardWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: .26;
+}
+.avator {
+    flex: .18;
+}
+.time {
+    flex: .4;
+    color: rgb(76, 76, 76)
+}
+
+.name {
+    width: 115rpx; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}

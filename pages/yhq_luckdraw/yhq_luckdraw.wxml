@@ -1,0 +1,294 @@
+<view class='ld_value_fa'>
+  <image src="{{lotteryActivityinfo.Banner}}" mode="widthFix" class='ld_banner'></image>
+<view style='padding:0 10px;' >
+
+<view class='card_list' wx:for="{{dataimg}}" wx:for-index="idx" >
+    <image bindtap="{{disable?'':'Luckdraw'}}"  src="{{item.img}}"   data-index="{{idx}}" mode="widthFix" class='card_list_bg flip {{item.seletcClass}}'></image>
+
+<block wx:if="{{prizeArr.length>0}}">
+    <view class='card_list_pro_fa ' wx:for="{{prizeArr}}" hidden='{{item.index!=idx}}'>
+      <image src="{{item.prizeImg}}"  class='card_list_pro flip {{imgclass}}'></image>
+      <view class='card_list_txt flip {{imgclass}}'>{{item.prizeName}}</view>
+    </view>
+    </block>
+  </view>
+  
+
+<block wx:if="{{lotteryActivityinfo.IsUseGold}}">
+ <view class='ld_txt2' hidden='{{!buttomlink}}'>（您还有{{currenChance}}次免费抽奖机会）</view>
+  <view class='ld_txt1'>抽奖一次需消耗{{lotteryActivityinfo.GoldConsumptionCnt}}积分，当前积分余额：{{currenGcCnt}}</view>
+  <view class='ld_txt2' hidden='{{!buttomlink}}'>（您还有{{interCnt}}次消耗积分抽奖机会）</view>
+  </block>
+
+ <block wx:if="{{!lotteryActivityinfo.IsUseGold}}">
+ <view class='ld_txt2' hidden='{{!buttomlink}}'>（您还有{{currenChance}}次抽奖机会）</view>
+  </block> 
+
+
+  <view class='ld_foot' hidden='{{!buttomlink}}'>
+  <view bindtap='returnIndex' hidden='{{returnIcon}}' class="fun_back_fa"><image src='{{lotteryActivityinfo.ReturnButtonPhoto}}' mode="widthFix" class="fun_back"></image></view>
+  <view class='ld_foot_btn' bindtap='ActivityRule'>
+    <image src="../img/ld_icon1.png" mode="widthFix" class='ld_icon'></image>
+    <font class="ld_icon_txt">活动规则</font>
+  </view>
+  <view class='ld_foot_btn' bindtap='MyPrize'>
+    <image src="../img/ld_icon2.png" mode="widthFix" class='ld_icon'></image>
+    <font class="ld_icon_txt">我的奖品</font>
+  </view>
+  
+    <view class='ld_foot_btn' bindtap='toStatBar' hidden='{{!lotteryActivityinfo.DisplayTaskbar}}'>
+    <image src="../img/ld_icon2.png" mode="widthFix" class='ld_icon'></image>
+    <font class="ld_icon_txt">任务栏</font>
+  </view>
+  <view class='ld_foot_btn' bindtap='returnIndex' hidden='true'>
+    <image src="../img/ld_icon3.png" mode="widthFix" class='ld_icon'></image>
+    <font class="ld_icon_txt">返回首页</font>
+  </view>
+
+</view>
+
+</view>
+</view>
+
+<view class='ld_value_img'>
+<image src="{{backgroundImg}}" mode="widthFix" class='ld_banner'></image>
+</view>
+
+
+
+<!--优惠券奖品提示框-->
+<view hidden='{{!isPrize}}'>
+  <view class='tip_bg'></view>
+  <view class='tip_fa2' style='margin-top:-200px;width:85%;'>
+     <block wx:if="{{winRecortObj.PrizeId==2478 || winRecortObj.PrizeId==5528 }}">
+    <view class='tip_fa2_head'>请选择提货门店方可获得优惠券哦~</view>
+    </block>
+      <block wx:if="{{winRecortObj.PrizeId!=2478 && winRecortObj.PrizeId!=5528}}">
+    <view class='tip_fa2_head'>恭喜您获得优惠券哦~</view>
+    </block>
+    <view class='tip_fa2_body'>
+   <image src="../img/y_close2.png" mode="widthFix" class="modal_close3" catchtap='close' style='top:6px;right:5px;'></image>
+    <view class='prize-body'>
+      <image src="{{winRecortObj.PrizeImg}}" mode="widthFix" class='prize-img'></image>
+      <view class='prize-title mt10 red'>{{winRecortObj.PrizeName}}</view>
+      <view class='ta-l'>使用时间：{{winRecortObj.ShowStartTime}} - {{winRecortObj.ShowEndTime}}</view>
+
+      <block wx:if="{{winRecortObj.TakeGoodStore}}">
+      <view class='mt10' catchtap='chooseStore'>
+        <block wx:if="{{prizecurrStoreInfo.TakeGoodsStoreName==''}}">
+        <view class='eject-choose-shop'>点击选择门店</view>
+        </block>
+     <block wx:if="{{prizecurrStoreInfo.TakeGoodsStoreName!=''}}">
+        <view class='eject-choose-shop'>{{prizecurrStoreInfo.TakeGoodsStoreName}}</view>
+        </block>
+        <image src="../img/choose-jz.png" mode="widthFix" class='choose-jz' ></image>
+      </view>
+      <block wx:if="{{prizecurrStoreInfo.TakeGoodsStoreName!=''}}">
+      <view class='mt10 ta-l'>门店名称：{{prizecurrStoreInfo.TakeGoodsStoreName}}</view>
+      <view class='mt5 ta-l'>门店电话：{{prizecurrStoreInfo.TakeGoodsStorePhone}}</view>
+      <view class='mt5 ta-l'>门店地址：{{prizecurrStoreInfo.TakeGoodsStoreAddress}}</view>
+      </block>
+      <view class='mt10 red ta-l'>本券需要到指定门店微信支付即可核销。</view>
+      <view class='mt10 red ta-l' hidden='true'>仅限广东门店提货；</view>
+      </block>
+
+    </view>
+    <view class='ta_c' style='margin:30px auto 0 auto;'>
+    <button class='ld_tip_btn' bindtap='coupon_close' >确定</button> 
+    </view>
+    </view>
+  </view>
+</view>
+<!--优惠券奖品提示框-->
+
+
+
+<!--快递到家奖品提示框-->
+<view hidden='{{!isExpress}}'>
+  <view class='tip_bg'></view>
+  <view class='tip_fa2' style='margin-top:-235px;width:83%;'>
+    <view class='tip_fa2_head'>恭喜您获得</view>
+    <form report-submit="true" bindsubmit='savexpressinfo'  data-id="{{expressInfo.WLRId}}">
+    <view class='tip_fa2_body'>
+      <view style='text-align: center;'><image src='{{expressInfo.PrizeImg}}' mode="widthFix" class='lp_imd'></image></view>
+      <view class='lp_tip_fa2_txt1 mt20' style='text-align: center;'>{{expressInfo.PrizeName}}</view>
+      <view class='lp_tip_fa2_input' style='margin-top:20px'>
+        <view class='ld_input_txt'>姓名：</view><input class='ld_input' name="username" value='{{form_info}}'></input> 
+      </view>
+      <view class='lp_tip_fa2_input'>
+        <view class='ld_input_txt'>电话：</view><input class='ld_input' value='{{form_info}}' name="mobile"></input> 
+      </view>
+      <view class='lp_tip_fa2_input'>
+        <view class='ld_input_txt'>地址：</view><input class='ld_input' value='{{form_info}}' name="adress"></input> 
+      </view>
+      <view class='lp_tip_fa2_input'>*请填写快递信息,确认无误后点击确定</view>
+      <view class='ta_c' style='margin:30px auto 0 auto;'>
+        <!--<view class='tip_btn mr10' style='display:inline-block'>确定</view>-->
+        <button form-type="submit" class='ld_tip_btn'>确定</button>
+        <button class='ld_tip_btn2' bindtap='tap_close'>取消</button>
+      </view>
+    </view>
+    </form>
+  </view>
+</view>
+<!--快递到家奖品提示框-->
+
+
+
+
+<!--积分奖品提示框-->
+<view hidden='{{!isIntegral}}'>
+  <view class='tip_bg'></view>
+  <view class='tip_fa2' style='margin-top:-152px'>
+    <view class='tip_fa2_head'>恭喜您获得</view>
+    <view class='tip_fa2_body'>
+      <view style='text-align: center;'><image src='{{winRecortObj.PrizeImg}}' mode="widthFix" class='lp_imd'></image></view>
+      <view class='lp_tip_fa2_txt1 mt20' style='text-align: center;'>{{winRecortObj.PrizeName}}</view>
+      <view class='lp_tip_fa2_txt2' style='text-align: center;'>*请到我的奖品查看</view>
+      <view class='ta_c' style='margin:30px auto 0 auto;'>
+        <button class='ld_tip_btn' bindtap='tap_close'>确定</button>
+      </view>
+      
+    </view>
+  </view>
+</view>
+<!--积分奖品提示框-->
+
+<!--会员弹出框-->
+<view class="modal_bg" style="{{isMember?'display:block':'display:none'}}"></view>
+<view class="modal_fa2" style="{{isMember?'display:block':'display:none'}}">
+  <view style="padding:30px 10px;">
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close3" bindtap='closeTask'></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <!--<text>领取成功，可在"我的券"页面中查看，到店使用微信支付即可核销</text>-->
+       <text>抱歉！您还不是会员，请点击“马上成为会员”注册会员后再参加抽奖活动
+</text>
+    </view>
+
+    <form bindsubmit="getMemberCard" report-submit='true'>
+      <button form-type="submit" class='modal_btn' style='margin-top:30px;'>马上成为会员</button>
+    </form>
+  </view>
+</view>
+
+
+<!-- 获取用户信息组件 -->
+<view class="modal_bg" style="{{isShowUserInfoBtn?'display:block':'display:none'}}"></view>
+<view class='modal_fa2' style="{{isShowUserInfoBtn?'display:block':'display:none'}}">
+  <view style="padding:30px 10px;">
+    <view class="modal_txt" style="margin-top:10px; color:#666; font-size:16px;">无法获取您的用户信息，请授权给我们应用以正常使用本应用的相关功能。</view>
+    <button class='modal_btn' style='margin-top:30px; font-size:16px;' open-type='getUserInfo' bindgetuserinfo='getUserInfoBtnClick'>确定</button>
+  </view>
+</view>
+
+<!--兑换码奖品提示框-->
+<view hidden='{{!isreedcodetast}}'>
+  <view class='tip_bg'></view>
+  <view class='tip_fa2' style='margin-top:-152px'>
+    <view class='tip_fa2_head'>恭喜您获得<image src='../img/brand_tip_close.png' mode="widthFix" class='brand-tip-close' bindtap="tap_close"></image></view>
+    <view class='tip_fa2_body'>
+      <view style='text-align: center;'><image src='{{winRecortObj.PrizeImg}}' mode="widthFix" class='lp_imd'></image></view>
+      <view class='lp_tip_fa2_txt1 mt20' style='text-align:center;'>{{winRecortObj.PrizeName}}</view>
+      <view class='lp_tip_fa2_txt2'>兑换码：<text>{{winRecortObj.MTicketNo}}</text></view>
+      <view class='ta_c' style='margin:30px auto 0 auto;'>
+      <button  bindtap='copyreedcode'class='ld_tip_btn' style='background-color:#F5F4F5;color:black;border:solid 1px #ddd;' >复制</button> 
+      </view>
+      <view class='ta_c' style='margin:30px auto 0 auto;'>
+      <button class='ld_tip_btn' bindtap='tap_close' wx:if="{{isShowExchangeBtn==false}}">确定</button> 
+      <button class="ld_tip_btn" bindtap="exchangeNow" wx:if="{{isShowExchangeBtn==true}}">立即兑换</button>
+      </view>
+      
+    </view>
+  </view>
+</view>
+<!--兑换码奖品提示框-->
+
+
+<!--现金奖品提示框-->
+<view hidden='{{!iscashTast?true:false}}'>
+  <view class='tip_bg'></view>
+  <view class='tip_fa2' style='margin-top:-235px;width:83%;'>
+    <view class='tip_fa2_head'>恭喜您获得</view>
+    <form report-submit="true" bindsubmit='savecanshinfo'  data-id="{{winRecortObj.WLRId}}">
+    <view class='tip_fa2_body'>
+      <view style='text-align: center;'><image src='{{winRecortObj.PrizeImg}}' mode="widthFix" class='lp_imd'></image></view>
+      <view class='lp_tip_fa2_txt1 mt20' style='text-align: center;'>{{winRecortObj.PrizeName}}</view>
+      <view class='lp_tip_fa2_input' style='margin-top:20px'>
+        <view class='ld_input_txt'>姓名：</view><input class='ld_input' name="xjusername" value='{{form_info}}'></input> 
+      </view>
+         <view class='lp_tip_fa2_input'>
+          <picker bindchange="selectSexChange" data-model="selector" data-name="index"  value='{{index}}' range="{{gender}}">
+           <view class='ld_input_txt'>性别：</view>
+           <view class='ld_input_txt'>
+    <input class='ld_input'  disabled='true' placeholder='必填' name="xjsex" value='{{gender[genIndex]}}'></input>
+    </view>
+</picker>
+</view>
+      <view class='lp_tip_fa2_input'>
+        <view class='ld_input_txt'>电话：</view><input class='ld_input' value='{{form_info}}' name="xjmobile"></input> 
+      </view>
+      <view class='lp_tip_fa2_input'>
+        <view class='ld_input_txt' style='margin-left:-29px;'>身份证号：</view><input class='ld_input' value='{{form_info}}' name="xjidnum"></input> 
+      </view>
+      <view class='lp_tip_fa2_input'>*请填写个人信息,确认无误后点击确定</view>
+      <view class='ta_c' style='margin:30px auto 0 auto;'>
+        <!--<view class='tip_btn mr10' style='display:inline-block'>确定</view>-->
+        <button form-type="submit" class='ld_tip_btn'>确定</button>
+        <button class='ld_tip_btn2' bindtap='tap_close'>取消</button>
+      </view>
+    </view>
+    </form>
+  </view>
+</view>
+<!--现金奖品提示框-->
+
+
+<view class='modal_bg' hidden='{{!isShowTastList}}'></view>
+<view class="task_fa"  hidden='{{!isShowTastList}}'>
+    <view class='t_title'>做任务获取抽奖次数</view>
+    <image src="../img/f_pro.png" mode="widthFix" class="t_close" catchtap='closeTast' style='width:50rpx;height:50rpx;'></image>
+    <view class='task_list bgcolor1'  >
+      <view class='task_list_l'>前往美宜佳选，多1次抽奖机会(每天1次)</view>
+      <!-- <view class='task_list_btn color1'>去完成</view> -->
+      <block wx:if="{{statusList['wx572796b93d5c783b']}}">
+      <view class='task_list_btn color2 color_act' >已完成</view>
+      </block>
+       <block wx:if="{{!statusList['wx572796b93d5c783b']}}">
+      <view class='task_list_btn color1' bindtap='toWxMiniprogram' data-type='0'>去完成</view>
+      </block>
+    </view>
+    <view class='task_list bgcolor2' >
+      <view class='task_list_l'>前往美宜佳外卖，多1次抽奖机会(每天1次)</view>
+      <!-- <view class='task_list_btn color2 color_act'>已完成</view> -->
+       <block wx:if="{{statusList['wx64286f463c42df55']}}">
+      <view class='task_list_btn color2 color_act'>已完成</view>
+      </block>
+       <block wx:if="{{!statusList['wx64286f463c42df55']}}">
+      <view class='task_list_btn color1' bindtap='toWxMiniprogram' data-type='1'>去完成</view>
+      </block>
+    </view>
+    <view class='task_list bgcolor3' hidden='{{!lotteryActivityinfo.IsSharingPower}}'>
+      <view class='task_list_l'>邀请好友助力，增加抽奖机会</view>
+      <button class='task_list_btn color3' open-type='share'>去完成</button>
+    </view>
+</view>
+
+
+
+<!--赠送抽奖机会-->
+<view hidden='{{!isAddSuccess}}'>
+  <view class='tip_bg' hidden='{{!isAddSuccess}}'></view>
+  <view class='tip_fa2' style='margin-top:-152px;z-index:99999999'>
+    <view class='tip_fa2_head'>温馨提示</view>
+    <view class='tip_fa2_body'>
+     <view style='text-align: center;'>恭喜您获得一次抽奖机会！</view>
+      <view class='ta_c' style='margin:30px auto 0 auto;'>
+      <button class='ld_tip_btn' bindtap='tap_close'>确定</button> 
+      </view>
+      
+    </view>
+  </view>
+</view>
+<!--赠送抽奖机会-->
+
+

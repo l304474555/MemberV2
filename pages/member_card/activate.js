@@ -141,7 +141,7 @@ Page({
             showCancel: false,
             success: function () {
               wx.reLaunch({
-                url: '/pages/member_index/member_index'
+                url: '/pages/yhq_index/yhq'
               });
             }
           });
@@ -217,7 +217,7 @@ Page({
               showCancel: false,
               success:function(){
                 wx.reLaunch({
-                  url: '/pages/member_index/member_index'
+                  url: '/pages/yhq_index/yhq'
                 });
               }
             });

@@ -1,0 +1,127 @@
+<import src="../components/scratch/scratch.wxml" />
+<import src="../../wxParse/wxParse.wxml" />
+<image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/15e23da8fa7e4a35.png' mode="widthFix" class='d-bg'></image>
+<view class='d-value'>
+  <view>
+    <image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/4da6f6c2a1af9541.png' mode="widthFix" class='d-back' catchtap='backindex'></image>
+    <view class='back'>返回</view>
+    <view class='location'>{{locationProvince}}</view>
+    <image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/956463bf56a101d3.png' mode="widthFix" class='d-location'></image>
+  </view>
+  <image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/b68539a6ae866a3.png' mode="widthFix" class='d-ad'></image>
+  <view class='mid'>
+    <image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/5535068f535e5be6.png' mode="widthFix" class='d-mid-bg'></image>
+    <view class="guagua" >
+    <block wx:if="{{memberIdTxt==''}}">
+    <view hidden="{{isShowRule||!showSratch}}">
+      <template is = "scratch" data = "{{scratch, isScroll}}" ></template> 
+      </view>
+      </block>
+
+      <view class='yigua' hidden='{{memberIdTxt==""}}' style='font-size:32rpx;font-weight:bold;color:#e84445;font-style:italic;border-radius:200px;'>{{memberIdTxt}}</view>
+    
+      </view>
+        
+        <view class='d-txt'>
+        <block wx:if='{{isShowResult}}'>
+          <view>{{wenan}}</view>
+        </block>
+        <block wx:if='{{!isShowResult}}'>
+        <view>看看你是第几位美宜佳会员</view>
+        </block>
+      <!-- <image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/c2f00ea3aeebbad8.png' mode="widthFix" class='d-finger'></image> -->
+    </view> 
+    
+  <!--初始进来还没刮奖的-->
+  <view class='state1' style='{{result==-2 || !isShowResult?"display:block;":"display:none;"}}'>
+    <image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/f8590b1527641326.png' mode="widthFix" class='d-gift'></image>
+  </view>
+   <!--初始进来还没刮奖的-->
+
+  <!--抽奖的-->
+  <view class='state2' style='{{(result==1 && isShowResult) ?"display:block;":"display:none;"}}'>
+    <image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/47f3453890fb357f.png' mode="widthFix" class='d-prize' catchtap='toLotterry'></image>
+  </view>
+    <!--抽奖的-->
+  
+  <!--优惠券的-->
+  <view class='state3' style='{{(result==2 && isShowResult)?"display:block;":"display:none;"}}'>
+    <image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/f8cd22b9e12c3ecd.png' mode="widthFix" class='d-prize' catchtap='toMyCoupon'></image>
+  </view>
+    <!--优惠券-->
+
+  <!--谢谢参与-->
+  <view class='state4' style='{{(result==0 && isShowResult) ?"display:block;":"display:none;"}}'>
+    <image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/25b26cc20aebaf08.png' mode="widthFix" class='d-prize'></image>
+
+  </view>
+  <!--谢谢参与-->
+
+  
+  <!--点击重试-->
+  <view class='state4' style='{{(result==-1 && isShowResult) ?"display:block;":"display:none;"}}'>
+    <image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/123sdfsd.png' mode="widthFix" class='d-prize' bindtap='resetGuagua'></image>
+  </view>
+  <!--点击重试-->
+
+</view>
+</view>
+
+
+<!--底部告诉好友、活动规则按钮-->
+<view class='foot'>
+  <button open-type='share' class='d-btn' style='float:left;margin-left:100rpx;'> <image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/4dd604ca09fde81c.png' mode="widthFix" class='d-share'bindtap='shareFriends' ></image></button>
+  <button bindtap='showRules' class='d-btn' style='float:right;margin-right:100rpx;'><image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/dcfd51d1176a8ba9.png' mode="widthFix" class='d-rule' ></image></button>
+</view>
+<!--底部告诉好友、活动规则按钮-->
+
+
+<!--活动弹框-->
+<view  hidden='{{!isShowRule}}'>
+  <view class='d-eject-bg'></view>
+  <view class='d-eject'>
+    <image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/35e99318c14fb048.png' mode="widthFix" class='a_eject'></image>
+    <image src='https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201906/e6fc7ca1571cf3f2.png' mode="widthFix" class='a_eject_btn' bindtap='closeTast'></image>
+    <view class='a-rule'>
+    <!-- {{configInfo.ActivityRule}} -->
+      <template is="wxParse" data="{{wxParseData:activityrule.nodes}}" />
+    </view>
+  </view>
+</view>
+<!--活动弹框-->
+
+
+<!-- 获取用户信息组件 -->
+<view class="modal_bg" style="{{isShowUserInfoBtn?'display:block':'display:none'}}"></view>
+<view class='modal_fa2' style="{{isShowUserInfoBtn?'display:block':'display:none'}}">
+  <view style="padding:30px 10px;">
+    <view class="modal_txt" style="margin-top:10px; color:#666; font-size:16px;">无法获取您的用户信息，请授权给我们应用以正常使用本应用的相关功能。</view>
+    <button class='modal_btn' style='margin-top:30px; font-size:16px;' open-type='getUserInfo' bindgetuserinfo='getUserInfoBtnClick'>确定</button>
+  </view>
+</view>
+<!-- 获取用户信息组件 -->
+
+
+
+<!--注册成为会员弹出框-->
+<view class="modal_bg" hidden='{{!ismember}}'></view>
+<view class="modal_fa2" hidden='{{!ismember}}' style='top:18%'>
+  <view style="padding:30px 10px;">
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close3" bindtap='closeTask'></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <!--<text>领取成功，可在"我的券"页面中查看，到店使用微信支付即可核销</text>-->
+      <text>您还不是会员,点击[马上成为会员]注册会员以享受更多优惠哦~
+</text>
+    </view>
+
+    <form bindsubmit="getMemberCard" report-submit='true'>
+      <button form-type="submit" class='modal_btn' style='margin-top:30px;'>马上成为会员</button>
+    </form>
+  </view>
+</view>
+<!--注册成为会员弹出框-->
+
+
+
+
+

@@ -1,0 +1,20 @@
+<view class='hw_game' style="background-image: url({{game_bg}})">
+  <view class='flyingtree' style="background-image: url({{flyingtree}})"></view>
+  <view class='downcloud' style="background-image: url({{downcloud}})"></view>
+  <view class='upcloud' style="background-image: url({{upcloud}})"></view>
+  <view class='treecover' style="background-image: url({{treecover}})"></view>
+  <view style="display: {{canvasShown ? 'block' : 'none'}}" class='go_back' catchtap="goBack"></view>
+  <view class="score {{score === 0 ? '' : 'activeScore'}}">{{score}}</view>
+  <canvas style="display: {{canvasShown ? 'block' : 'none'}}" canvas-id="canvas-1" class="canvas-1" bindtouchstart="touchstart"></canvas>
+  <view class="balloon {{isBalloonActive ? 'balloon_active': ''}}" style="{{balloonStyle}}{{balloomScaleStyle}}"></view>
+  <view class="pump {{isPumpActive ? 'pump_active' : ''}}" style="{{pumpStyle}}"></view>
+  <view class="btn {{isBtnActive ? 'btn_active' : ''}}" style="{{btnStyle}}" bindtouchstart="pressDown">
+    <view class="tips" wx:if="{{isTips}}"></view>
+  </view>
+  <view class="balls {{isBallActive ? 'ball_active' : ''}}" style="{{ballsStyle}}">
+    <view class="ball" style="{{ballStyle}}"></view>
+    <view class="ball" style="{{ballStyle}}"></view>
+    <view class="ball" style="{{ballStyle}}"></view>
+    <view class="ball" style="{{ballStyle}}"></view>
+  </view>
+</view>

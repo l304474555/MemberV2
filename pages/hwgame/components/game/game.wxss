@@ -1,0 +1,205 @@
+@charset "UTF-8";
+.hw_game {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  text-align: center;
+}
+
+.hw_game .treecover,
+.hw_game .downcloud,
+.hw_game .flyingtree,
+.hw_game .upcloud {
+  position: absolute;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.hw_game .treecover {
+  width: 113rpx;
+  height: 210rpx;
+  top: 438rpx;
+  right: 0rpx;
+}
+
+@keyframes flyingtree
+{
+0%,100% {transform: translateY(0);}
+50% {transform: translateY(-20rpx);}
+}
+
+.hw_game .flyingtree {
+  width: 68rpx;
+  height: 112rpx;
+  top: 491rpx;
+  left: 667rpx;
+  animation: flyingtree 2s infinite;
+}
+
+@keyframes upcloud
+{
+0%,100% {transform: translateX(0);}
+50% {transform: translateX(-225rpx);}
+}
+
+.hw_game .upcloud{
+  width: 98rpx;
+  height: 61rpx;
+  top: 30rpx;
+  left: 466rpx;
+  animation: upcloud ease-in-out 4s infinite;
+}
+
+@keyframes downcloud
+{
+0%,100% {transform: translateX(0);}
+50% {transform: translateX(254rpx);}
+}
+
+.hw_game .downcloud{
+  width: 155rpx;
+  height: 97rpx;
+  top: 148rpx;
+  left: 168rpx;
+  animation: downcloud ease-in-out 4s infinite;
+}
+
+.hw_game .go_back {
+  position: absolute;
+  left: 10rpx;
+  top: 52rpx;
+  width: 131rpx;
+  height: 54rpx;
+  z-index: 99999;
+  background-image: url(https://mimage.myj.com.cn/MicroMallFileServer/Files/Excel/UploadExcel/201807/92734cf5e91cbdc1.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.hw_game .score {
+  display: inline-block;
+  position: absolute;
+  color: #fa7671;
+  font-size: 100rpx;
+  transform: translate(-50rpx, 0);
+  top: 20vh;
+  text-shadow: 0px 0px 10rpx #FFffff, 0px 0px 10rpx #FFffff, 0px 0px 10rpx #FFffff, 0px 0px 10rpx #FFffff, 0px 0px 10rpx #FFffff, 0px 0px 10rpx #FFffff, 0px 0px 10rpx #FFffff, 0px 0px 10rpx #FFffff, 0px 0px 10rpx #FFffff, 0px 0px 10rpx #FFffff, 0px 0px 10rpx #FFffff, 0px 0px 10rpx #FFffff, 0px 0px 10rpx #FFffff;
+  opacity: 0;
+  transition: all 1s ease-in-out;
+}
+
+.hw_game .score::after {
+  content: '分';
+  font-size: .6em;
+  position: absolute;
+  display: inline;
+  right: -60rpx;
+  bottom: 10rpx;
+}
+
+.hw_game .activeScore {
+  opacity: 1;
+  transform: translate(-50rpx, -50rpx);
+}
+
+.hw_game .canvas-1 {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: transparent;
+}
+
+.hw_game .balloon {
+  position: absolute;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: all .5s ease-in-out;
+  transform-origin: 50% 100%;
+  z-index: 2;
+}
+
+.hw_game .balloon_active {
+  transform: scale(0.1, 0.1);
+}
+
+.hw_game .pump {
+  position: absolute;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 1;
+  opacity: 0;
+}
+
+.hw_game .pump_active {
+  opacity: 1;
+  transition: transform .2s ease-out;
+  transform: translateY(-80rpx);
+}
+
+.hw_game .btn {
+  position: absolute;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: transform .1s ease-in-out;
+}
+
+.hw_game .btn .tips {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  width: 278rpx;
+  height: 253rpx;
+  left: 70%;
+  top: -30rpx;
+  background-image: url(https://mimage.myj.com.cn/MicroMallFileServer/Files/Excel/UploadExcel/201807/b1a727502ec587e3.png);
+  animation: float 1s ease-in-out infinite;
+}
+
+.hw_game .btn_active {
+  transform: translateY(30rpx);
+}
+
+.hw_game .balls {
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 250rpx;
+  height: 50rpx;
+  left: 250rpx;
+  top: 90vh;
+  transition: all .1s ease-in-out;
+}
+
+.hw_game .balls .ball {
+  width: 10rpx;
+  height: 10rpx;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.hw_game .ball_active {
+  width: 350rpx;
+  left: 200rpx;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-40rpx);
+  }
+}

@@ -34,13 +34,17 @@ Page({
         var pages = getCurrentPages();
         console.log(pages);
         if(pages.length>1){
+          /**如果首页登录完要重新加载数据所以加了个标志重新去加载页面 app.globalData.isYhqIndex=true  */
+          var pages = getCurrentPages();
           var prevPage = pages[pages.length - 2]; //获取上一页的信息:订单数据
-          if (prevPage.route == 'pages/member_index/member_index') {
-            wx.reLaunch({
-              url: '/pages/member_index/member_index',
+          if (prevPage.route =='pages/yhq_index/yhq')
+          {
+            app.globalData.isYhqIndex=true;
+            wx.switchTab({
+              url: '../yhq_index/yhq',
             });
           }else
-          { 
+          {
         wx.navigateBack({
           delta: 1,
           success:function(){
@@ -49,8 +53,8 @@ Page({
           fail:function(){
             console.log("login success. navigateBack fail.");
             //跳回上一页失败，直接返回首页
-            wx.reLaunch({
-              url: '/pages/member_index/member_index',
+            wx.switchTab({
+              url: '../yhq_index/yhq',
             });
           }
         });
@@ -58,8 +62,8 @@ Page({
         }
         else{
           //只有当前页，直接返回首页
-          wx.reLaunch({
-            url: '/pages/member_index/member_index',
+          wx.switchTab({
+            url: '../yhq_index/yhq',
           });
         }
       });
@@ -113,12 +117,5 @@ Page({
    */
   onShareAppMessage: function () {
   
-  },
-
-  /**
-   * 拒绝登录
-   */
-  refuseLogin(){
-    wx.navigateBack();
   }
 })

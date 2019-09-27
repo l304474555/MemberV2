@@ -1,0 +1,10 @@
+<!--custom-tab-bar/index.wxml-->
+<view class='tab-bar'>
+  <view wx:for="{{companyCode=='GD'?gdList:otherList}}" style="color: {{index==selectIndex?selectedColor:color}};" wx:key='index' bindtap='changeTab' data-index='{{index}}' data-url='{{item.pagePath}}' data-style='{{item.navigateStyle}}' data-istominiprogram="{{item.isToMiniProgram}}"
+    data-appid="{{item.appId}}" class="tabBar">
+    <view style="margin-bottom:-10px;">
+      <image src="{{index==selectIndex?item.selectedIconPath:item.iconPath}}" style="width:25px;height:25px;"></image>
+    </view>
+    <text style="font-size:13px;">{{item.text}}</text>
+  </view>
+</view>

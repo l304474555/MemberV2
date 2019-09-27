@@ -11,7 +11,7 @@
 <view style="margin:10px 10px; text-align:center;border-radius:10px; height:150px; overflow:hidden; font-size:20px; color:#666;">
   <image src="../img/member_card.jpg" style=" width:100%;" />
 </view>
-<view class='yhq_register' hidden='{{hideCardInfo}}'> 
+<view class='yhq_register' > 
   <view style='padding:0px 10px 20px 10px;'>
     <view class='yhq_register_list1'>请完善开卡信息</view>
     <view class='yhq_register_list2'>

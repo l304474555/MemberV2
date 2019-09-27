@@ -1,0 +1,177 @@
+<import src="../../wxParse/wxParse.wxml" />
+<view class="title_bg">
+  <view class="title_img">
+    <image src="../img/y01.jpg" mode="aspectFit" style="width:130px; height:38px;"></image>
+  </view>
+
+  <block wx:if="{{currCity!=''}}">
+  <view bindtap='changeCity'>
+<view class="title_name">{{currCity}}</view>
+  <view class="title_dw"><image src="https://mimage.myj.com.cn/MicroMallFileServer/Files/CouponBanner/201906/ec6aca54dea5216a.png" mode="widthFix" style="width:22px; "></image></view>
+  </view>
+</block>
+
+</view>
+<view style="width:100%; height:40px;background-color: #fff;"></view>
+<view class='title_city' style='color:#d1121a;'>{{currShopName}} 店号：{{currShopCode}}</view>
+
+<view style="width:100%; height:40px;background-color: #fff;"></view>
+
+
+<view style='padding:10px;'>
+  <view class="yhq_dq_q_fa {{item.CardStatus=='立即领取'?'yhq_dq_y':'yhq_dq_g'}}"   wx:for="{{coupeList}}" >
+   <view bindtap='opencoupe' data-id="{{item.Id}}" data-target="anniversary">
+    <view class='yhq_dq_q_icon'></view>
+    <view class='yhq_dq_q_icon_txt'>店庆</view>
+    <view class='yhq_dq_q_img_bg'><image src="{{item.ActivityImage}}" mode="widthFix" style="width:100%;border-radius:8px; "></image></view>
+    <view class='yhq_dq_q_name'>{{item.Name}}</view>
+    <view class='yhq_dq_q_price'><text class='yhq_dq_q_price_after'>{{item.MainExplanation}}</text><text class='yhq_dq_q_price_before'>{{item.ViceExplanation}}</text></view>
+
+    <view class="yhq_dq_spot1">●</view>
+    <view class="yhq_dq_spot2">●</view>
+
+    <view class='yhq_dq_line_r'>
+    <block wx:if="{{item.CardStatus=='立即领取'}}">
+    <image src="../img/yhq_dq_line_r.png" mode="widthFix" style="width:100%;"></image>
+    </block>
+
+      <block wx:if="{{item.CardStatus!='立即领取'}}">
+    <image src="../img/yhq_dq_line_g.png" mode="widthFix" style="width:100%;"></image>
+    </block>
+    </view>
+
+    <view class='yhq_dq_time'>抢购时间：{{item.BuyBeginTime}}-{{item.BuyEndTime}}</view>
+
+ </view>
+
+    <form report-submit="true" bindsubmit='getCard' >
+    <button class="{{item.CardStatus=='立即领取'?'yhq_dq_q_btn_r':'yhq_dq_q_btn_g'}}" form-type="submit" hover-stop-propagation="true" data-target="anniversary" data-cardid="{{item.AcitivityId}}" >
+    <view style="{{item.CardStatus=='立即领取'?'margin-top: 13px;':'margin-top: 22px;'}}">{{item.CardStatus}}</view>
+    </button>
+    </form>
+  </view>
+  <block wx:if="{{coupeList.length>0 && shopCoupeList.length>0}}">
+  <view class='yhq_qt_title'>该店其他优惠</view>
+</block>
+</view>
+
+
+
+
+
+<!--券列表-->
+<view class="yhq_fa" id="card_list_container" >
+  <view class="yhq_body" wx:for="{{shopCoupeList}}">
+    <view class="yhq_spot">
+      <image src="../img/spot.png" mode="widthFix" style="width:5px;"></image>
+    </view>
+    <view class="yhq_spot2">
+      <image src="../img/spot.png" mode="widthFix" style="width:5px;"></image>
+    </view>
+    <view class="yhq_spot3">
+      <text>●</text>
+    </view>
+    <view class="yhq_spot4">
+      <text>●</text>
+    </view>
+
+   <form report-submit="true" bindsubmit='getNearryCard' data-target="neary">
+      <button form-type="submit" hover-stop-propagation="true" data-cardid="{{item.Id}}" class="yhq_btn {{item.CardStatus == '立即领取' ? 'yhq_bg_red' : (item.CardStatus == '已抢光' || item.CardStatus == '已领取' ? 'yhq_bg_gray' : '')}}">
+      <text class="yhq_btn_txt" style="width:1em; top:0px; line-height:1.2em; margin-top:{{item.CardStatus == '立即领取' ?'13px':'18px'}};">{{item.CardStatus}}</text>
+    </button>
+    </form>
+
+    <view class="yhq_tpye" bindtap='opencoupe' data-target="neary" data-id="{{item.Id}}">
+      <image src="{{item.ImageUrl}}" mode="widthFix" style="height: 70px;border: 1px solid #ddd;border-radius: 8px;"></image>
+    </view>
+    <view class="yhq_value_fa" bindtap='opencoupe' data-target="neary" data-id="{{item.Id}}" >
+      <view class="yhq_value">
+        <text class="yhq_value_title1">{{item.Name}}</text>
+      </view>
+      <view class="yhq_value" style="margin-top:0;">
+       <text class="yhq_value2 yhq_red_txt">{{item.MDescription}}</text>
+       <text class="yhq_value3 yhq_red_txt">{{item.SDescription}}</text>
+
+      </view>
+      <view class="yhq_value" style="margin-top:0;">
+        <text class="yhq_value1">抢购时间：{{item.BuyBeginTime}}-{{item.BuyEndTime}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+
+<!--查看卡券弹框-->
+<view class="modal_bg" style="{{isHowtast?'display:block':'display:none'}}"></view>
+<view class="modal_fa2" style="top:50%; margin-top:-210px;text-align:left; width:85%;{{isHowtast?'display:block':'display:none'}}">
+  <view style="padding:12px 10px 20px 10px;">
+
+    <view class='modal_close3_new' bindtap='closeTask'>
+      <image src="../img/y_close2.png" mode="widthFix" style="margin-left: 0;margin-top: 10px;width: 22px;height: 22px;"></image>
+    </view>
+
+    <view class="modal_title">美宜佳优惠券</view>
+    <view class='modal_value_txt_ot_fa'>
+      <view class='modal_value_txt' style="text-align: center;">{{objcoupe.Name}}</view>
+      <view class='modal_value_txt_ot'>使用时间：{{objcoupe.BuyBeginTime}} 至 {{objcoupe.BuyEndTime}}</view>
+      <view class='modal_value_txt_ot'>本优惠券只需到店购物时，直接微信支付即可自动抵扣！</view>
+
+
+      <view class='modal_value_txt_ot'>
+        <template is="wxParse" data="{{wxParseData:article.nodes}}" />
+      </view>
+
+    </view>
+    <view class="modal_btn_fa">
+
+      <block wx:if="{{objcoupe.CardStatus=='立即领取'}}">
+      <block wx:if="{{target=='anniversary'}}">
+       <form report-submit="true" bindsubmit='getCard' >
+        <button form-type="submit" hover-stop-propagation="true" data-target="{{target}}"  data-cardid="{{objcoupe.AcitivityId}}"class='modal_btn' style="margin-top:20px;display:inline-block;background-color: red;color:white;" >{{objcoupe.CardStatus}}</button>
+           </form>
+           </block>
+
+            <block wx:if="{{target!='anniversary'}}">
+       <form report-submit="true" bindsubmit='getNearryCard' >
+        <button form-type="submit" hover-stop-propagation="true" data-target="{{target}}"  data-cardid="{{objcoupe.Id}}"class='modal_btn' style="margin-top:20px;display:inline-block;background-color: red;color:white;" >{{objcoupe.CardStatus}}</button>
+           </form>
+           </block>
+      </block>
+
+      <block wx:if="{{objcoupe.CardStatus=='未开始'}}">
+        <button class='modal_btn' style="margin-top:20px;display:inline-block;background-color: #ffb71c;color:white;" bindtap="getCard" disabled='true' data-cardid="{{objcoupe.Id}}">{{objcoupe.CardStatus}}</button>
+      </block>
+      <block wx:if="{{objcoupe.CardStatus=='已领取'}}">
+        <form report-submit="true" bindsubmit='getMemberCard'>
+        <button class='modal_btn' style="margin-top:20px;display:inline-block;background-color: #50a837;color:white;" form-type="submit" hover-stop-propagation="true"  data-cardid="{{objcoupe.AcitivityId}}">打开微信支付</button>
+        </form>
+      </block>
+
+      <block wx:if="{{objcoupe.CardStatus=='已抢光'}}">
+        <button class='modal_btn' style="margin-top:20px;display:inline-block;background-color: #D3D3D3;color:white;" bindtap="getCard" disabled='true' data-cardid="{{objcoupe.AcitivityId}}">{{objcoupe.CardStatus}}</button>
+      </block>
+    </view>
+  </view>
+</view>
+
+
+<!--马上成为会员弹框 -->
+<view class="modal_bg" hidden='{{!isShowGetCardInfo}}'></view>
+<view class="modal_fa2" hidden='{{!isShowGetCardInfo}}'>
+  <view style="padding:30px 10px;">
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close3" bindtap="closeGetCardModal"></image>
+    <image src="../img/y15.png" mode="widthFix" style="width:50px;"></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <text>抱歉！本券仅限会员领取\n\t点击“领取”马上成为会员！</text>
+    </view>
+    <button class='modal_btn' style='margin-top:30px;' bindtap='getMemberCard'>领取</button>
+  </view>
+</view>
+
+<!--新店列表无数据测试-->
+<block wx:if="{{isCompleted && isNearyDataCompleted && coupeList.legnth<=0 && shopCoupeList.length<=0}}">
+<view class='cx_list_nodate_fa' >
+  <view class='cx_list_nodate'>抱歉，您所在的门店优惠商品已被抢光，</view>
+  <view class='cx_list_nodate'style='margin-top:10px;' >可以点击<text bindtap='locationIndex'>这里</text>查看其它优惠</view>
+</view>
+</block>

@@ -1,0 +1,9 @@
+<!--components/process.wxml-->
+<view class="red small percircle animate {{gt50Class}}">
+  <view class='yq_txt'>已抢</view>
+  <text>{{percent}}%</text>
+  <view class="slice">
+    <view class="bar" style="transform: rotate({{rotationDegrees}}deg);"></view>
+    <view class="fill"></view>
+  </view>
+</view>

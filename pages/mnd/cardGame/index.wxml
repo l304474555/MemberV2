@@ -1,0 +1,49 @@
+<!-- page -->
+<!-- opt position handle page srcoll -->
+<view 
+  class="page" 
+  style="position: {{(router === 'cardGame') && (prizeCenter.show || toastList[0]) || (router === 'loading' || router === 'rule') || (router === 'share' && prompt.show) ? 'fixed' : 'relative'}};"
+>
+  <rule-component
+    wx:if="{{router === 'rule' || router === 'rule-s'}}"
+    from="{{router}}"
+  />
+  <loading-component
+    wx:if="{{router === 'loading'}}"
+  />
+  <share-component
+    wx:if="{{loaded}}"
+    style="position: {{router === 'share' ? 'relative' : 'absolute'}}; top: {{router === 'share' ? '0' : '-100000px'}};"
+  />
+  <cardGame-component
+    wx:if="{{loaded}}"
+    style="position: {{router === 'cardGame' ? 'relative' : 'absolute'}}; top: {{router === 'cardGame' ? '0' : '-100000px'}};"
+  />
+
+  <!-- cmp -->
+  <toast-component
+    wx:if="{{loaded}}"
+    style="visibility: {{((router === 'cardGame' || (router === 'share' && prompt.show)) && toastList[0]) ? 'visible' : 'hidden'}}"
+    toastList="{{toastList}}"
+  />
+
+  <prompt-component
+    wx:if="{{prompt.show && prompt.realShow}}"
+    lines="{{prompt.lines}}"
+    timeout="{{prompt.timeout}}"
+  />
+
+  <prizeCenter-component
+    wx:if="{{loaded}}"
+    style="visibility: {{prizeCenter.show ? 'visible' : 'hidden'}}"
+    showPrzieCenter="{{prizeCenter.show}}"
+    onlyShowExpress="{{prizeCenter.onlyShowExpress}}"
+  />
+  <view class="userInfo" wx:if="{{showGetUserInfo}}">
+    <view class="box">
+      <view>无法获取您的用户信息，请授权给我们应用以正常使用本应用的相关功能</view>
+      <button class="box-button" wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
+      <view wx:else>请升级微信版本</view>
+    </view>
+  </view>
+</view>

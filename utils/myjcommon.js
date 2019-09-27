@@ -1,3 +1,6 @@
+// const accessTokenUrl = "http://192.168.0.227:9999/mp_token.ashx?grant_type=client_credential&partner_code=wxxiaochengxu&secret=e857tsd1f3sd7ras8r677ur";
+// const apiUrl = "http://192.168.0.227:9999/mp_aip.ashx";
+// const apiPartner = "wxxiaochengxu";
 
 const accessTokenUrl = "https://servicedx.myj.com.cn/mp_token.ashx?grant_type=client_credential&partner_code=wxxiaochengxu&secret=e857tsd1f3sd7ras8r677ur";
 const apiUrl = "https://servicedx.myj.com.cn/mp_aip.ashx";
@@ -8,18 +11,18 @@ const apiPartner = "wxxiaochengxu";
 // const apiPartner = "wxxiaochengxu";
 
 var util = {
-  getUrlParams:function(url){
+  getUrlParams: function (url) {
     var data = {};
-    if(!url){
+    if (!url) {
       return data;
     }
     var urlArr = url.split('?');
-    if(urlArr.length<2){
+    if (urlArr.length < 2) {
       return data;
     }
     var psArr = urlArr[1].split("#")[0].split("&");
     var kvArr;
-    for(var i=0;i<psArr.length;i++){
+    for (var i = 0; i < psArr.length; i++) {
       kvArr = psArr[i].split('=');
       data[kvArr[0]] = kvArr[1];
     }
@@ -27,11 +30,12 @@ var util = {
   }
 };
 
-var myjConfig={
+
+var myjConfig = {
   cardId: "pjs3_ti5rDuy9D2TMG6uFv9QdT7A",
-  mcardActivated:false,   //会员卡是否已激活
-  mpSource: 2,
-  mpConfigCode: "member_card"
+  mcardActivated: false,   //会员卡是否已激活
+  mpSource: 1,
+  mpConfigCode: "coupon"
 };
 
 var _currentToken = {
@@ -141,7 +145,7 @@ function _callApi(opts) {
       if (res.data.Code == "0") {
         var isSuccessed = false;
         var resultObj = null;
-        try{
+        try {
           resultObj = JSON.parse(res.data.Result);
           if (typeof (resultObj.Code) !== 'undefined' && resultObj.Code === "300") {
             //登录信息过期，重新登录
@@ -153,14 +157,18 @@ function _callApi(opts) {
           isSuccessed = true;
           //opts.success(JSON.parse(res.data.Result));
         }
-        catch(ex){
-          console.log(ex);
-          console.log(res.data.Result);
+        catch (ex) {
+          //console.log(ex);
+          //console.log(res.data.Result);
+          var err = "返回数据转换异常：" + JSON.stringify(ex) + "-------data:" + JSON.stringify(res);
+          if (opts.interfaceCode != "WxMiniProgram.Service.MPLog") {
+            log(opts.interfaceCode, err);
+          }
         }
-        if(isSuccessed){
+        if (isSuccessed) {
           opts.success(resultObj);
         }
-        else{
+        else {
           var msg = {
             statusCode: "-1",
             errMsg: "服务器繁忙，请一会再试。"
@@ -192,6 +200,9 @@ function _callApi(opts) {
     },
     fail: function (msg) {
       opts.fail(msg);
+      if (opts.interfaceCode != "WxMiniProgram.Service.MPLog") {
+        log(opts.interfaceCode, JSON.stringify(msg));
+      }
     },
     complete: function (res) {
       opts.complete(res);
@@ -225,18 +236,18 @@ var _loginUser = {
   lastErrorCode: "",
   userInfo: {}
 };
-function getCurrentUser(){
+function getCurrentUser() {
   return _loginUser;
 }
 //重新登录
-function relogin(callback, ignoreError){
+function relogin(callback) {
   _loginUser.isLogin = false;
   _loginUser.sessionId = "";
   _loginUser.lastErrorCode = "";
   logigByCode(callback);
 }
 //退出登录
-function logout(){
+function logout() {
   _loginUser.isLogin = false;
   _loginUser.sessionId = "";
   _loginUser.lastErrorCode = "";
@@ -374,6 +385,7 @@ function loginByUserInfo(uData, callback) {
               }
               else if (loginRes.Code == "304") {
 
+
                 wx.showModal({
                   title: '提示',
                   content: "获取微信用户信息不完整，请确保不要拒绝授权申请，再重试。",
@@ -446,99 +458,8 @@ function loginByUserInfo(uData, callback) {
     }
   });
 }
-
-/*
-//直接登录
-function login(callback, ignoreError) {
-  wx.login({
-    success: function (lRes) {
-      wx.getUserInfo({
-        withCredentials: true,
-        success: function (uRes) {
-          
-          callApi({
-            interfaceCode: "WxMiniProgram.Service.MPLoginV2",
-            biz: { targetCode: "member_card", authCode: lRes.code, rawData: uRes.rawData, signature: uRes.signature, encryptedData: uRes.encryptedData, iv: uRes.iv },// {targetCode: "coupon" },
-            success: function (loginRes) {
-              if (loginRes.Code == "0") {
-                //登录成功
-                _loginUser.isLogin = true;
-                _loginUser.sessionId = loginRes.Result;
-                _loginUser.userInfo = uRes.userInfo;
-                callback(_loginUser);
-              }
-              else if (loginRes.Code == "304"){
-                wx.showModal({
-                  title: '提示',
-                  content: "获取微信用户信息不完整，请确保不要拒绝授权申请，再重试。",
-                  showCancel: false
-                });
-                console.log(loginRes);
-              }
-              else if (loginRes.Code == "4014") {
-                //业务改了，4014当做登录成功
-                if (true) { //(ignoreError) {
-                  _loginUser.isLogin = true;
-                  _loginUser.sessionId = loginRes.Result;
-                  _loginUser.userInfo = uRes.userInfo;
-                  callback(_loginUser);
-                }
-                else {
-                  _loginUser.isLogin = false;
-                  _loginUser.sessionId = "";
-                  wx.showModal({
-                    title: '提示',
-                    content: loginRes.Msg,
-                    showCancel: false,
-                    complete: function () {
-                      wx.reLaunch({
-                        url: '/pages/member_card/index',
-                      });
-                    }
-                  });
-                }
-              }
-              else {
-                console.log("登录失败");
-                console.log(loginRes);
-                callback(_loginUser);
-              }
-            },
-            fail: function (msg) {
-              console.log("小程序登录失败：" + JSON.stringify(msg));
-              _loginUser.isLogin = false;
-              _loginUser.sessionId = "";
-              callback(_loginUser);
-            }
-          });
-        },
-        fail: function (msg) {
-          console.log("getUserInfo 失败");
-          console.log(msg);
-          wx.showModal({
-            title: '提示',
-            content: "获取登录信息失败，可能您未授权给我们应用登录，这可能会影响你正常使用本小程序的某些功能。",
-            showCancel: false
-          });
-
-          _loginUser.isLogin = false;
-          _loginUser.sessionId = "";
-          callback(_loginUser);
-        }
-      });
-    },
-    fail: function (msg) {
-      console.log("小程序授权失败：" + JSON.stringify(msg));
-      _loginUser.isLogin = false;
-      _loginUser.sessionId = "";
-      callback(_loginUser);
-    }
-  });
-}
-*/
-
 //取前当前的登录信息
-function getLoginUser(callback, ignoreError) {
+function getLoginUser(callback) {
   //检查状态并登录
   var checkAndLogin = function () {
     wx.checkSession({
@@ -565,27 +486,21 @@ function getLoginUser(callback, ignoreError) {
   }
 };
 
-/********记录用户提交formId ******* */
-function logFormId(formId) {
-  if (!formId) {
-    return;
-  }
-  try {
-    getLoginUser(function (user) {
-      callApi({
-        interfaceCode: "WxMiniProgram.Service.LogMPFormId",
-        biz: { sessionId: user.sessionId, mpSource: myjConfig.mpSource, formId: formId },
-        success: function (data) {
-        },
-        fail: function (msg) {
-          console.log("记录用户提交formId：" + JSON.stringify(msg));
-        }
-      });
-    });
-  }
-  catch (e) {
+function log(category, msg) {
+  //取消记录服务端log
+  console.log(msg);
+  /*
+  callApi({
+    interfaceCode: "WxMiniProgram.Service.MPLog",
+    biz: { category: category, msg: msg },
+    success: function () {
+    },
+    fail: function (msg) {
+      console.log("日志记录失败：" + JSON.stringify(msg));
 
-  }
+    }
+  });
+  */
 }
 
 //********记录用户提交formId ******* */
@@ -599,8 +514,6 @@ function logFormId(formId) {
         interfaceCode: "WxMiniProgram.Service.LogMPFormId",
         biz: { sessionId: user.sessionId, mpSource: myjConfig.mpSource, formId: formId },
         success: function (data) {
-          console.log("记录用户提交formId结果：");
-          console.log(data)
         },
         fail: function (msg) {
           console.log("记录用户提交formId：" + JSON.stringify(msg));
@@ -613,28 +526,13 @@ function logFormId(formId) {
   }
 }
 
-function log(category, msg) {
-  callApi({
-    interfaceCode: "WxMiniProgram.Service.MPLog",
-    biz: { category: category, msg: msg },
-    success: function () {
-    },
-    fail: function (msg) {
-      console.log("日志记录失败：" + JSON.stringify(msg));
-
-    }
-  });
-}
-
 /**转发管理 */
 function forward(callback) {
   var forwardinfo = null;
   callApi({
     interfaceCode: "WxMiniProgram.Service.GetForwardInfoByAppid",
-    biz: { appid: "wxc94d087c5890e1f8" },
+    biz: { appid: "wx55595d5cf709ce79" },
     success: function (res) {
-      console.log("外卖")
-      console.log(res);
       if (res.Result != null) {
         forwardinfo = res.Result;
       }

@@ -1,0 +1,14 @@
+<view class='hw_loading' style="background-image: url({{bg}})">
+  <view class="housebg">
+  	<!-- <view class="base" style="background-image: url({{bgIcon}})"></view> -->
+  	<view class="floor" style="background-image: url({{bgIconFloor}})"></view>
+  	<view class="house" style="background-image: url({{bgIconHouse}})"></view>
+  	<view class="tree" style="background-image: url({{bgIconTree}})"></view>
+  </view>
+  <view class="progress">
+    <view class="bar" style="width: {{percentage}}%"></view>
+  </view>
+  <block class="image-wrapper">
+    <image class='preload_images' wx:for="{{preloadImg}}" wx:key="i" wx:for-index="i" wx:for-item="item" src="{{item}}" bindload="imageOnLoad" binderror="imageOnLoad" />
+  </block>
+</view>

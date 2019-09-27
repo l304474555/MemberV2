@@ -1,0 +1,26 @@
+page{background-color: #fff;}
+.tip_fa2_txt_dh{ font-size: 15px; text-align:center;margin: 0 auto; margin-top: 5px;}
+.fun-choose-shop{display:inline-block;  text-align: center;}
+
+.eject-r-dw{ display: inline-block;vertical-align: middle; width: 40rpx;}
+
+.eject-choose-shop{ display: inline-block; font-size: 28rpx; margin: 0 10rpx;}
+
+.choose-jz{ display: inline-block;vertical-align: middle; width: 26rpx;}
+
+.prize-body{ width: 80%; margin: 0 auto;  text-align: center; font-size: 28rpx;}
+
+.prize-img{ width: 150rpx; border-radius: 8px; margin: 0 auto;}
+
+.prize-title{ font-size: 32rpx; text-align: left;}
+
+.brand-tip-close{position: absolute; right: 20rpx; top:20rpx; width: 40rpx; height: 40rpx;}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "boostList-component": "../../components/boostList/boostList"
+  }
+}

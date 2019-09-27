@@ -33,6 +33,7 @@ Page({
      //options.shareMemberId = '2275805';
     console.log("助力")
     console.log(options.shareMemberId)
+    console.log(options.activityId)
     if (options.activityId != undefined && options.shareMemberId != undefined && options.actype != undefined) //活动号
     {
       that.setData({
@@ -165,9 +166,6 @@ Page({
             that.setData({
               isNoMember:true
             });
-            /**初始化注册会员组件方法 */
-            that.regerter1 = that.selectComponent("#regerter");
-            that.regerter1.init(that.data.isMember, "wxc94d087c5890e1f8", "member_card");
             wx.hideShareMenu();
             return;
           } else if (res.Code == "-109")
@@ -232,7 +230,7 @@ Page({
   returnIndex:function()
   {
     wx.switchTab({
-      url: '../member_index/member_index',
+      url: '../yhq_index/yhq',
     });
   },
   /**跳到规则页 */
@@ -242,7 +240,7 @@ Page({
       isurlrule:true
     });
     wx.navigateTo({
-      url: '../components/luckdraw_rule/luckdraw_rule',
+      url: '../luckdraw_rule/luckdraw_rule',
     });
   },
   /**我也要玩 */
@@ -250,22 +248,14 @@ Page({
   {
     if (this.data.actype=='luck') //翻牌
     {
-      wx.setStorageSync("aid", this.data.activityId);
-      wx.navigateTo({
-        url: '../components/fanpai_lucky/fanpai_lucky',
+      wx.reLaunch({
+        url: '../yhq_luckdraw/yhq_luckdraw?activityid=' + this.data.activityId,
       });
-      // wx.reLaunch({
-      //   url: '../yhq_luckdraw/yhq_luckdraw?activityid=' + this.data.activityId,
-      // });
     } else if (this.data.actype == 'jgg') //九宫格
     {
-      wx.setStorageSync("aid", this.data.activityId);
-      wx.navigateTo({
-        url: '../components/member_index/member_index',
+      wx.reLaunch({
+        url: '../yhq_ninebox/yhq_ninebox?activityid=' + this.data.activityId,
       });
-      // wx.reLaunch({
-      //   url: '../yhq_ninebox/yhq_ninebox?activityid=' + this.data.activityId,
-      // });
     }
    
   },

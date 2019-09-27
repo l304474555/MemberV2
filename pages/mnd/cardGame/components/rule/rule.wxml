@@ -1,0 +1,8 @@
+<!--pages/cardGame/components/rule/rule.wxml-->
+<view class="Rule" style="background-image: url({{static.bg_rule}});animation: {{animation}}">
+    <!-- <image class="close" bindtap="navToCardGame" src="{{static.btn_close}}" /> -->
+    <div class="close" bindtap="navToCardGame" />
+    <view class="ruleWrapper">
+        <image class="text" mode="aspectFit" src="{{static.bg_ruleContent}}" />
+    </view>
+</view>

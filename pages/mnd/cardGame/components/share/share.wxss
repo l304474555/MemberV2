@@ -1,0 +1,139 @@
+/* pages/cardGame/components/share/show.wxss */
+.Share {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 750rpx;
+    height: 1648rpx;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+.card,
+.Share,
+.btn_home,
+.btn_rule,
+.title,
+.character,
+.openCardBtn,
+.playBtn,
+.card_bg {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.header {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-right: 30rpx;
+    padding-bottom: 30rpx;
+}
+
+.main {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 30rpx 0;
+}
+
+.title {
+    width: 663rpx;
+    height: 213rpx;
+    margin-top: 80rpx;
+}
+
+.btn_home {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 52rpx;
+    width: 132rpx;
+    padding: 35rpx 40rpx;
+    align-self: flex-start;
+}
+
+.btn_rule {
+    position: absolute;
+    top: 10rpx;
+    right: 40rpx;
+    align-self: flex-end;
+    justify-self: end;
+    width: 115rpx;
+    height: 80rpx;
+    margin-top: 10rpx;
+    padding: 0 20rpx;
+}
+
+.card,
+.cardShadow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(15deg);
+    width: 196rpx;
+    height: 288rpx;
+}
+
+.cardShadow {
+    left: 51%;
+    z-index: 1;
+    width: 180rpx;
+    height: 265rpx;
+    box-shadow: 0px 0px 80rpx rgb(155, 219, 255);
+}
+
+.btns {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 75%;
+    height: 70rpx;
+    margin-bottom: 30rpx;
+}
+
+.openCardBtn,
+.playBtn {
+    position: relative;
+    width: 216rpx;
+    height: 70rpx;
+    line-height: 70rpx;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: 4rpx;
+    background-color: transparent;
+}
+
+.playBtn::after {
+    content: '我也要玩';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    line-height: 70rpx;
+    text-align: center;
+}
+
+.character {
+    width: 368rpx;
+    height: 598rpx;
+    transform: translateX(15%) translateZ(1px);
+}
+
+.card_bg {
+    position: relative;
+    width: 466rpx;
+    height: 466rpx;
+    transform: translateX(-15%);
+}
+
+.des {
+    transform: translate(-10%, -10rpx);
+    font-size: 12px;
+    color: rgb(251, 96, 136);
+    text-align: left;
+}

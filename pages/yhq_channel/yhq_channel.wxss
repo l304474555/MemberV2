@@ -38,7 +38,7 @@ button[class="yhq_button"]::after {
 
 .yhq_tpye{display: inline-block;width: 18%; height: 18%; margin:10px 10px; vertical-align: middle; }
 
-.yhq_tpye image{width:100% ; height: 100%; border-radius:8px; }
+.yhq_tpye image{width:100% ; height: 100%; border-radius:8px;border:1px solid #ddd }
 
 .adimg{height: 150px;width:100%;display:inline-block;overflow:hidden;}
 
@@ -47,11 +47,11 @@ button[class="yhq_button"]::after {
 .yhq_value{ float: left; width: 100%;}
 
 .yhq_value1{ 
-  font-size: 12px; 
+  font-size: 11px; 
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 1; 
+  /* -webkit-line-clamp:1;  */
   -webkit-box-orient: vertical;
 	word-break: break-all;
   line-height: 18px;
@@ -60,12 +60,12 @@ button[class="yhq_button"]::after {
 .yhq_value2{ 
   font-size: 16px; 
   line-height: 18px;
-  color:#ffb71b;
+  color:#d1121b;
 }
 .yhq_value3{ 
   font-size: 14px; 
   line-height: 18px;
-  color:#ffb71b;
+  color:#d1121b;
   vertical-align: bottom;
   margin-left: 10px;
 }
@@ -82,25 +82,208 @@ button[class="yhq_button"]::after {
 
 .add_popup_close{position: absolute; top:-15%;right:13%;}
 .add_popup_txt{position: absolute; top: 40%; right: 0; left: 0; text-align: center; margin:0 auto; font-size: 25px; color: #fff; font-weight: bold;}
-
-
-
 .channelImg {width:25px;height:30px;text-align: center}
+
+
+/*小程序改版*/
+/* image{overflow: initial;} */
+
+.va_m{vertical-align: middle;}
+
+.mt5{margin-top: 5px;}
+
+.mt10{margin-top: 10px;}
+
+.inline{ display: inline-block;}
+
+.r_txt_c{text-align: center;}
+
+.r_nav{ position: fixed; z-index: 99999; top: 10px; left: 0; right: 0; text-align: center;}
+
+.r_nav2{ padding: 10px;background-color: #fff;}
+
+.r_nav_in{ display: inline-block; vertical-align: middle; background: rgba(0, 0, 0, .6); border-radius: 50px; text-align: center; width: 32px; height: 32px;position: relative;  }
+
+.r_nav_in2{ display: inline-block; vertical-align: middle; text-align: center; width: 32px; height: 32px;position: relative;  }
+
+.r_nav_fa{ position: absolute; left: 0; right: 0; top: 0;}
+
+.r_navtxt{ font-size: 9px; color: #fff; margin-top: -4px; float: left;width: 100%; clear: both;}
+
+.r_navtxt2{ font-size: 9px; margin-top: -2px; float: left;width: 100%; clear: both;}
+
+.r_nav_input_fa{ position: relative; display: inline-block; width: 80%; padding: 8rpx 0; margin: 0 2% 0 0; vertical-align: middle; background:rgba(255,255,255,0.8); border-radius: 35px;  }
+
+.r_nav_input_fa2{ position: relative; display: inline-block; width: 88%; padding: 8rpx 0; margin: 0 2% 0 0; vertical-align: middle; background-color: #f2f2f2; border-radius: 35px;  }
+
+.r_nav_input{ width:100%;border-radius: 35px; font-size: 28rpx; text-align: left;  vertical-align: middle; display: inline-block; }
+
+.r_nav_input_icon{ width: 24px; height: 24px; position: absolute; left: 10px; top: 9px; z-index: 99999;}
+
+.r_search_icon{ width: 70rpx !important; position: absolute; left: 10px; top: 9px; z-index: 99999;}
+
+.r_shop{ font-size: 28rpx; margin: 0 3px;}
+
+.r_function_fa{ margin-top: -25px;position:relative;z-index: 888;
+}
+
+.r_function_list_fa{display: inline-block; vertical-align: middle; width:100%; overflow: auto; }
+
+.r_function_list{ background-color: #fff; width:calc(100% - 40px);display:inline-block;vertical-align:middle;white-space: nowrap; padding:0 0 3px 0;    overflow-x: scroll;overflow-y: hidden;}
+
+.r_fl{display: inline-block; width: 20%; text-align: center; font-size: 24rpx;}
+
+.r_more_fa{position: fixed; top: 60px; right: 10px; z-index: 999999;}
+
+.r_triangle {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 8px solid #000;
+    float: right;
+    margin-right: 7px;
+    opacity: 0.6;
+}
+
+.r_detail_fa{ float: left; clear: both;  background: rgba(0, 0, 0, .6); border-radius: 5px; padding:5px 15px 0 15px; color: #fff; font-size: 28rpx;}
+
+.r_detail_list{ padding: 20rpx 0; margin-bottom: 5px;}
+.r_space_line{ border-top:1px solid #ececec;border-bottom:1px solid #ececec;}
+
+.r_yhq_value_fa{display: inline-block; width:calc(100% - 35% - 25px);vertical-align: middle;}
+
+.r_yhq_button_fa{ display: inline-block; width:18%; height: 100px; background-color: #fff;border-left: 1px dashed #dbdbdb; vertical-align: middle; position: relative; text-align: center;}
+
+.r_yhq_spot3{position: absolute; color: #f0eff4; z-index: 999; line-height: 8px; font-size: 20px; right: 118rpx;top:-6px}
+
+.r_yhq_spot4{position: absolute; color: #f0eff4; z-index: 999; line-height: 8px; font-size: 20px; right: 118rpx;bottom:-6px}
+
+.r_btn_value_fa{ text-align: center;}
+
+.r_btn_txt{ font-size:20rpx; text-align: center; color: #d1121b; }
+
+.r_btn_time{ border-radius: 5px; background-color: #666666;  color: #fff; width:26rpx; height: 36rpx;line-height: 36rpx;    display: inline-block; font-size: 18rpx; vertical-align: middle;text-align: center;}
+
+.r_btn_mh{display: inline-block; font-size: 16rpx; vertical-align: middle; color: #000; margin: 0 5rpx;}
+
+.r_btn_red{display: inline-block; border-radius:30px; width: 80%; padding: 2px 0; color: #fff; background-color:#d1121b; text-align: center; font-size: 22rpx; line-height: normal;}
+
+button[class="r_btn_red"]::after {
+  border: 0;
+} 
+
+.r_btn_red_fa{position: absolute;bottom:8px; left: 0;right: 0; text-align: center;width: 100%;}
+/*没有圆形进度条时领取按钮居中**/
+.r_btn_red_fa_defualt{position: absolute;top:41%; left: 0;right: 0; text-align: center;width: 100%;}
+
+/*未开始*/
+.r_btn_yellow{display: inline-block; border-radius:30px; width: 80%; padding: 2px 0; color: #fff; background-color: #ffb71c; text-align: center; font-size: 22rpx; line-height: normal;}
+
+
+.r_btn{display: inline-block; border-radius:30px; width: 80%; padding: 2px 0; color: #fff; background-color: #f96708; text-align: center; font-size: 22rpx; line-height: normal;}
+
+button[class="r_btn"]::after {
+  border: 0;
+
+} 
+
+.r_btn_tip{position: absolute; top:20%; left: 0; right: 0;margin: 0 auto; z-index: 99}
+
+.r_list_fl_c{ display: inline-block;  width: 100%; 
+height: 40x;
+line-height: 40px;
+overflow:auto;}
+
+.r_fl_c_fa{white-space:nowrap;background-color: #f0eff4;}
+
+.r_fl_c_name{font-size: 26rpx;}
+
+.r_name_act{border-bottom: 2px solid #d1121b; color: #d1121b;}
+
+.r_c_name_act{color: #d1121b}
+
+ .r_fl_c { display:inline-block;
+text-align:center;
+margin-left:13px;
+margin-right:13px;
+
+}
+
+.r_fl_page_fa{ float: left; text-align: center; width: 100%; margin-top:0px; margin-bottom: 5px;}
+
+.r_fl_page{ width: 40rpx; height: 3px; background-color: #616161; border-radius: 10px; margin: 0 1px; display: inline-block;}
+
+.r_fl_notact{background-color: #ababab;}
+
+.r_kf_btn{color: #fff; font-size: 28rpx; display: inline-block; background-color: transparent;vertical-align: middle;padding: 0;line-height: normal;}
+
+button[class="r_kf_btn"]::after {
+  border: 0;
+} 
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+.mtab{position:fixed; top:48px; left:0px; width:100%; background-color:#f0eff4;  vertical-align:middle; z-index:99999; padding:0px; }
+
+.r_nav2_fa{position: fixed;top:0;left: 0;right: 0;z-index: 99999;}
+
+
+.oop{position: fixed;top: 0;left: 0;right: 0;z-index: 9999;}
+.oop2{position: fixed;top: 52px;left: 0;right: 0;z-index: 9999;}
+.yhq_dq_q_icon_txt{transform: rotate(-45deg); position: absolute;left: 7rpx;top: 6rpx;font-size: 24rpx;color: #fff;z-index: 9998;}
+
+
+/*小程序改版*/
+.modal_fa_ew{
+position: fixed;
+z-index: 9999991;
+top: 25%;
+left:0;
+right:0;
+margin: 0 auto;
+background-color: #fff;
+border-radius: 5px;
+width: 80%;
+height: auto;
+text-align:  center;
+}
+.yhq_dq_q_icon{
+    width: 0;
+    height: 0;
+    border-width: 36rpx;
+    border-color: #ffd034 transparent transparent #ffd034;
+    border-style: solid;
+    
+    position: absolute;
+    z-index: 9998;
+    left: 0; 
+    top: 0}
+
+.yhq_dq_q_icon_txt{transform: rotate(-45deg); position: absolute;left: 7rpx;top: 6rpx;font-size: 24rpx;color: #fff;z-index: 9998;}
+
 
 
 @media (max-width:360px){
 .yhq_value2{ 
   font-size: 15px; 
   line-height: 18px;
-  color:#ffb71b;
+  color:#d1121b;
 }
 .yhq_value3{ 
   font-size: 12px; 
   line-height: 18px;
-  color:#ffb71b;
+  color:#d1121b;
   vertical-align: bottom;
   margin-left: 10px;
 }
+.r_yhq_spot3{position: absolute; color: #f0eff4; z-index: 999; line-height: 8px; font-size: 20px; right: 121rpx;top:-6px}
+
+.r_yhq_spot4{position: absolute; color: #f0eff4; z-index: 999; line-height: 8px; font-size: 20px; right: 121rpx;bottom:-6px}
+
+
 }
 
 /*屏幕响应判断 iphone5 兼容 */
@@ -120,19 +303,23 @@ button[class="yhq_button"]::after {
  .yhq_value2{ 
   font-size: 14px; 
   line-height: 18px;
-  color:#ffb71b;
+  color:#d1121b;
 }
 .yhq_value3{ 
   font-size: 12px; 
   line-height: 18px;
-  color:#ffb71b;
+  color:#d1121b;
   vertical-align: bottom;
   margin-left: 10px;
 }
 
 .yhq_button{ display: inline-block; width:16%; height: 85px;  line-height:normal; border-radius: 0; background-color: #ffb71c; border:0;text-align: center;transform:none !important;vertical-align: middle;
 }
+.r_yhq_spot3{position: absolute; color: #f0eff4; z-index: 999; line-height: 8px; font-size: 20px; right: 121rpx;top:-6px}
 
+.r_yhq_spot4{position: absolute; color: #f0eff4; z-index: 999; line-height: 8px; font-size: 20px; right: 121rpx;bottom:-6px}
+
+  .r_yhq_button_fa{ display: inline-block; width:18%; height: 88px; background-color: #fff;border-left: 1px dashed #dbdbdb; vertical-align: middle; position: relative;}
 
 
 

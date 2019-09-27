@@ -1,7 +1,7 @@
 {
-
-
-
-
-  
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "game-component": "../hwgame/components/hwEntrance/hwEntrance",
+    "cprocess": "../components/cprocess/process"
+  }
 }
