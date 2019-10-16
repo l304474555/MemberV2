@@ -1,5 +1,0 @@
-/* pages/brandMemberAgreement/brandMemberAgreement.wxss */
-
-page>view {
-  padding: 40rpx;
-}

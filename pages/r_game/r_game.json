@@ -1,5 +1,0 @@
-{
-  "usingComponents": {
-    "game-component": "../hwgame/components/hwEntrance/hwEntrance"
-  }
-}

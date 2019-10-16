@@ -1,6 +1,0 @@
-{
-   "enablePullDownRefresh": false,
-  "usingComponents": {
-    "cprocess": "../components/cprocess/process"
-  }
-}

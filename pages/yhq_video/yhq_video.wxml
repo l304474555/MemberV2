@@ -1,4 +1,0 @@
-<txv-video vid="d0519ry1mbq" playerid="txv1" autoplay="{{false}}" bindtap='play'></txv-video>
- <view style='margin-top:10px;margin-left:5px;'>温馨提示：建议在WiFi连接状态下播放</view>
-
-

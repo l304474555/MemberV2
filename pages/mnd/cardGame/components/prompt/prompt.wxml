@@ -1,4 +1,0 @@
-<!--pages/cardGame/components/prompt/prompt.wxml-->
-<view class="Prompt">
-    <text wx:for="{{lines}}" wx:key="{{index}}">{{item}}</text>
-</view>

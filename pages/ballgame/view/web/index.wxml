@@ -1,6 +1,0 @@
-<!--pages/index/index.wxml-->
-<web-view
-    class="web"
-    src="{{url}}"
-    bindmessage="onWebviewMessage">
-</web-view>
