@@ -1,0 +1,89 @@
+<!-- 
+  <cover-view style='position: fixed; width: 100%; height: 100%; z-index: 999;top:0;left:0'>
+    <cover-view  class="modal_bg" ></cover-view >
+    <cover-view  class='modal_fa2' >
+      <cover-view  style="padding:30px 10px;">
+        <cover-view  class="modal_txt" style="margin-top:10px; color:#666; font-size:16px;">无法获取您的用户信息，请授权给我们应用以正常使用本应用的相关功能。</cover-view >
+        <button class='modal_btn' style='margin-top:30px; font-size:16px;' open-type='getUserInfo' bindgetuserinfo='getUserInfoBtnClick'>确定</button>
+      </cover-view >
+    </cover-view >
+  </cover-view > -->
+
+<!--周年庆活动显示-->
+<view style="height:170px;">
+  <block wx:if="{{memberDicountInfo!=null}}">
+  <view style='padding:10px; height:100px;'><image src='../img/adcode.jpg' class='code-ad' mode="widthFix"></image></view>
+
+  <view class="code-tip" style="height:40px; min-width:100px; display:block;">{{memberDicountInfo.ActivityName}}，您的今天次数剩余{{memberDicountInfo.DayCnt}}次，活动剩余可参与次数{{memberDicountInfo.BalanceCnt}}次</view>
+  </block>
+</view>
+<!--周年庆活动显示-->
+
+
+ <view class="jf_fa" style='position:relative;'>
+  <view class='jf_head'>
+    <image src='../img/logo.png' class='jf_icon' mode="widthFix" style=" height:18px; width:18px;"></image>
+    <view class='jf_num'>当前积分数 {{uCnt}}</view>
+  </view>
+  <view class='jf_title' >会员条码每30秒刷新，截图无效</view>
+    <view class="barcode">
+      <canvas canvas-id="barcode" />
+    </view>
+  <view class='jf_code' style='margin-top:10px;'>
+    <view class='jf_code_num'>{{code}}</view>
+  </view>
+  <view bindtap='getbarcode' wx:if="{{isCodeError}}" style="background:#fff; height:150px; line-height:150px; text-align:center; width:100%; position:absolute; top:90px; left:0px; color:#ccc;">会员条码已过期，请点击刷新</view>
+</view> 
+
+<view style='padding:10px 10px 40rpx 10px;'>
+<button bindtap='url_wxpay' style='background-color: #00BB00;color: #fff;'>微信支付</button>
+</view>
+<view class='jf_tip'><image src='../img/jf_tip.png' class='jf_icon2' mode="widthFix" style="width:16px; height:16px;"></image><font style="vertical-align: middle;">温馨提示</font></view>
+<view class='jf_tip'>会员条码仅用于向收银员出示使用，为防止诈骗，请勿发送给他人
+</view>
+
+<!-- 获取用户信息组件 -->
+<view class="modal_bg" style="{{isShowUserInfoBtn?'display:block':'display:none'}}"></view>
+<view class='modal_fa2' style="{{isShowUserInfoBtn?'display:block':'display:none'}}">
+  <view style="padding:30px 10px;">
+    <view class="modal_txt" style="margin-top:10px; color:#666; font-size:16px;">无法获取您的用户信息，请授权给我们应用以正常使用本应用的相关功能。</view>
+    <button class='modal_btn' style='margin-top:30px; font-size:16px;' open-type='getUserInfo' bindgetuserinfo='getUserInfoBtnClick'>确定</button>
+  </view>
+</view>
+
+<!--非会员弹框-->
+<!-- <view class="modal_bg" style="{{isMember?'display:block':'display:none'}}"></view>
+<view class="modal_fa2" style="{{isMember?'display:block':'display:none'}}">
+  <view style="padding:30px 10px;">
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close3" bindtap='closeTask'></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <text>您还不是会员,点击[马上成为会员]注册会员以享受更多优惠哦~
+</text>
+    </view> -->
+
+    <!-- <form bindsubmit="BecomeMember" report-submit='true'>
+      <button form-type="submit" class='modal_btn' style='margin-top:30px;'>马上成为会员</button>
+    </form> -->
+        <!-- <button open-type="getPhoneNumber" bindgetphonenumber="regesterByMobile" class='modal_btn' style='margin-top:30px;'>马上成为会员</button>
+  </view>
+</view> -->
+<!--非会员弹框-- -->
+
+<!--黎梅芳 20190424 注册会员组件-->
+ <regesmember id="regerter" ></regesmember>
+ <!--黎梅芳 20190424 注册会员组件-->
+
+
+ <!--周年庆提示框-->
+<view class='z_modal' hidden='{{ !isShowMjCount}}'>
+
+  <image src='../img/barcode_tip.png' class='z_modal_close' mode="widthFix" bindtap='closeTast'></image>
+  <view class='z-title'>周年庆会员买三送一，每天享受1次</view>
+  <view class='z-frequency'>
+    <view>您今天剩余<font class=''>{{memberDicountInfo.DayCnt}}</font>次</view>
+    <view>活动剩余可参与次数<font class=''>{{memberDicountInfo.BalanceCnt}}</font>次</view>
+  </view>
+
+</view>
+ <!--周年庆提示框-->
+

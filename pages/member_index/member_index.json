@@ -1,0 +1,11 @@
+{
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "fanpai_lucky": "../components/fanpai_lucky/fanpai_lucky",
+    "regesmember": "../components/regester_member/regestermember"
+  },
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#3a373e",
+    "navigationBarTitleText": "美宜佳会员",
+    "navigationBarTextStyle": "white"
+}

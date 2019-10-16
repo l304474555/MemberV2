@@ -1,0 +1,23 @@
+
+<view style="padding:10px 10px 0 10px;position: relative;"  bindtap="locationDtl" data-id="{{memAd.Id}}">
+  <image src="{{memAd.ImageUrl}}" mode="widthFix" class='h_tw_banner'></image>
+  <view class='h_zx_title'>
+    <view class='h_zx_title_1'>{{memAd.Title}}</view>
+    <view class='h_zx_title_2'>{{memAd.Remark}}</view>
+  </view>
+</view>
+
+<view class="h_zx_list_fa" wx:for="{{memInfoList}}" >
+  <image src="{{item.ImageUrl}}" bindtap="locationDtl" data-id="{{item.Id}}" mode="widthFix" class='h_zx_list_banner'></image>
+  <view class='h_zx_list_value' bindtap="locationDtl" data-id="{{item.Id}}">
+    <view class='h_zx_list_txt1'>{{item.Title}}</view>
+    <view class='h_zx_list_txt2'>{{item.Remark}}</view>
+  </view>
+
+  <view bindtap='clickGreat' data-ischeck="{{item.IsCheck}}" data-comId="{{item.Id}}" class='h_zx_list_img_fa'>
+    <image src="{{item.IsCheck>0?'../img/b10.png':'../img/b9.png'}}" mode="widthFix" class='h_zx_list_img' ></image>
+  </view>
+
+</view>
+
+<view class="yhq_kf" ><image bindtap='returnTop' src="../img/top.png" style="width:50px; height:50px;"></image></view>

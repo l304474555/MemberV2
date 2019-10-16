@@ -1,0 +1,15 @@
+
+<!--更多尊享弹框-->
+<view bindtap="returnIndex">
+<view class="modal_bg" ></view>
+<view class="modal_fa2" style="top:50%; margin-top:-82px">
+  <view style="padding:30px 10px 20px 10px;">
+    <image src="../img/h13.png" mode="widthFix"  class="modal_close" style="display:none;"></image>
+    <image src="../img/h15.png" mode="widthFix" style="width:50px;"></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <text>抱歉，该服务暂未开放。\n\t敬请期待！</text>
+    </view>
+  </view>
+</view>
+</view>
+

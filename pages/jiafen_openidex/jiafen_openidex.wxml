@@ -1,0 +1,94 @@
+<view style='padding-top:10px;'>
+  <view class='fun_type_list'>请选择佳纷会员类型：</view>
+  <view class='fun_type_list' wx:for="{{jiafenCardtypes}}" catchtap='chooseCardtype' data-item="{{item}}">{{item.CardName}} <font>￥{{item.Price}}/{{item.Unit}}</font>
+  <image src="../img/fun_selection.png" mode="widthFix" class='fun_type_select' hidden='{{chooseitem.Id==item.Id?false:true}}'></image>
+  </view>
+
+  <view class='fun_agreement' bindtap='seeAgreement'>
+    <image src="../img/fun_selection2.png" mode="widthFix"></image>
+    <font>《佳纷会员-会员协议》</font>
+  </view>
+</view>
+
+
+<!--广告-->
+<view style='margin-top:20px;'>
+<image src='{{jiafenInfo.ImgUrl}}'  mode='widthFix' style='width: 100% ;'></image>
+</view>
+
+<view class='fun_button_fa'>
+  <button class='fun_button' bindtap='openJfMember'>开通佳纷会员</button>
+</view>
+
+
+<!--弹框-->
+<view style='{{payCodeTask?"display:block":"display:none"}};'>
+  <view class='modal_bg'></view>
+  <view class='fun_modal_fa'>
+    <image src="../img/close.png" mode="widthFix" class="jf_close" bindtap='ncloseTast'></image>
+    <image src="../img/fun_steps_title.png" mode="widthFix" style='width:100%; padding-bottom:5px;'></image>
+    <view class='fun_title'>{{chooseitem.CardName}} ￥{{chooseitem.Price}}/{{chooseitem.Unit}}</view>
+    <view class="barcode" style='margin-top: 17px;'>
+    <canvas canvas-id="barcode" />
+    </view>
+     <view class='jf_code_num'>{{code}}</view>
+    <!-- <view>6584521354658621235</view> -->
+    <view style='font-size:13px;margin-top:6px;'>该条形码90秒内有效，请尽快扫码。</view>
+    <view style='margin-top:19px;padding-bottom:15px;'>
+    <button class='fun_button_l' style='margin-right:5%;' catchtap='openWXPay'>打开微信支付</button>
+    <button class='fun_button_r' catchtap='returnCenter'>返回会员中心</button>
+   </view>
+  </view>
+</view>
+
+<view class="modal_bg" hidden='{{nochooseCardtype?fase:true}}'></view>
+<view class="modal_fa2" hidden='{{nochooseCardtype?fase:true}}' style="top:50%; margin-top:-150px;text-align:left; width:85%;">
+  <view style="padding:40px 10px 20px 10px;">
+    <view class='modal_title_add'>抱歉</view>
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close_add" bindtap='ncloseTast'></image>
+
+    <view class="modal_txt" style="margin:30px 0;text-align:left;line-height: 20px; max-height:250px; overflow:auto;text-align:center;">
+      <text style='font-size:30rpx;'>抱歉，您还未选择佳纷会员类型，请选择后再开通。</text>
+    </view>
+    <button class="modal_btn" bindtap='ncloseTast'>朕知道了</button>
+  </view>
+</view>
+
+
+<!--非会员弹框-->
+<!-- <view class="modal_bg" style="{{isMember?'display:block':'display:none'}}"></view>
+<view class="modal_fa2" style="{{isMember?'display:block':'display:none'}}">
+  <view style="padding:30px 10px;">
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close3" bindtap='closeTask'></image>
+    <view class="modal_txt" style="margin-top:10px;">
+
+      <text>您还不是会员,点击[马上成为会员]注册会员以享受更多优惠哦~
+</text>
+    </view> -->
+
+    <!-- <form bindsubmit="BecomeMember" report-submit='true'>
+      <button form-type="submit" class='modal_btn' style='margin-top:30px;'>马上成为会员</button>
+    </form> -->
+        <!-- <button open-type="getPhoneNumber" bindgetphonenumber="regesterByMobile" class='modal_btn' style='margin-top:30px;'>马上成为会员</button>
+  </view>
+</view> -->
+<!--非会员弹框-- -->
+
+
+<view class="modal_bg" hidden='{{!tonewjfmembercoupons}}'></view>
+<view class="modal_fa2" hidden='{{!tonewjfmembercoupons}}' style="top:50%; margin-top:-150px;text-align:left; width:85%;">
+  <view style="padding:40px 10px 20px 10px;">
+    <view class='modal_title_add'>温馨提示</view>
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close_add" bindtap='ncloseTast'></image>
+
+    <view class="modal_txt" style="margin:30px 0;text-align:left;line-height: 20px; max-height:250px; overflow:auto;text-align:center;">
+      <text style='font-size:30rpx;'>赠送您佳纷会员专属券，券在3分钟内会派发到您的账号种，请在”我的券“中查看。</text>
+    </view>
+    <button class="modal_btn" bindtap='ncloseTast'>朕知道了</button>
+  </view>
+</view>
+
+
+<!--黎梅芳 20190424 注册会员组件-->
+ <regesmember id="regerter" ></regesmember>
+ <!--黎梅芳 20190424 注册会员组件-->

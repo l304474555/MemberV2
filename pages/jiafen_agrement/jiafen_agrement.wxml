@@ -1,0 +1,6 @@
+<import src="../../wxParse/wxParse.wxml" />
+<view style="padding:10px;">
+  <view class='h_tw_value'>
+    <template is="wxParse" data="{{wxParseData:article.nodes}}" />
+  </view>
+</view>

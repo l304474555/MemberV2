@@ -1,0 +1,56 @@
+<!--pages/applyfor/index.wxml-->
+<view class="appeal-type">
+  <view class='title'>请选择申诉类型</view>
+  
+  <view class="type-option  {{giftBagBtn == true ? 'type-option-act':''}} " data-btnType="1" bindtap="btnClick" style='margin-top:15rpx;'>新人礼包未到账？</view>
+</view>
+
+
+<view class='appeal-content' hidden='{{!giftBagBtn}}'>
+  <view class='title'>新人礼包申诉</view>
+   <view style='font-size:24rpx;color:#737373;margin-top:15rx'>新人礼包一般在注册后，5分钟内到账哦，如未到账，可在此进行申诉，申诉后还有问题，请与客服进行联系，谢谢。</view>
+  <view class='value'>
+    <view class='title2'><font class="appeal-asterisk">*</font>您注册会员的手机号：</view>
+    {{userMobile}}
+  </view>
+
+  <view class='value'>
+    <view class='title2'><font class="appeal-asterisk">*</font>您所在的城市：</view>
+    <image src='../img/r_dw.png' mode='widthFix' style=' width:24px;vertical-align: middle;margin-left:10rpx;' class='dw_icon'></image>
+    <view class='city' bindtap='JumpDW'> {{cityName==""?"请选择":cityName}}</view>
+  </view>
+  
+  <button  hidden="{{cityName==''?true:false}}" class='appeal-btn' bindtap='beginApplyFor'>申诉</button>
+</view>
+
+
+<view class="modal_bg" hidden='{{!isShowMsg}}'></view>
+<view class="modal_fa2" hidden='{{!isShowMsg}}' style="top:50%; margin-top:-150px;text-align:left; width:85%;">
+  <view style="padding:14px 10px 20px 10px;">
+    <!-- <view class='modal_title_add'></view> -->
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close_add" bindtap='ncloseTast'></image>
+
+    <view class="modal_txt" style="margin:30px 0;text-align:left;line-height: 20px; max-height:250px; overflow:auto;text-align:center;">
+      <text style='font-size:30rpx;'>{{showMsg}}</text>
+    </view>
+    <button class="modal_btn" bindtap='ncloseTast'>朕知道了</button>
+  </view>
+</view>
+
+<!--注册成为会员弹出框-->
+<view class="modal_bg" style="{{noMemberTask?'display:block':'display:none'}};z-index:999992;"></view>
+<view class="modal_fa2" style="{{noMemberTask?'display:block':'display:none'}};z-index:999992">
+  <view style="padding:30px 10px;">
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close3" bindtap='closeTask'></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <!--<text>领取成功，可在"我的券"页面中查看，到店使用微信支付即可核销</text>-->
+      <text>您还不是会员,点击[马上成为会员]注册会员以享受更多优惠哦~
+</text>
+    </view>
+
+    <form bindsubmit="getMemberCard" report-submit='true'>
+      <button form-type="submit" class='modal_btn' style='margin-top:30px;'>马上成为会员</button>
+    </form>
+  </view>
+</view>
+<!--注册成为会员弹出框-->

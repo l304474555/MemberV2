@@ -1,0 +1,216 @@
+<!--尊享弹框
+<view class="modal_bg"></view>
+<view class="modal_fa" style="top:50%; margin-top:-165px">
+  <view style="padding:30px 10px 20px 10px;">
+    <image src="../img/h13.png" mode="widthFix"  class="modal_close"></image>
+    <image src="../img/banner.jpg" mode="widthFix" style="width:100%;"></image>
+    <view class="modal_txt" style="margin-top:30px; margin-left:10px; margin-right:10px;">
+      <view style="text-align: left;height:120px;overflow:auto;">
+        <text>券单详情：\n\t1.本券适用于广东省所有门店；\n\t2.凭券购买五羊甜筒系列，即可立减3元\n\t3.券有效使用时间为9月1日-9月30日\n\t3.券有效使用时间为9月1日-9月30日</text>
+      </view>
+    </view>
+    <button class="modal_btn" style="margin-top:10px;">立即领取</button>
+  </view>
+</view>
+-->
+
+<!--为领卡尊享弹框
+<view class="modal_bg"></view>
+<view class="modal_fa2" style="top:50%; margin-top:-120px">
+  <view style="padding:30px 10px 20px 10px;">
+    <image src="../img/h13.png" mode="widthFix"  class="modal_close"></image>
+    <image src="../img/h12.png" mode="widthFix" style="width:50px;"></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <text>抱歉！本券仅限会员领取哦。\n\t点击上方“立即领取”\n\t马上成为会员</text>
+    </view>
+    <button class='modal_btn' style='margin-top:20px;'>查看</button>
+  </view>
+</view>
+-->
+
+
+<!--领取成功提示框
+<view class="modal_bg"></view>
+<view class="modal_fa2" style="top:50%; margin-top:-120px">
+  <view style="padding:30px 10px 20px 10px;">
+    <image src="../img/h13.png" mode="widthFix"  class="modal_close"></image>
+    <image src="../img/h11.png" mode="widthFix" style="width:50px;"></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <text>领取成功！\n\t到店使用微信支付\n\t即可自动享受优惠</text>
+    </view>
+    <button class='modal_btn' style='margin-top:20px;'>查看</button>
+  </view>
+</view>
+-->
+
+<!--更多尊享弹框
+<view class="modal_bg"></view>
+<view class="modal_fa2" style="top:50%; margin-top:-82px">
+  <view style="padding:30px 10px 20px 10px;">
+    <image src="../img/h13.png" mode="widthFix"  class="modal_close"></image>
+    <image src="../img/h15.png" mode="widthFix" style="width:50px;"></image>
+    <view class="modal_txt" style="margin-top:10px;">
+      <text>抱歉，该服务暂停开放。\n\t敬请期待！</text>
+    </view>
+  </view>
+</view>
+-->
+
+<!--会员权益弹框
+<view class="modal_bg"></view>
+<view class="modal_fa2" style="top:50%; margin-top:-180px;text-align:left; width:85%;">
+  <view style="padding:30px 10px 20px 10px;">
+    <image src="../img/h13.png" mode="widthFix"  class="modal_close"></image>
+   
+    <view class="modal_txt" style="margin-top:10px;text-align:left;line-height: 16px; max-height:300px; overflow:auto;">
+      <text>
+      会员权益说明：\n\t
+1.领取美宜佳会员卡；\n\t
+2.领取美宜佳会员卡可享受美宜佳会员权益\n\t
+3.可领取代金券\n\t
+4.领取美宜佳会员卡；\n\t
+5.领取美宜佳会员卡可享受美宜佳会员权益\n\t
+6.可领取代金券\n\t
+7.领取美宜佳会员卡；\n\t
+8.领取美宜佳会员卡可享受美宜佳会员权益\n\t
+9.可领取代金券\n\t
+10.领取美宜佳会员卡；\n\t
+11.领取美宜佳会员卡可享受美宜佳会员权益</text>
+    </view>
+  </view>
+</view>
+-->
+
+<!--账号管理弹框
+<view class="modal_bg"></view>
+<view class="modal_fa2" style="top:50%; margin-top:-211px;text-align:left; width:85%;">
+  <view style="padding:12px 10px 30px 10px;">
+    <view class="modal_title">编辑账号信息</view>
+    <view style="font-size:14px; margin-top:10px;">
+      <view class="modal_value_list">
+        <view class="modal_name">姓名</view>
+        <input class="modal_input" value="Allen_冯" disabled="false" />
+        <view class="modal_xg">修改</view>
+      </view>
+      <view class="modal_value_list">
+        <view class="modal_name">手机号</view>
+        <input class="modal_input" value="13826359615" disabled="false"/>
+        <view class="modal_xg">修改</view>
+      </view>
+      <view class="modal_value_list">
+        <view class="modal_name">常住城市</view>
+        <view style="display:inline-block;vertical-align: middle;">
+          <view>{{areaInfo}}</view>
+        </view>
+        <view class="modal_xg" bindtap="selectDistrict" style="margin-left:0;">选择</view>
+
+
+<view class="dialog-mask " style="visibility:{{isVisible ? 'visible': 'hidden'}}" bindtap="hideMenuTap " />
+
+<view class="dialog-mask " style="z-index:11;visibility:{{addressMenuIsShow ? 'visible': 'hidden'}}" bindtap="hideCitySelected" />
+
+
+<view class="picker-view" animation="{{animationAddressMenu}}" style="visibility:{{addressMenuIsShow ? 'visible':'hidden'}}">
+  <view style="width:100%;">
+  <view style="padding:13px; color:#586c94;">
+    <text catchtap="cityCancel">取消</text>
+    <text style="float: right" catchtap="citySure">确定</text>
+  </view>
+    
+  </view>
+ 
+ 
+  <picker-view style="width: 100%; height: 300px;" bindchange="cityChange" value="{{value}}" wx:key="">
+    <picker-view-column>
+      <view wx:for="{{provinces}}" class="picker-item">
+        {{item.name}}</view>
+    </picker-view-column>
+    <picker-view-column>
+      <view wx:for="{{citys}}" class="picker-item" wx:key="">
+        {{item.name}}</view>
+    </picker-view-column>
+  </picker-view>
+</view>
+
+      <view class="modal_value_list">
+        <view class="modal_name">生日</view>
+        <view class="date_section">  
+          <picker mode="date" value="{{date}}" start="1978-01-01" end="2017-1-23" bindchange="bindDateChange">  
+            <view class="picker">日期{{dates}}</view>  
+          </picker>  
+        </view>  
+      </view>
+
+
+      <view class="modal_value_list">
+        <view class="modal_name">个人标签</view>
+        <view class="label_v_fa">
+          <view class="label_v">文艺青年</view>
+          <view class="label_v label_v_select">小清新</view>
+          <view class="label_v">吃货</view>
+          <view class="label_v">熟食</view>
+          <view class="label_v label_v_select">美宜佳粉丝</view>
+        </view>
+        <view class="modal_btn_fa">
+          <button class='modal_btn_n' style='margin-top:20px;margin-right:15px; display:inline-block;'>取消</button>
+          <button class='modal_btn' style='margin-top:20px;display:inline-block;'>保存</button>
+        </view>
+        
+        
+      </view>
+      </view>
+    </view>
+  </view>
+</view>
+-->
+<!--账号添加标签弹框
+<view class="modal_bg"></view>
+<view class="modal_fa2" style="top:50%; margin-top:-180px;text-align:left; width:85%;">
+<view style="text-align: center;font-size: 16px;border-bottom: 1px solid #eee;padding:10px 0;">添加标签</view>
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close3_new" bindtap='closeTask'></image>
+  <view style="padding:30px 20px 20px 20px;">
+    <view class="modal_txt">
+      <text style='color:#d1121a;'>请每个分类选择1~3个选项哦。选择完成后点击确定即可</text>
+
+      <view style='text-align: left; margin-top:20px;'>
+        <text style='font-size:16px;'>消费主张</text>
+        <view><button class='account_popup_button_g'>小清新</button><button class='account_popup_button_g'>文艺青年</button><button class='account_popup_button_g'>小清新</button><button class='account_popup_button_g button_yellow'>文艺青年</button><button class='account_popup_button_g'>小清新</button></view>
+      </view>
+
+      <view style='text-align: left;margin-top:20px;'>
+        <text style='font-size:16px;'>平常状态</text>
+        <view><button class='account_popup_button_g button_yellow'>小清新</button><button class='account_popup_button_g'>文艺青年</button><button class='account_popup_button_g'>小清新</button><button class='account_popup_button_g'>文艺青年</button><button class='account_popup_button_g'>小清新</button></view>
+      </view>
+      <button class='modal_btn' style='margin-top:20px;background-color:#d1121a;'>确定</button>
+    </view>
+  </view>
+</view>-->
+
+
+<!--温馨提示弹框
+<view class="account_popup_smo" style="top:50%; margin-top:-120px;text-align:left; width:60%;z-index:999999;">
+  <view class='account_popup_smo_title'>温馨提示</view>
+  <view style="padding:20px 20px 20px 20px;">
+    <view class="modal_txt">
+      请每个分类选择1~3个选项哦。选择完成后点击确定即可
+    </view>
+    <button class='modal_btn' style='margin-top:20px;background-color:#d1121a;'>朕知道了</button>
+  </view>
+</view>-->
+
+
+<!--温馨提示弹框222-->
+<view class="modal_bg"></view>
+<view class="account_popup_smo2" style="top:50%; margin-top:-120px;text-align:left; width:60%;z-index:999999;">
+  <view class='account_popup_smo_title2'>温馨提示</view>
+   <image src="../img/y_close2.png" mode="widthFix" class="modal_close3_new" bindtap='closeTask'></image>
+  <view style="padding:20px 20px 20px 20px;">
+    <view class="modal_txt">
+      请每个分类选择1~3个选项哦。选择完成后点击确定即可
+    </view>
+    <button class='modal_btn' style='margin-top:20px;background-color:#d1121a;'>朕知道了</button>
+  </view>
+</view>
+<!--温馨提示弹框22-->
+
+

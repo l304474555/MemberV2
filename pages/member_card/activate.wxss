@@ -1,0 +1,23 @@
+/* pages/member_card/activate.wxss */
+.title_bg{background-color: #d1121a; height: 40px;position: fixed;z-index: 9999; width: 100%;}
+
+.title_img{ float: left; height: 40px; margin-left: 10px; }
+
+.title_name{ float: right;font-size: 14px; color: #fff; line-height: 40px; margin-right: 10px;}
+
+.title_tx{float: right; width: 30px; height: 30px; margin-top: 5px; margin-right: 8px;   }
+
+.yhq_register{background-color: #fff; width: 100%; display: inline-block;}
+
+.yhq_register_list1{width: 100%; font-size: 14px; color: #aaa;padding: 10px 0;border-bottom:1px solid #f0eff4;}
+
+.yhq_register_list2{width: 100%; font-size: 14px;  padding: 10px 0 0 0;}
+
+.yhq_register_list2_l{ display: inline-block;  width: 45px; margin-right: 25px; text-align: right; vertical-align: middle;padding-bottom: 10px;}
+
+.yhq_register_list2_r{ display: inline-block;  width:calc(100% - 70px);vertical-align: middle;border-bottom:1px solid #f0eff4; padding-bottom: 10px; }
+
+.yhq_register_pos{position: relative;}
+
+.yhq_register_btn{background-color: #d1121a; border-radius: 5px; color: #fff; font-size: 12px; position: absolute; left: 56%; top: 50%; margin-top: -15px;}
+.yhq_register_btn_gray{background-color:#ccc;}
