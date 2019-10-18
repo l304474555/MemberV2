@@ -4,6 +4,12 @@ var address = require('../../utils/city.js');
 var WxParse = require('../../wxParse/wxParse.js');
 var util = require('../../utils/util.js');
 var app = getApp();
+const jxAppId = 'wx572796b93d5c783b';
+const takeOutAppId_HN = 'wx64286f463c42df55';
+const takeOutAppId_HZ = 'wx36dc7878ec18111b';
+const jxMyVoucherPath = 'pages/couponCenter/couponCenter?active=2';
+const takeOutMyVoucherPath = 'pages/my_coupon/my_coupon';
+
 Page({
   /**
    * 页面的初始数据
@@ -59,16 +65,16 @@ Page({
     selectType: 0, //积分筛选类型：0 全部   1：获得  2使用,
     selectMonthTask: false,
     monthList: [],
-    isMember:false,
-    isnotMember:false,
-    isShowUserInfoBtn:false,
+    isMember: false,
+    isnotMember: false,
+    isShowUserInfoBtn: false,
     /**佳纷会员  demi 2019.01.07 */
-    jfUserInfo:null,
-    openbeforimg:'',//开通佳纷会员前图标
-    openbeforafter:'', //开通佳纷会员后显示的图标
-    openbeforafterlogo:'',
-    ordinaryMember:'',
-    currProvince:'',
+    jfUserInfo: null,
+    openbeforimg: '',//开通佳纷会员前图标
+    openbeforafter: '', //开通佳纷会员后显示的图标
+    openbeforafterlogo: '',
+    ordinaryMember: '',
+    currProvince: '',
     //悬浮窗 2019.04.11
     ballBottom: 240,
     ballRight: 120,
@@ -83,10 +89,11 @@ Page({
     this.setData({
       selected1: false,
       selected: true,
-      coupeList:[],
-      pageIndex:1,
-      isCompleted:false
+      coupeList: [],
+      pageIndex: 1,
+      isCompleted: false
     })
+    this.loadData();
   },
   selected1: function (e) {//选中”我的积分“
     this.setData({
@@ -95,7 +102,7 @@ Page({
       PpageSize: 10, //积分明细页的大小
       PpageIndex: 1, //积分明细页号
       PointList: [], //积分集合
-      monthList:[],
+      monthList: [],
       PisCompleted: false //标识是否已加载完数据
     });
     this.GetIntegralDtl(this.data.selectType);
@@ -111,7 +118,7 @@ Page({
         console.log(res)
         var userInfo = res.userInfo
         userInfo.isLogin = true;
-        that.setData({ 
+        that.setData({
           userInfo: userInfo
         });
       }
@@ -134,26 +141,25 @@ Page({
         interfaceCode: "WxMiniProgram.Service.GetMemberCardConfig",
         biz: { sessionId: user.sessionId, cityName: app.currProvince },
         success: function (res) {
-          if (res.Result!=null)
-          {
-          //去掉最后一个字符
-          var strTags = res.Result.CardInfo.Tags || "";
-          var spTags = strTags.split('$');
-          var items = [];
-          var tag;
-          for (var i = 0; i < spTags.length; i++) {
-            tag = spTags[i];
-            if (tag) {
-              items.push({
-                Tag: tag,
-                isSelected: false
-              });
+          if (res.Result != null) {
+            //去掉最后一个字符
+            var strTags = res.Result.CardInfo.Tags || "";
+            var spTags = strTags.split('$');
+            var items = [];
+            var tag;
+            for (var i = 0; i < spTags.length; i++) {
+              tag = spTags[i];
+              if (tag) {
+                items.push({
+                  Tag: tag,
+                  isSelected: false
+                });
+              }
             }
-          }
-          that.setData({
-            tags: items,
-            userPoint: res.Result.TotalCnt
-          });
+            that.setData({
+              tags: items,
+              userPoint: res.Result.TotalCnt
+            });
           }
 
           //that.GetMemberInfo();
@@ -295,8 +301,7 @@ Page({
           selected1: true,
           selected: false
         });
-      } else
-      {
+      } else {
         this.setData({
           selected: true,
           selected1: false
@@ -360,7 +365,7 @@ Page({
           that.setData({
             isLoading: false
           });
-          
+
         }
       });
     });
@@ -436,7 +441,7 @@ Page({
     wx.reLaunch({
       url: "pages/member_center/member_center",
     })
-  } ,
+  },
   opencoupe: function (event) {
     var that = this;
     var id = event.currentTarget.dataset.id; //主键id
@@ -562,9 +567,9 @@ Page({
     this.setData({
       coupeState: 1, //卡券状态
       coupeList: [], //我的券列表
-      monthList:[],
+      monthList: [],
       pageIndex: 1, //页号
-      PpageIndex:1, 
+      PpageIndex: 1,
       selectColorall: '',
       selectColorwait: 'color: #d1121a',
       selectColoexpire: '',
@@ -573,28 +578,24 @@ Page({
     this.GetMemberCardConfig();
     this.loadData();
     this.GetIntegralDtl(this.data.selectType);
-    if (app.currProvince!=undefined)
-    {
+    if (app.currProvince != undefined) {
       this.setData({
         currProvince: app.currProvince
       });
-    }else
-    {
+    } else {
       wx.showModal({
         title: '温馨提示',
         content: '获取不到您的位置信息，为了更好的体验美宜佳会员服务，请选择您当前所在的城市。',
-        showCancel:true,
-        success:function(res)
-        {
-          if(res.confirm)
-          {
+        showCancel: true,
+        success: function (res) {
+          if (res.confirm) {
             wx.navigateTo({
               url: '/pages/yhq_dw/yhq_dw',
             });
           }
         },
-        fail: function(){
-          
+        fail: function () {
+
         }
       });
     }
@@ -654,12 +655,12 @@ Page({
       selectColorwait: '',
       selectColoexpire: '',
       selectColoruse: ''
-    },()=>{
+    }, () => {
       this.GetMemberCardConfig();
       this.loadData();
       this.GetIntegralDtl(this.data.selectType);
     });
- 
+
   },
 
   /**
@@ -861,27 +862,26 @@ Page({
       });
       myjCommon.callApi({
         interfaceCode: "WxMiniProgram.Service.GetIntegralDtl",
-        biz: { 
+        biz: {
           sessionId: user.sessionId,
           provinceName: app.currProvince,
-          coinType: that.data.selectType, 
-          pageSize: that.data.PpageSize, 
-          pageIndex: that.data.PpageIndex 
-          },
+          coinType: that.data.selectType,
+          pageSize: that.data.PpageSize,
+          pageIndex: that.data.PpageIndex
+        },
         success: function (res) {
           console.log("积分流水")
           console.log(res)
-          if(res.Code=="301")
-          {
-              that.setData({
-                isMember:true,
-                isnotMember:true
-              });
+          if (res.Code == "301") {
+            that.setData({
+              isMember: true,
+              isnotMember: true
+            });
             /**初始化注册会员组件方法 */
             that.regerter1 = that.selectComponent("#regerter");
             that.regerter1.init(that.data.isMember, "wxc94d087c5890e1f8", "member_card");
-              return;
-          }else if (res.Code == "305") //查询不到CompanyCode
+            return;
+          } else if (res.Code == "305") //查询不到CompanyCode
           {
             return;
           }
@@ -889,12 +889,11 @@ Page({
             isMember: false,
             isnotMember: false
           });
-          
-          if (res.Result.length <= 0)
-          {
+
+          if (res.Result.length <= 0) {
             return;
           }
-          
+
 
           //分页加载 item.uModel.OperateTime
           var list = that.data.monthList.concat(res.Result);
@@ -929,7 +928,7 @@ Page({
   //领取会员卡
   getMemberCard: function (e) {
     this.setData({
-      isMember:false
+      isMember: false
     });
     wx.switchTab({ url: "/pages/member_card/index" });
   },
@@ -937,11 +936,11 @@ Page({
   SelectCoin: function (e) {
     var selectType = e.currentTarget.dataset.typeselect;
     this.setData({
-      PpageIndex: 1, 
-      monthList:[],
+      PpageIndex: 1,
+      monthList: [],
       selectType: selectType,
       selectMonthTask: false,
-      isCompleted:false
+      isCompleted: false
     });
     this.GetIntegralDtl(selectType);
   },
@@ -950,35 +949,31 @@ Page({
       selectMonthTask: true
     });
   },
-  closeT:function()
-  {
+  closeT: function () {
     this.setData({
       selectMonthTask: true
     });
   },
-  closeTask:function()
-  {
+  closeTask: function () {
     this.setData({
       isMember: false
     });
-    
+
   },
   //跳转至账户编辑页面
-  AcountIndex:function()
-  {
+  AcountIndex: function () {
     wx.navigateTo({
-       url: '../member_account/member_account?target=center'
-     })
+      url: '../member_account/member_account?target=center'
+    })
   },
   /**佳纷会员  demi 2019.01.07 */
-  getJFUserInfo:function()
-  {
+  getJFUserInfo: function () {
     var that = this;
     myjCommon.getLoginUser(function (user) {
       if (!user.isLogin) {
-       that.setData({
-         isShowUserInfoBtn:true
-       });
+        that.setData({
+          isShowUserInfoBtn: true
+        });
         return;
       }
       myjCommon.callApi({
@@ -997,13 +992,11 @@ Page({
             that.regerter1.init(that.data.isMember, "wxc94d087c5890e1f8", "member_card");
             return;
           }
-          if(res.Result!=null)
-          {
+          if (res.Result != null) {
             that.setData({
               jfUserInfo: res.Result
             });
-          }else
-          {
+          } else {
             ordinaryMember: '普通会员'
           }
         },
@@ -1021,21 +1014,18 @@ Page({
     });
   },
   /**开通佳纷会员 */
-  openJFMember:function()
-  {
+  openJFMember: function () {
     wx.navigateTo({
       url: '../jiafen_openidex/jiafen_openidex',
     });
   },
   /**跳转到个人中心 */
-  nagativeCenter:function()
-  {
+  nagativeCenter: function () {
     wx.navigateTo({
       url: '../jiafen_memberinfo/jiafen_memberinfo',
     });
   },
-  jumpToApplyFor:function()
-  {
+  jumpToApplyFor: function () {
     wx.navigateTo({
       url: '../applyfor/index',
     });
@@ -1071,6 +1061,33 @@ Page({
       complete: function (res) {
         wx.hideLoading();
       }
+    });
+  },
+  /**
+   * 创建人：袁健豪
+   * 创建时间：20191007
+   * 描述：跳转到美宜佳选小程序的“我的券”页面
+   */
+  toJiaXuan() {
+    wx.navigateToMiniProgram({
+      appId: jxAppId,
+      path: jxMyVoucherPath
+    });
+  },
+  /**
+   * 创建人：袁健豪
+   * 创建时间：20191007
+   * 描述：跳转到外卖小程序“我的优惠券”页面
+   */
+  toTakeOut() {
+    let appId = takeOutAppId_HZ;
+
+    if (app.currProvince.indexOf('广东') > -1 || app.currProvince.indexOf('上海') > -1 || app.currProvince.indexOf('浙江') > -1 || app.currProvince.indexOf('江苏') > -1) {
+      appId = takeOutAppId_HN;
+    }
+    wx.navigateToMiniProgram({
+      appId: appId,
+      path: takeOutMyVoucherPath
     });
   }
 })

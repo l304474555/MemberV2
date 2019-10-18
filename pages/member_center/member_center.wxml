@@ -1,4 +1,5 @@
 <import src="../../wxParse/wxParse.wxml" />
+<wxs src="../../utils/wxmlUtil.wxs" module="tools" />
 <view class="h_center_title_fa">
   <view class="h_c_title">
     <view style="padding:0 10px;">
@@ -58,8 +59,13 @@
   </view>
 
   <view style="float:left;  width:100%; height:10px;background-color:#f0eff4;"></view>
-  <view class="h_my {{selected?'h_my_select red':'default'}}" bindtap="selected">我的券</view>
-  <view class="h_my {{selected1?'h_my_select red':'default'}}" bindtap="selected1">我的积分</view>
+  <view style="display: flex;align-items: center;justify-content: space-between;background-color: #fff;padding: 0px 10px;">
+    <view class="h_my {{selected?'h_my_select red':'default'}}" bindtap="selected">优惠券</view>
+    <view class="h_my default" bindtap="selected" bindtap="toJiaXuan" wx:if="{{tools.moreIndexOf(currProvince,['广东','上海','浙江','江苏'])}}">佳选券</view>
+    <view class="h_my default" bindtap="selected" bindtap="toTakeOut">外卖券</view>
+    <view class="h_my {{selected1?'h_my_select red':'default'}}" bindtap="selected1">我的积分</view>
+  </view>
+  
 
 
 </view>

@@ -74,7 +74,7 @@ margin:0 auto;
 .head_fa3{ position: absolute; bottom: 34rpx;left: 40rpx; z-index: 999;border-radius:20rpx;padding:5rpx 15rpx 8rpx 15rpx;background:rgba(0,0,0,0.5);font-size:20rpx;color:#fff;}
 .head{display: inline-block;   background-color: #fff; width: 100%; border-bottom: 1px solid #ddd; padding: 5px 0}
 .head2{display: inline-block; padding:0 10rpx 0 5rpx; background:#e68d90; border-radius: 20px; }
-
+.head3{display: inline-block; padding:0 10rpx 0 5rpx; border-radius: 20px; color: #fff; }
 .city{ margin-left: 3px; vertical-align: middle; margin-top: 3rpx; display: inline-block;font-size:32rpx;}
 
 .city2{ vertical-align: middle; display: inline-block;font-size:24rpx;}
@@ -123,9 +123,10 @@ margin-top: 10rpx;
 .mess_detailed{ padding: 7px 0 10px 0;}
 .mess_detailed2{ padding: 20rpx 0 20rpx 0;}
 
-.mess_d_lr{ display: inline-block; width: 33%; text-align: center; font-size: 16px;}
+.mess_d_lr{ display: inline-block; width: 24%; text-align: center; font-size: 16px;}
 .mess_d_lr2{ display: inline-block; width: 25%; vertical-align: middle; text-align: center; font-size: 16px;position: relative}
 .mess_d_lr3{ display: inline-block; width: 25%; vertical-align: middle; text-align: center; font-size: 16px;position: relative}
+.mess_d_lr4{  display: inline-block; width: 25%; text-align: center; font-size: 16px;position: relative;border-right:1px solid #d1121b;}
 .mess_d_lr2::after{
   content: '';
   position: absolute;
@@ -135,7 +136,7 @@ margin-top: 10rpx;
   transform: translate(0,-50%);
   border: 1px solid #e0e0e0;
 }
-.mess_d_m{display: inline-block; width:calc(100% - 66% - 2px);border-left:1px solid #d1121b;
+.mess_d_m{display: inline-block; width:25%;border-left:1px solid #d1121b;
 border-right:1px solid #d1121b; text-align: center; font-size: 32rpx;}
 
 .code_act{width:45rpx; vertical-align: middle; }
@@ -194,6 +195,8 @@ button[class="form_card_data"]::after {
 .member_type1{ padding: 5rpx 10rpx; color: #e3c1c1; font-size: 22rpx; background-color: #ab0a10; border-radius: 100px; margin-top: 5rpx}
 
 .member_type2{ padding: 5rpx 10rpx; color: #f7ca5b; font-size: 22rpx; background-color: #ab0a10; border-radius: 100px; margin-top: 5rpx}
+
+.member_type3{ padding: 5rpx 10rpx; color: #000; font-size: 22rpx; background-color: #ffb31b; border-radius: 100px; margin-top: 5rpx}
 
 .contact-btn{padding: 0;position: absolute;opacity: 0}
 

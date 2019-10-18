@@ -1,0 +1,23 @@
+function indexOf(arr, value) {
+  if (arr.indexOf(value) < 0) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function moreIndexOf(value, arr) {
+  for (var i = 0; i < arr.length; i++) {
+    var temp = arr[i];
+
+    if (value.indexOf(temp) > -1) {
+      return true;
+    }
+  }
+  return false;
+}
+
+module.exports = {
+  indexOf: indexOf,
+  moreIndexOf: moreIndexOf
+};

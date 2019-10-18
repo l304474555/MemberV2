@@ -100,7 +100,7 @@ background-color:#d1121a;
 .h_my {
 float: left;
 background-color: #fff;
-width: 50%;
+width: 100%;
 height: 40px;
 line-height: 40px;
 text-align: center;

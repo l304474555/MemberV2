@@ -105,30 +105,51 @@ Page({
         title: '修改中',
         mask: true
       })
-     //选择完城市跳回对应的页面
+      //选择完城市跳回对应的页面
       wx.showToast({
         title: '修改城市成功！',
         icon: 'success',
         duration: 1000,
         success: function () {
           if (that.data.target == "applyfor") {
-           
-              wx.reLaunch({
-                url: '../applyfor/index?target=applyfor'
-              }) //延迟时间 这里是1.5秒  
-          } else if (that.data.target == "service")
-          {
+
+            wx.reLaunch({
+              url: '../applyfor/index?target=applyfor'
+            }) //延迟时间 这里是1.5秒  
+          } else if (that.data.target == "service") {
             wx.navigateBack();
-          } else if (that.data.target=="basketball")//篮球分换券
+          } else if (that.data.target == "basketball")//篮球分换券
           {
             wx.navigateBack();
           } else if (that.data.target == 'brandDay') {
             let pages = getCurrentPages();
             let page = pages[pages.length - 2];
+            let brandDayInfo = page.data.brandDayInfo;
+            let img;
+
+            if (brandDayInfo != null) {
+              img = brandDayInfo.PageBgImage;
+              brandDayInfo = {};
+              brandDayInfo.PageBgImage = img;
+            }
+            page.setData({
+              brandList: [],
+              brandDayInfo: brandDayInfo,
+              isBrandMember: false,
+              isShowDetails: false, //是否查看详情弹框
+              isShowBarCode: false, //是否展示会员码
+              barCodeNum: '', //会员条形码编码
+              isCodeError: false, //会员条形码是否加载错误
+              brandAmount: 0, //品牌金额
+              checkStatus: [], //品牌勾选列表
+              isBrandCheck: false, //是否勾选了品牌
+              isAgreementCheck: false,
+            });
+            clearTimeout(page.data.timeOutId);
             page.onLoad();
             wx.navigateBack();
           }
-           else {
+          else {
             wx.reLaunch({
               url: '../member_index/member_index'
             })
@@ -151,6 +172,27 @@ Page({
           } else if (that.data.target == 'brandDay') {
             let pages = getCurrentPages();
             let page = pages[pages.length - 2];
+            let brandDayInfo = page.data.brandDayInfo;
+
+            if (brandDayInfo != null) {
+              img = brandDayInfo.PageBgImage;
+              brandDayInfo = {};
+              brandDayInfo.PageBgImage = img;
+            }
+            page.setData({
+              brandList: [],
+              brandDayInfo: brandDayInfo,
+              isBrandMember: false,
+              isShowDetails: false, //是否查看详情弹框
+              isShowBarCode: false, //是否展示会员码
+              barCodeNum: '', //会员条形码编码
+              isCodeError: false, //会员条形码是否加载错误
+              brandAmount: 0, //品牌金额
+              checkStatus: [], //品牌勾选列表
+              isBrandCheck: false, //是否勾选了品牌
+              isAgreementCheck: false,
+            });
+            clearTimeout(page.data.timeOutId);
             page.onLoad();
             wx.navigateBack();
           } else {
@@ -176,14 +218,14 @@ Page({
           var lng = res.result.location.lng; //纬度
           myjCommon.callApi({
             interfaceCode: "WxMiniProgram.Service.UpdateUserLocation",
-            biz: { 
-              sessionId: user.sessionId, 
-              city: city, 
-              lat: lat, 
-              lng: lng, 
+            biz: {
+              sessionId: user.sessionId,
+              city: city,
+              lat: lat,
+              lng: lng,
               fromApp: that.data.fromApp,
               province: province
-              },
+            },
             success: function (res) {
               console.log(res);
               //把修改城市后的值赋值到全局变量
@@ -368,27 +410,48 @@ Page({
         duration: 1000,
         success: function () {
           // setTimeout(function () {
-            if (that.data.target == "applyfor") {
-              setTimeout(function () {
-                wx.reLaunch({
-                  url: '../applyfor/index?target=applyfor'
-                })
-
-              }, 1500) //延迟时间 这里是1.5秒  
-            } else if (that.data.target == "basketball")//篮球分换券
-            {
-              wx.navigateBack();
-            } else if (that.data.target == 'brandDay') {
-              let pages = getCurrentPages();
-              let page = pages[pages.length - 2];
-              page.onLoad();
-              wx.navigateBack();
-            }
-             else {
+          if (that.data.target == "applyfor") {
+            setTimeout(function () {
               wx.reLaunch({
-                url: '../member_index/member_index'
+                url: '../applyfor/index?target=applyfor'
               })
+
+            }, 1500) //延迟时间 这里是1.5秒  
+          } else if (that.data.target == "basketball")//篮球分换券
+          {
+            wx.navigateBack();
+          } else if (that.data.target == 'brandDay') {
+            let pages = getCurrentPages();
+            let page = pages[pages.length - 2];
+            let brandDayInfo = page.data.brandDayInfo;
+
+            if (brandDayInfo != null) {
+              img = brandDayInfo.PageBgImage;
+              brandDayInfo = {};
+              brandDayInfo.PageBgImage = img;
             }
+            page.setData({
+              brandList: [],
+              brandDayInfo: brandDayInfo,
+              isBrandMember: false,
+              isShowDetails: false, //是否查看详情弹框
+              isShowBarCode: false, //是否展示会员码
+              barCodeNum: '', //会员条形码编码
+              isCodeError: false, //会员条形码是否加载错误
+              brandAmount: 0, //品牌金额
+              checkStatus: [], //品牌勾选列表
+              isBrandCheck: false, //是否勾选了品牌
+              isAgreementCheck: false,
+            });
+            clearTimeout(page.data.timeOutId);
+            page.onLoad();
+            wx.navigateBack();
+          }
+          else {
+            wx.reLaunch({
+              url: '../member_index/member_index'
+            })
+          }
 
           // }, 1500); //延迟时间 1.5秒
         },
@@ -400,16 +463,16 @@ Page({
       //调用城市更新接口
       myjCommon.callApi({
         interfaceCode: "WxMiniProgram.Service.UpdateUserLocation",
-        biz: { 
-          sessionId: user.sessionId, 
-          city: that.data.cityName, 
-          province:app.currProvince,
-          lat: that.data.lat, 
-          lng: that.data.lng, 
-          fromApp: that.data.fromApp 
-          },
+        biz: {
+          sessionId: user.sessionId,
+          city: that.data.cityName,
+          province: app.currProvince,
+          lat: that.data.lat,
+          lng: that.data.lng,
+          fromApp: that.data.fromApp
+        },
         success: function (res) {
-          
+
         },
         fail: function (res) {
           app.currCity = that.data.cityName;
@@ -423,6 +486,27 @@ Page({
           } else if (that.data.target == 'brandDay') {
             let pages = getCurrentPages();
             let page = pages[pages.length - 2];
+            let brandDayInfo = page.data.brandDayInfo;
+
+            if (brandDayInfo != null) {
+              img = brandDayInfo.PageBgImage;
+              brandDayInfo = {};
+              brandDayInfo.PageBgImage = img;
+            }
+            page.setData({
+              brandList: [],
+              brandDayInfo: brandDayInfo,
+              isBrandMember: false,
+              isShowDetails: false, //是否查看详情弹框
+              isShowBarCode: false, //是否展示会员码
+              barCodeNum: '', //会员条形码编码
+              isCodeError: false, //会员条形码是否加载错误
+              brandAmount: 0, //品牌金额
+              checkStatus: [], //品牌勾选列表
+              isBrandCheck: false, //是否勾选了品牌
+              isAgreementCheck: false,
+            });
+            clearTimeout(page.data.timeOutId);
             page.onLoad();
             wx.navigateBack();
           } else {

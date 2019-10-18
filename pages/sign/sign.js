@@ -118,7 +118,7 @@ Page({
   },
   checkCanNotTapSign(){
     this.data.datColor.forEach(item=>{
-      if (item.day == this.data.day){
+      if (item.day == this.data.day && item.month == 'current'){
         this.setData({
           canNotTapSign: true
         })

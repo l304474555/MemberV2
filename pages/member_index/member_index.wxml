@@ -102,6 +102,15 @@
           </form>
           <!--券单-->
 
+          <!--每日签到-->
+          <form  report-submit='true' bindsubmit='tapToSign' >
+            <view class='mess_d_lr' style="border-right:1px solid #d1121b;">
+              <view style='color:#d1121b;font-size:36rpx;'  bindtap='tapToSign'>每日</view>
+              <button class='form_card_data' form-type='submit'>签到</button>
+            </view>
+          </form>
+          <!--每日签到-->
+
           <!--账单-->
           <form  report-submit='true' bindsubmit='locationBill' >
           <view class='mess_d_lr'>
@@ -486,7 +495,7 @@
   <!--首页改版2 2019.7.15-->
   <!--顶部-->
   <view class="member_card" bindtap='OpenCard'>
-    <image src="https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201907/31f28e9e7e0b5ca4.jpg" mode="widthFix" style='width: 100%;vertical-align: top;max-height:200px' ></image>
+    <image src="{{isBrandMember?'https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201907/member_head_bg.jpg':'https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201907/31f28e9e7e0b5ca4.jpg'}}" mode="widthFix" style='width: 100%;vertical-align: top;max-height:200px' ></image>
      <view class='h_pay_code'  catchtap='OpenCard'>
           <image src="../img/test_code.png" mode="widthFix" style='width: 80rpx;    vertical-align: middle;' ></image>
           <image src="../img/b7_w.png" mode="widthFix" class='code_act'></image>
@@ -496,18 +505,18 @@
       <view class='va_fa'>
         <view class="member_name">{{currUserInfo.nickName}}</view>
           <block wx:if="{{jfUserInfo==null}}">
-            <view class="member_type1">{{currUserInfo.nickName?ordinaryMember:'点击登陆'}}</view>
+            <view class="{{isBrandMember?'member_type3':'member_type1'}}">{{currUserInfo.nickName?(isBrandMember?'品牌日会员':ordinaryMember):'点击登陆'}}</view>
           </block>
           <block wx:if="{{jfUserInfo!=null}}">
             <view class="member_type2">{{jfUserInfo.StoreCode}}佳纷会员</view>
           </block>
         </view>
     </view>
-    <view class='head_fa2'>
-      <view class='head2' catchtap='changeCity'>
-      <image src='../img/dw_icon2.png' mode='widthFix' style=' width:30rpx;vertical-align: middle;max-height:50rpx;' class='dw_icon'></image>
+    <view class="head_fa2">
+      <view class="{{isBrandMember?'head3':'head2'}}" catchtap='changeCity'>
+      <image src="../img/{{isBrandMember?'dw_icon3.png':'dw_icon2.png'}}" mode='widthFix' style=' width:30rpx;vertical-align: middle;max-height:50rpx;' class='dw_icon'></image>
       <view class='city2'>{{cityName}}</view>
-      <image src='../img/card_more_region.png' mode='widthFix' style=' width:10rpx;vertical-align: middle; margin-left:5rpx;max-height:50rpx;'></image>
+      <image src="../img/{{isBrandMember?'card_more_region2.png':'card_more_region.png'}}" mode='widthFix' style=' width:10rpx;vertical-align: middle; margin-left:5rpx;max-height:50rpx;'></image>
       </view>
     </view>
     <view class="head_member_id" hidden='true'>NO.12565254</view>

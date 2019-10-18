@@ -1,6 +1,8 @@
 // pages/brandDay/brandDay.js
 let app = getApp();
 const mapKey = 'WJFBZ-QVMWX-DKE4Y-7R7MN-TZN7H-3GFBP';
+const yhqAppId = 'wx55595d5cf709ce79';
+const appId = 'wxc94d087c5890e1f8';
 const barCodeSign = 'myj_barcode_sign';
 const createMpBarcode_interface = 'WxMiniProgram.Service.CreateMpBarcode';
 const getBrandDetails_interface = 'WxMiniProgram.Service.GetBrandDetails';
@@ -10,6 +12,7 @@ const openBrand_interface = 'WxMiniProgram.Service.OpenBrand';
 const checkBrandStock_interface = 'WxMiniProgram.Service.CheckBrandStockInRedis';
 const prePay_interface = 'WxMiniProgram.Service.Prepay';
 const checkBrandOrderStatus = 'WxMiniProgram.Service.CheckBrandOrderStatus';
+const getMemberBrandDiscountCnt_interface = 'WxMiniProgram.Service.GetMemberBrandDiscountCnt';
 import QQMapWX from '../../map/qqmap-wx-jssdk.js';
 import myjCommon from '../../utils/myjcommon.js';
 import wxParse from '../../wxParse/wxParse.js';
@@ -54,6 +57,7 @@ Page({
     wx.showLoading({
       title: '加载中',
     });
+
     wx.getUserInfo({
       success(e) {
         self.setData({
@@ -103,13 +107,37 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
+    wx.showNavigationBarLoading();
 
+    // page.setData({
+    //   brandAmount: 0, //品牌金额
+    //   checkStatus: [], //品牌勾选列表
+    // });
+    this.data.isBrandCheck = false;
+    this.setData({
+      isBrandCheck: false,
+      brandAmount: 0,
+      checkStatus: [],
+      isBrandCheck: false,
+      isCodeError: false, //会员条形码是否加载错误
+      barCodeNum: '', //会员条形码编码
+      isShowBarCode: false, //是否展示会员码
+      isShowDetails: false, //是否查看详情弹框
+      isBrandMember: false,
+      brandList: [],
+    });
+    clearTimeout(this.data.brandOrderStatusTimeOutId);
+    wx.hideLoading();
+    this.onLoad();
+    wx.hideNavigationBarLoading(); //完成停止加载
+    wx.stopPullDownRefresh(); //停止下拉刷新
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
+
 
   },
 
@@ -163,6 +191,7 @@ Page({
           provinceName: app.globalData.currProvince
         });
         self.loadBrandDayInfo(self.data.cityName);
+        self.loadBarCodeInfo();
         return;
       }
       let cityName = wx.getStorageSync('membercity');
@@ -176,6 +205,7 @@ Page({
         app.globalData.currCity = cityName;
         app.globalData.currProvince = provinceName;
         self.loadBrandDayInfo(cityName);
+        self.loadBarCodeInfo();
         return;
       }
       wx.getLocation({
@@ -199,18 +229,24 @@ Page({
                 cityName: res.result.address_component.city,
                 provinceName: res.result.address_component.province
               });
-              self.loadBrandDayInfo(self.data.provinceName);
+              self.loadBrandDayInfo(self.data.cityName);
+              self.loadBarCodeInfo();
             },
             fail(res) {
               self.setData({
                 isSelectCity: true
               });
+              wx.hideLoading();
             }
           });
         },
         fail(res) {
+          wx.hideLoading();
           self.setData({
             isSelectCity: false
+          });
+          wx.navigateTo({
+            url: '/pages/yhq_dw/yhq_dw?target=brandDay'
           });
         }
       });
@@ -233,6 +269,7 @@ Page({
       // self.setData({
       //   defaultAvatar: user.userInfo.avatarUrl
       // });
+
       myjCommon.callApi({
         interfaceCode: isMember_interface,
         biz: {
@@ -283,7 +320,8 @@ Page({
       myjCommon.callApi({
         interfaceCode: getBrandDayInfo_interface,
         biz: {
-          cityName: cityName
+          cityName: cityName,
+          sessionId: user.sessionId
         },
         success(res) {
           console.log('调用WxMiniProgram.Service.GetBrandDayInfo成功');
@@ -292,18 +330,35 @@ Page({
             console.log(`[code=-1]：${res.Msg}`);
             wx.showModal({
               title: '提示',
-              content: res.Msg,
+              content: '当前城市未开展品牌日活动，敬请期待',
+              showCancel: false
+            });
+            self.setData({
+              isBrandCheck: false,
+              brandAmount: 0,
+              checkStatus: [],
+              isBrandCheck: false,
+              isCodeError: false, //会员条形码是否加载错误
+              barCodeNum: '', //会员条形码编码
+              isShowBarCode: false, //是否展示会员码
+              isShowDetails: false, //是否查看详情弹框
+              isBrandMember: false,
+              brandList: [],
+              brandDayInfo: null,
             });
             return;
           }
+
           wx.setStorageSync('brandMemberAgreement', res.Result.BrandDayModel.MemberAgreement);
           wxParse.wxParse('rule', 'html', res.Result.BrandDayModel.ActivityRule, self, 1);
+
           let isBrandMember = false;
           let list = res.Result.BrandModels.map((item, i) => {
             if (item.IsOpen == 1) {
               isBrandMember = true;
             }
-            item.isFull = Number(item.Stock) <= 0;
+            // item.isFull = Number(item.Stock) <= 0;
+            item.EndTime = item.EndTime.substring(0, 10);
             return item;
           });
           self.setData({
@@ -320,105 +375,6 @@ Page({
           wx.hideLoading();
         }
       });
-
-      // let obj = {
-      //   Id: 1,
-      //   PageBgImage: '../img/brandDay/brand_member_card-min.png',
-      //   OpenIcon: '../img/brandDay/foot_btn-min.png',
-      //   DrawId: 1,
-      //   DrawIcon: '../img/member_kf.png',
-      //   MemberAgreement: '<p>测试</p>',
-      //   ActivityRule: `<p>1.品牌活动的排序根据后台设置的排序来排列；每个品牌活动都有各自的权益说明，点击【查看详情】即可弹出框查看。</p><p>2.每个品牌都有开始活动时间和结束时间，当该品牌状态为未开通时，则显示 "未开通品牌，敬请期待" 。</p><p>3.每个品牌活动都有库存数，当开通该品牌的人数已达到品牌的库存数时，则未开通该品牌的用户前端显示 "很抱歉，该品牌已满员" ；已开通该品牌的用户前端显示 "已开通" 标识。</p>`,
-      //   CompanyCode: 'GD'
-      // };
-      // wx.setStorageSync('brandMemberAgreement', obj.MemberAgreement);
-      // wxParse.wxParse('rule', 'html', obj.ActivityRule, self, 1);
-      // let list = [{
-      //   Id: 1,
-      //   Name: '测试品牌1',
-      //   BeginTime: '2019-01-01',
-      //   EndTime: '2019-12-31',
-      //   State: 1,
-      //   Stock: 100,
-      //   Amount: 10,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 1
-      // }, {
-      //   Id: 2,
-      //   Name: '测试品牌2',
-      //   BeginTime: '2019-01-01',
-      //   EndTime: '2019-12-31',
-      //   State: 1,
-      //   Stock: 100,
-      //   Amount: 20,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 0
-      // }, {
-      //   Id: 3,
-      //   Name: '测试品牌3',
-      //   BeginTime: '2019-01-01',
-      //   EndTime: '2019-12-31',
-      //   State: 1,
-      //   Stock: 100,
-      //   Amount: 0.01,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 0
-      // }, {
-      //   Id: 4,
-      //   Name: '测试品牌4',
-      //   BeginTime: '2019-01-01',
-      //   EndTime: '2019-12-31',
-      //   State: 1,
-      //   Stock: 100,
-      //   Amount: 10,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 0
-      // }, {
-      //   Id: 5,
-      //   Name: '测试品牌5',
-      //   BeginTime: '2019-01-01',
-      //   EndTime: '2019-12-31',
-      //   State: 3,
-      //   Stock: 100,
-      //   Amount: 10,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 0
-      // }, {
-      //   Id: 6,
-      //   Name: '测试品牌6',
-      //   BeginTime: '2019-10-01',
-      //   EndTime: '2019-12-31',
-      //   State: 3,
-      //   Stock: 100,
-      //   Amount: 10,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 0
-      // }, {
-      //   Id: 7,
-      //   Name: '测试品牌7',
-      //   BeginTime: '2019-01-01',
-      //   EndTime: '2019-12-31',
-      //   State: 1,
-      //   Stock: 0,
-      //   Amount: 10,
-      //   BgImage: '../img/brandDay/brand_icon-min.png',
-      //   IsOpen: 0
-      // }];
-      // let isBrandMember = false;
-      // list = list.map((item, i) => {
-      //   if (item.IsOpen == 1) {
-      //     isBrandMember = true;
-      //   }
-      //   item.isFull = Number(item.Stock) <= 0;
-      //   return item;
-      // });
-      // self.setData({
-      //   brandDayInfo: obj,
-      //   brandList: list,
-      //   isBrandMember: isBrandMember
-      // });
-      // wx.hideLoading();
-
     });
   },
 
@@ -442,8 +398,9 @@ Page({
     let brandId = event.currentTarget.dataset.id;
     let state = event.currentTarget.dataset.state;
     let isFull = event.currentTarget.dataset.isfull;
+    let isOpen = event.currentTarget.dataset.isopen;
 
-    if (state == 3 || isFull) {
+    if (state == 3 || (isFull == 1 && isOpen != 1)) {
       return;
     }
     myjCommon.callApi({
@@ -580,11 +537,11 @@ Page({
             isCodeError: false
           });
           wx.nextTick(() => {
-            wxbarcode.barcode('barcode', res.Result.barCode, 640, 150, (isSuccess, err) => {
+            wxbarcode.barcode('barcode', res.Result.barCode, 550, 110, (isSuccess, err) => {
               if (isSuccess) {
                 return;
               }
-              wxbarcode.barcode('barcode', res.Result.barCode, 640, 150, () => {
+              wxbarcode.barcode('barcode', res.Result.barCode, 550, 110, () => {
                 self.setData({
                   isCodeError: true
                 });
@@ -612,7 +569,7 @@ Page({
     let self = this;
     this.getBarCode();
     console.log('刷新会员条形码');
-    this.data.timeOutId = setTimeout(self.refreshBarCode, 30000);
+    this.data.timeOutId = setTimeout(self.refreshBarCode, 60000);
   },
 
   /**
@@ -625,7 +582,8 @@ Page({
     let isCheck = false;
 
     if (e.detail.value.length != 1) {
-      brandAmount -= brandList[checkId].Amount;
+      brandAmount = Number(brandAmount) - Number(brandList[checkId].Amount);
+      brandAmount = brandAmount.toFixed(2);
       this.setData({
         brandAmount: brandAmount,
         [`checkStatus[${checkId}]`]: false
@@ -644,7 +602,9 @@ Page({
       }
       return;
     }
-    brandAmount += brandList[checkId].Amount;
+
+    brandAmount = Number(brandAmount) + Number(brandList[checkId].Amount);
+    brandAmount = brandAmount.toFixed(2);
     this.data.isBrandCheck = true;
     this.setData({
       brandAmount: brandAmount,
@@ -703,85 +663,64 @@ Page({
           return brandIds.push(self.data.brandList[i].Id);
         }
       });
+
       myjCommon.callApi({
-        interfaceCode: checkBrandStock_interface,
+        interfaceCode: openBrand_interface,
         biz: {
+          sessionId: user.sessionId,
+          brandAmount: self.data.brandAmount,
+          brandDayId: self.data.brandDayInfo.Id,
           brandIdsJson: JSON.stringify(brandIds),
-          brandDayId: self.data.brandDayInfo.Id
+          companyCode: self.data.brandDayInfo.CompanyCode
         },
         success(res) {
-          if (res.Code == '-1') {
+          if (res.Code == '300') {
+            wx.hideLoading();
+            wx.showModal({
+              title: '提示',
+              content: '登录已过期，请重新登录',
+              showCancel: false,
+              success(res) {
+                self.setData({
+                  isShowUserInfoBtn: true
+                });
+              }
+            });
+            return;
+          }
+
+          if (res.Code == '301') {
+            wx.hideLoading();
+            self.setData({
+              noMemberTask: true,
+              memberStatus: '301'
+            });
+            wx.showModal({
+              title: '提示',
+              content: '对不起，请先注册会员',
+              showCancel: false,
+              success(res) {
+                self.regerter1 = self.selectComponent('#regerter');
+                self.regerter1.init(self.data.noMemberTask, app.globalData.currenAppid, 'member_card');
+              }
+            })
+            return;
+          }
+
+          if (res.Code != '0') {
             wx.hideLoading();
             wx.showModal({
               title: '提示',
               content: res.Msg,
               showCancel: false
             });
-            reutrn;
+            return;
           }
-          myjCommon.callApi({
-            interfaceCode: openBrand_interface,
-            biz: {
-              sessionId: user.sessionId,
-              brandAmount: self.data.brandAmount,
-              brandDayId: self.data.brandDayInfo.Id,
-              brandIdsJson: JSON.stringify(brandIds),
-              companyCode: self.data.brandDayInfo.CompanyCode
-            },
-            success(res) {
-              if (res.Code == '300') {
-                wx.hideLoading();
-                wx.showModal({
-                  title: '提示',
-                  content: '登录已过期，请重新登录',
-                  showCancel: false,
-                  success(res) {
-                    self.setData({
-                      isShowUserInfoBtn: true
-                    });
-                  }
-                });
-                return;
-              }
-
-              if (res.Code == '301') {
-                wx.hideLoading();
-                self.setData({
-                  noMemberTask: true,
-                  memberStatus: '301'
-                });
-                wx.showModal({
-                  title: '提示',
-                  content: '对不起，请先注册会员',
-                  showCancel: false,
-                  success(res) {
-                    self.regerter1 = self.selectComponent('#regerter');
-                    self.regerter1.init(self.data.noMemberTask, app.globalData.currenAppid, 'member_card');
-                  }
-                })
-                return;
-              }
-
-              if (res.Code != '0') {
-                wx.hideLoading();
-                wx.showModal({
-                  title: '提示',
-                  content: res.Msg,
-                  showCancel: false
-                });
-                return;
-              }
-              self.prePay(res.Result, user.sessionId, brandIds);
-            },
-            fail(msg) {
-              console.error(`调用接口OpenBrand失败：${JSON.stringify(msg)}`);
-              wx.hideLoading();
-            }
-          });
+          self.prePay(res.Result, user.sessionId, brandIds);
         },
         fail(msg) {
+          console.error(`调用接口OpenBrand失败：${JSON.stringify(msg)}`);
           wx.hideLoading();
-          console.error(`调用接口CheckBrandStockInRedis失败：${JSON.stringify(msg)}`);
         }
       });
 
@@ -800,14 +739,13 @@ Page({
   /**
    * 预支付订单
    */
-  prePay(brandOrder, sessionId, brandIds) {
+  prePay(orderNo, sessionId, brandIds) {
     let self = this;
-    brandOrder.CreateTime = brandOrder.CreateTime.replace('+', '%2B');
 
     myjCommon.callApi({
       interfaceCode: prePay_interface,
       biz: {
-        brandOrderJson: JSON.stringify(brandOrder),
+        orderNo: orderNo,
         sessionId: sessionId
       },
       success(res) {
@@ -835,9 +773,16 @@ Page({
           });
           return;
         }
+        let obj = JSON.parse(res.Result);
+        obj.success = function () {
+          wx.showLoading({
+            title: '支付回调中',
+          });
+          self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 500, orderNo, brandIds, sessionId);
+        }
         wx.hideLoading();
-        wx.requestPayment(JSON.parse(res.Result));
-        self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 5000, brandOrder.OrderNo, brandIds);
+        wx.requestPayment(obj);
+
       },
       fail(msg) {
         console.error(`调用接口Prepay失败：${JSON.stringify(msg)}`);
@@ -849,24 +794,39 @@ Page({
   /**
    * 定时检查品牌订单状态
    */
-  checkBrandOrderStatus(orderNo, brandIds) {
+  checkBrandOrderStatus(orderNo, brandIds, sessionId) {
     let self = this;
 
     myjCommon.callApi({
       interfaceCode: checkBrandOrderStatus,
       biz: {
-        orderNo: orderNo
+        orderNo: orderNo,
+        brandDayId: self.data.brandDayInfo.Id,
+        sessionId: sessionId
       },
       success(res) {
         if (res.Code != "0") {
-          self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 2000, orderNo, brandIds);
+          self.data.brandOrderStatusTimeOutId = setTimeout(self.checkBrandOrderStatus, 500, orderNo, brandIds, sessionId);
           return;
         }
+        self.setData({
+          isBrandCheck: false,
+          brandAmount: 0,
+          checkStatus: [],
+          isBrandCheck: false
+        });
         clearTimeout(self.data.brandOrderStatusTimeOutId);
+        wx.hideLoading();
+        wx.showModal({
+          title: '支付成功',
+          content: '开通成功,你所开通的品牌权益将会在5分钟后生效.',
+          showCancel: false
+        })
         self.onLoad();
       },
       fail(msg) {
         console.error(`调用接口CheckBrandOrderStatus失败：${JSON.stringify(msg)}`);
+        wx.hideLoading();
       }
     });
   },
@@ -877,9 +837,156 @@ Page({
   openDraw() {
     let self = this;
 
-    wx.navigateTo({
-      url: self.data.brandDayInfo.PageUrl,
+    wx.navigateToMiniProgram({
+      appId: yhqAppId,
+      path: self.data.brandDayInfo.PageUrl,
+      envVersion: 'trial',
+      success(res) { }
     });
-  }
+  },
+
+  /**
+   * 返回会员小程序首页
+   */
+  returnHomePage() {
+    wx.reLaunch({
+      url: '/pages/member_index/member_index',
+    });
+    // wx.navigateToMiniProgram({
+    //   appId: yhqAppId,
+    //   path: '/pages/member_index_member_index',
+    //   envVersion: 'release'
+    // });
+  },
+
+  /**
+   * 创建人：袁健豪
+   * 创建时间：20191005
+   * 描述：跳转到微信付款页面
+   */
+  toWeCharPayment() {
+    // wx.switchTab({
+    //   url: '../wetchat_payment/wetchat_payment',
+    // });
+    // wx.navigateTo({
+    //   url: '../wechat_payment_new/wechat_payment_new',
+    // })
+    this.url_wxpay();
+  },
+
+  /**
+   * 创建人：袁健豪
+   * 创建时间：20191005
+   * 描述：跳转到更多权益页面
+   */
+  toMoreEquity(e) {
+    let jump = e.target.dataset.jump;
+    let spid = e.target.dataset.spid;
+    let appid = e.target.dataset.appid;
+    let pagePath = e.target.dataset.pagepath;
+    let channelPageId = e.target.dataset.channelpageid;
+    let jumpLink = e.target.dataset.jumplink;
+
+    //跳转小程序
+    if (jump == 2) {
+      //有配置appid和页面路径，如果没有配置页面路径就直接跳转对应appid的小程序的首页
+      if (pagePath != undefined) {
+
+        //判断是否是华东地区并且是抽奖链接
+        var fanpaistr = "fanpai_lucky/fanpai_lucky";
+        var nineboxstr = "ninebox_lucky/ninebox_lucky";
+        // if ((app.currProvince == "上海市" || app.currProvince == "江苏省" || app.currProvince == "浙江省") && pagePath.indexOf(fanpaistr)!=-1)
+        if (pagePath.indexOf(fanpaistr) != -1) {
+          //获取活动号
+          var activityNo = pagePath.substring(pagePath.indexOf('=') + 1);
+          wx.removeStorageSync("aid");
+          wx.setStorageSync("aid", activityNo);
+          wx.navigateTo({
+            url: '../components/fanpai_lucky/fanpai_lucky',
+          });
+          // } else if ((app.currProvince == "上海市" || app.currProvince == "江苏省" || app.currProvince == "浙江省") && pagePath.indexOf(nineboxstr)!=-1)
+        } else if (pagePath.indexOf(nineboxstr) != -1) {
+          //获取活动号
+          var activityNo = pagePath.substring(pagePath.indexOf('=') + 1);
+          wx.removeStorageSync("aid");
+          wx.setStorageSync("aid", activityNo);
+          wx.navigateTo({
+            url: '../components/ninebox_lucky/ninebox_lucky',
+          });
+        } else {
+          if (appid == appId) {
+            wx.navigateTo({
+              url: pagePath,
+            });
+          } else {
+            wx.navigateToMiniProgram({
+              appId: appid,
+              path: pagePath,
+              envVersion: 'release',
+              success(res) {
+                // 打开成功
+              }
+            });
+          }
+        }
+      } else {
+        wx.navigateToMiniProgram({
+          appId: appid,
+          envVersion: 'release',
+          success(res) {
+            // 打开成功
+          }
+        });
+      }
+    } else if (jump == 3) //跳转频道页
+    {
+      wx.navigateTo({
+        url: '../yhq_channel/yhq_channel?channelId=' + channelPageId
+      })
+    } else if (jump == 4) //跳转其他页面
+    {
+      wx.navigateTo({
+        url: '../bannerWeb/bannerWeb?bannerUrl=' + jumpLink
+      });
+    }
+  },
+
+  /**
+   * 创建人：袁健豪
+   * 创建时间：20191011
+   * 描述：微信支付
+   */
+  url_wxpay() {
+    myjCommon.callApi({
+      interfaceCode: "WxMiniProgram.Service.MPMberPay",
+      biz: {
+      },
+      success: function (res) {
+        if (res.Code == "0") {
+          wx.openOfflinePayView({
+            'appId': res.Result.appId,
+            'timeStamp': res.Result.timeStamp,
+            'nonceStr': res.Result.nonceStr,
+            'package': res.Result.package,
+            'signType': res.Result.signType,
+            'paySign': res.Result.paySign,
+            'success': function (res) { },
+            'fail': function (res) {
+              console.log(res)
+            },
+            'complete': function (res) { }
+          });
+        }
+
+
+      },
+      fail: function (msg) {
+        console.log("MPMberPay失败：" + JSON.stringify(msg));
+      },
+      complete: function (res) {
+        wx.hideLoading();
+      }
+    });
+  },
 
 })
