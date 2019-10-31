@@ -3,6 +3,8 @@ var app = getApp();
 var myjCommon = require("../../utils/myjcommon.js");
 var WxParse = require('../../wxParse/wxParse.js');
 var QQMapWX = require('../../map/qqmap-wx-jssdk.js');
+const couponAppId = 'wx55595d5cf709ce79';
+
 Page({
 
   /**
@@ -51,7 +53,9 @@ Page({
     tuodongheight: 650,
     floatheight: 430,//浮动图标位置
     /**华东会员小程序优化 */
-    currentProvince:'' //当前省份
+    currentProvince:'', //当前省份
+    cardUrl: '',  //卡片配置url
+    isShowCardTast: false,  //是否卡片提示弹框
   },
   //加载积分兑换券列表
   LoadGCMPJfList: function () {
@@ -185,7 +189,7 @@ Page({
       carId: carid,
       coupontype: coupontype,
       formId: formId,
-      gifType:gifType
+      gifType:gifType,
     });
   },
   //确认兑换
@@ -232,6 +236,7 @@ Page({
       if (that.data.coupontype==3) //礼品
       {
         cardInfo=that.getgifCardInfo(carid);
+        debugger
         myjCommon.callApi({
           interfaceCode: "WxMiniProgram.Service.AddExchangeGif",
           biz: { 
@@ -239,7 +244,7 @@ Page({
             cardId: carid, 
             GCCnt: needJifen, 
             source: 2, 
-            province:app.currProvince
+            province:app.currProvince,
             },//source:来源：1 优惠券小程序；2 会员小程序  formId:表单Id
           success: function (res) {
             that.setData({
@@ -277,6 +282,12 @@ Page({
                   reckey: res.Msg,
                   isChange: false,
                   isexpress: true
+                });
+              } else if (that.data.gifType == 3) {
+                that.setData({
+                  cardUrl: res.Msg,
+                  isChange: false,
+                  isShowCardTast: true
                 });
               }
               if (parseInt(res.Result)<=0) {
@@ -687,6 +698,11 @@ Page({
       if (cityName && provinceName) {
         app.currCity = cityName;
         app.currProvince = provinceName;
+        that.loadCouponList();
+        that.loadGifList();
+        that.setData({
+          currentProvince: app.currProvince
+        });
       }else
       {
         var demo = new QQMapWX({
@@ -856,6 +872,7 @@ Page({
             });
           }
           var list = that.data.MaterialList.concat(res.Data);
+          
           that.setData({
             MaterialList: list
           });
@@ -945,15 +962,16 @@ Page({
   //关闭弹框
   closeTast: function () {
     this.setData({
-      ismeritask:false,
+      ismeritask: false,
       isHowInterTast: false,
       isChange: false,
       isHowtast: false,
-      isMember:false,
+      isMember: false,
       needJifen: 0,
       carid: 0,
       isGetSucess: false,
-      isredeecodeTast:false
+      isredeecodeTast: false,
+      isShowCardTast: false
     });
   },
   //避免2个弹框时关闭的时候一起关闭了。
@@ -1075,6 +1093,24 @@ Page({
       complete: function (res) {
         wx.hideLoading();
       }
+    });
+  },
+
+  /**
+   * 创建人：袁健豪
+   * 创建时间：20191025
+   * 描述：立即查看卡片
+   */
+  openGameCard() {
+    let self = this;
+
+    this.setData({
+      isShowCardTast: false
+    }, () => {
+      wx.navigateToMiniProgram({
+        appId: couponAppId,
+        path: self.data.cardUrl
+      });
     });
   }
 })

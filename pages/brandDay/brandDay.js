@@ -316,7 +316,7 @@ Page({
         userInfo: user.userInfo
       });
       console.log('---WxMiniProgram.Service.GetBrandDayInfo---');
-
+debugger
       myjCommon.callApi({
         interfaceCode: getBrandDayInfo_interface,
         biz: {
@@ -348,7 +348,7 @@ Page({
             });
             return;
           }
-
+debugger
           wx.setStorageSync('brandMemberAgreement', res.Result.BrandDayModel.MemberAgreement);
           wxParse.wxParse('rule', 'html', res.Result.BrandDayModel.ActivityRule, self, 1);
 

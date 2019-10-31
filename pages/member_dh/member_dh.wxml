@@ -359,3 +359,20 @@
 <!--黎梅芳 20190424 注册会员组件-->
  <regesmember id="regerter" ></regesmember>
  <!--黎梅芳 20190424 注册会员组件-->
+
+<!-- 袁健豪 20191025 卡片兑换成功弹框 -->
+<view class="modal_bg" wx:if="{{isShowCardTast}}"></view>
+<view class="modal_fa2" wx:if="{{isShowCardTast}}" style="top:50%; margin-top:-150px;text-align:left; width:85%;">
+  <view style="padding:40px 10px 20px 10px;">
+    <view class='modal_title_add'>兑换成功</view>
+    
+    <image src="../img/y_close2.png" mode="widthFix" class="modal_close_add" bindtap='closeTast'></image>
+
+    <view class="modal_txt" style="margin:30px 0;text-align:left;line-height: 20px; max-height:250px; overflow:auto;text-align:center;font-size:30rpx;">
+      <text>您已兑换成功，可在兑换记录查看；点击“立即查看”可进入集卡活动页面查看。</text>
+    </view>
+
+    <button class="modal_btn" bindtap='openGameCard'>立即查看</button>
+  </view>
+</view>
+<!-- 袁健豪 20191025 卡片兑换成功弹框 -->

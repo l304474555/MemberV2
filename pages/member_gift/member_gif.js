@@ -4,6 +4,8 @@ var myjCommon = require("../../utils/myjcommon.js");
 var WxParse = require('../../wxParse/wxParse.js');
 var QQMapWX = require('../../map/qqmap-wx-jssdk.js');
 var utils = require('../../utils/util.js');
+const couponAppId = 'wx55595d5cf709ce79';
+
 Page({
 
   /**
@@ -67,6 +69,7 @@ Page({
         wx.hideLoading();
         return false;
       }
+      
       myjCommon.callApi({
         interfaceCode: "WxMiniProgram.Service.GetExchangeRecord",
         biz: { sessionId: user.sessionId, coupeType: that.data.coupeType, pageSize: that.data.pageSize, pageIndex: that.data.pageIndex },
@@ -88,6 +91,7 @@ Page({
           }
           //分页加载
           var list = that.data.exchangeRecordList.concat(res.Result.ExchangRecord)
+          
           that.setData({
             exchangeRecordList: list,
           })
@@ -104,7 +108,7 @@ Page({
           }
         },
         fail: function (msg) {
-          console.log("GetExchangeRecord失败：" + JSON.stringify(msg));
+          console.error("GetExchangeRecord失败：" + JSON.stringify(msg));
         },
         complete: function (res) {
         }
@@ -421,6 +425,23 @@ Page({
           }
         })
       }
+    });
+  },
+
+  /**
+   * 创建人：袁健豪
+   * 创建时间：20191025
+   * 描述：立即查看卡片
+   */
+  openGameCard(e) {
+    let url = e.currentTarget.dataset.url;
+
+    if (!url) {
+      return;
+    }
+    wx.navigateToMiniProgram({
+      appId: couponAppId,
+      path: url
     });
   }
 })
