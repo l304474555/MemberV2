@@ -119,6 +119,12 @@ Page({
    * 拒绝登录
    */
   refuseLogin() {
-    wx.navigateBack();
+    if (getCurrentPages().length <= 1) {
+      wx.switchTab({
+        url: '/pages/member_index/member_index',
+      })
+    } else {
+      wx.navigateBack();
+    }
   }
 })

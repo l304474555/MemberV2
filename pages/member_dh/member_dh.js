@@ -30,7 +30,7 @@ Page({
     isGetSucess: false, //券兑换成功弹出框
     formId: "",
     isNorMember: false,
-    currentTab:0,
+    currentTab:1,
     MaterialList:[], //实物礼品
     integralList: [], //优惠券列表
     toView: 'red',
