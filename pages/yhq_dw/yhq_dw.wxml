@@ -22,7 +22,7 @@
     <text>热门城市</text>
   </view>
 
-  <view class='yhq_city_list' wx:for="{{item.hotCitys}}"  bindtap='selectCity' data-city="{{item.Name}}" data-peovince="{{item.Province}}">
+  <view class='yhq_city_list' wx:for="{{item.hotCitys}}"  bindtap='selectCity' data-city="{{item.Name}}" data-peovince="{{item.Province}}" data-companycode="{{item.CompanyCode}}">
     <text>{{item.Name}}</text>
   </view>
 
@@ -30,7 +30,7 @@
   <view  wx:for="{{item.cityList}}" wx:for-item="province">
     <view class='yhq_city_title_list yhq_city_title_gray'>{{province.Province}}</view>
   <!--显示城市-->
-  <view class='yhq_city_list' wx:for="{{province.Citys}}" wx:for-item="city" bindtap='selectCity' data-city="{{city.Name}}"  data-peovince="{{ isSerchcity?city.Province: province.Province}}">
+  <view class='yhq_city_list' wx:for="{{province.Citys}}" wx:for-item="city" bindtap='selectCity' data-city="{{city.Name}}"  data-peovince="{{ isSerchcity?city.Province: province.Province}}" data-companycode="{{province.CompanyCode}}">
     <text>{{city.Name}}</text>
   </view>
   </view>

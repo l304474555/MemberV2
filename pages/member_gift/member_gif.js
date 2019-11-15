@@ -434,6 +434,7 @@ Page({
    * 描述：立即查看卡片
    */
   openGameCard(e) {
+    debugger
     let url = e.currentTarget.dataset.url;
 
     if (!url) {

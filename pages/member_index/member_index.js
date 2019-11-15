@@ -4,6 +4,8 @@ var myjCommon = require("../../utils/myjcommon.js");
 var WxParse = require('../../wxParse/wxParse.js');
 var QQMapWX = require('../../map/qqmap-wx-jssdk.js');
 const getBrandDayInfo_interface = 'WxMiniProgram.Service.GetBrandDayInfo';
+const getMemberLevelEquity_interface = 'WxMiniProgram.Service.GetMemberLevelEquity';
+const getStoreListData_interface = 'WxMiniProgram.Service.GetStoreListData';
 
 Page({
 
@@ -71,6 +73,10 @@ Page({
     isNewPage: 0,//是否为新版会员页面:0加载中，1旧页面，2新页面
     moduleList: [],//首页7个模块
     isBrandMember: false,  //是否品牌会员
+    companyCode: '',  //区域编号
+    memberLevelObj: null, //会员等级对象
+    gradeList: [],  //等级列表
+    isMinLevel: true, //是否最低会员等级
   },
 
   /**用户定位 */
@@ -277,12 +283,14 @@ Page({
     //     return;
     //   }
     var user = myjCommon.getCurrentUser()
+    
     that.getJFUserInfo();//获取佳纷会员信息
-    if (app.currCity != undefined && app.currProvince != undefined) //全局已经存在城市
+    if (app.currCity != undefined && app.currProvince != undefined && app.companyCode != undefined) //全局已经存在城市
     {
       that.setData({
         cityName: app.currCity,
-        isNewPage: app.checkNewPage()
+        isNewPage: app.checkNewPage(),
+        companyCode: app.companyCode
       });
       /**加载配置信息 */
       that.GetMemberCardConfig();
@@ -303,13 +311,19 @@ Page({
       if (app.currProvince.indexOf('广东') > -1) {
         callback && callback(app.currCity);
       }
+
+      if (user.sessionId){
+        that.loadMemberLevelEquity(user.sessionId, app.companyCode);
+      }
     } else {
       var cityName = wx.getStorageSync("membercity");
       var provinceName = wx.getStorageSync("memberprovince");
-      if (cityName && provinceName) {
+      let companyCode = wx.getStorageSync('companyCode');
+      if (cityName && provinceName && companyCode) {
         that.setData({
           cityName: cityName,
-          isNewPage: app.checkNewPage()
+          isNewPage: app.checkNewPage(),
+          companyCode:companyCode
         });
         app.currCity = cityName;
         app.currProvince = provinceName;
@@ -331,6 +345,10 @@ Page({
         if (provinceName.indexOf('广东') > -1) {
           callback && callback(cityName);
         }
+        
+        if (user.sessionId) {
+          that.loadMemberLevelEquity(user.sessionId, companyCode);
+        }
       } else {
         wx.getLocation({
           type: 'wgs84',
@@ -340,6 +358,11 @@ Page({
             }
             var latitude = res.latitude
             var longitude = res.longitude
+            that.loadStoreInfo(latitude, longitude, (companyCode)=>{
+              if (user.sessionId) {
+                that.loadMemberLevelEquity(user.sessionId, companyCode);
+              }
+            });
             // 调用接口 根据经纬度去获取所在城市
             that.setData({
               LoadingDesc: "城市定位中，请稍候……"
@@ -354,7 +377,9 @@ Page({
               },
               success: function (res) {
                 app.currCity = res.result.address_component.city;
+                wx.setStorageSync('membercity', res.result.address_component.city);
                 app.currProvince = res.result.address_component.province;
+                wx.setStorageSync('memberprovince', res.result.address_component.province);
                 app.latitude = res.result.address_component.latitude,
                   app.longitude = res.result.address_component.longitude;
                 if (res.result.address_component.city) {
@@ -746,9 +771,15 @@ Page({
             currUserInfo: e.userInfo
           });
           //用户定位
-          that.getUserLocationInfoV1(cityName => {
-            that.checkBrandMember(cityName);
+          myjCommon.getLoginUser(user => {
+            if (!user.isLogin) {
+              return;
+            }
+            that.getUserLocationInfoV1(cityName => {
+              that.checkBrandMember(cityName);
+            });
           });
+          
         },
         fail: function (msg) {
           console.log(msg)
@@ -1990,6 +2021,110 @@ Page({
           wx.hideLoading();
         }
       });
+    });
+  },
+
+  /**
+   * 创建人:袁健豪
+   * 创建时间：20191105
+   * 描述：加载会员等级
+   */
+  loadMemberLevelEquity(sessionId,companyCode) {
+    return;//暂时不放出会员等级来
+    let self = this;
+
+    myjCommon.callApi({
+      interfaceCode: getMemberLevelEquity_interface,
+      biz: {
+        sessionId: sessionId,
+        companyCode: companyCode
+      },
+      success(res) {
+        if (res.Code == '0') {
+          self.setData({
+            memberLevelObj: res.Result.MemberLevel,
+            gradeList: res.Result.GradeList,
+            ordinaryMember: res.Result.MemberLevel.Name
+          },()=>{
+            self.judgeMinLevel();
+          });
+        }
+      },
+      fail(msg) {
+        console.error(msg);
+      }
+    });
+  },
+
+  /**
+   * 创建人：袁健豪
+   * 创建时间：20191105
+   * 描述：加载门店信息
+   */
+  loadStoreInfo(lat, lng,callback) {
+
+    myjCommon.callApi({
+      interfaceCode: getStoreListData_interface,
+      biz: {
+        keyWords: '',
+        pageIndex: 1,
+        pageSize: 1,
+        uLng: lng,
+        uLat: lat,
+        groupId: 0
+      },
+      success(res) {
+        if(res.Code!='0'){
+          wx.showModal({
+            title: '提示',
+            content: '无法加载CompanyCode!',
+          });
+          return;
+        }
+        let obj = res.EntityList[0];
+        let companyCode = obj.CompanyCode;
+        wx.setStorageSync('companyCode', companyCode);
+        app.companyCode = companyCode;
+        callback && callback(companyCode);
+      },
+      fail(msg) {
+        console.error(msg);
+      }
+    });
+  },
+
+  /**
+   * 创建人：袁健豪
+   * 创建时间：20191105
+   * 描述：跳转到会员小程序的会员权益页面
+   */
+  toMemberEquity() {
+    if (!this.data.currUserInfo) {
+      wx.navigateTo({
+        url: '../login/login',
+      });
+      return;
+    }
+    wx.navigateToMiniProgram({
+      appId: 'wx55595d5cf709ce79',
+      path: 'pages/member_rankequity/member_rankequity'
+    });
+  },
+
+  /**
+   * 创建人：袁健豪
+   * 创建时间：20191105
+   * 描述：判断是否最低会员等级
+   */
+  judgeMinLevel() {
+    if (this.data.memberLevelObj.GRId == this.data.gradeList[0].GRId) {
+      this.setData({
+        isMinLevel: true
+      });
+      return;
+    }
+    this.setData({
+      isMinLevel: false
     });
   }
 })

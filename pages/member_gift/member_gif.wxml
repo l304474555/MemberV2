@@ -9,15 +9,15 @@
       <view class="yhq_txt2 yhq_txt2_dw"><text class="yhq_value1">兑换时间:{{item.ExchangeTime}}</text></view>
     </view>
    </view>
-      <button  bindtap='expressinfo' hidden='{{item.UserCardCode!=""&&item.MPCouponCard==null?true:false}}' data-reckey="{{item.RecKey}}" data-endtime="{{item.EndTime}}" data-rename="{{item.CneeName}}"  data-readdress="{{item.CneeAddress}}" data-remobile="{{item.CneeMobile}}" hover-stop-propagation="true"  class="dh_btn yhq_bg_red" style='position: absolute;right: 10px;top: 43px;'>
+      <button  bindtap='expressinfo' hidden='{{item.UserCardCode!=""&&!item.MPCouponCard.PageUrl?true:false}}' data-reckey="{{item.RecKey}}" data-endtime="{{item.EndTime}}" data-rename="{{item.CneeName}}"  data-readdress="{{item.CneeAddress}}" data-remobile="{{item.CneeMobile}}" hover-stop-propagation="true"  class="dh_btn yhq_bg_red" style='position: absolute;right: 10px;top: 43px;'>
       <text>快递信息</text>
     </button>
 
-    <button  bindtap='detailreedcode' data-reedcode='{{item.UserCardCode}}' hidden='{{item.UserCardCode!=""&&item.MPCouponCard==null?false:true}}' data-reckey="{{item.RecKey}}" data-endtime="{{item.EndTime}}" data-rename="{{item.CneeName}}"  data-readdress="{{item.CneeAddress}}" data-remobile="{{item.CneeMobile}}" hover-stop-propagation="true"  class="dh_btn yhq_bg_red" style='position: absolute;right: 10px;top: 43px;'>
+    <button  bindtap='detailreedcode' data-reedcode='{{item.UserCardCode}}' hidden='{{item.UserCardCode!=""&&!item.MPCouponCard.PageUrl?false:true}}' data-reckey="{{item.RecKey}}" data-endtime="{{item.EndTime}}" data-rename="{{item.CneeName}}"  data-readdress="{{item.CneeAddress}}" data-remobile="{{item.CneeMobile}}" hover-stop-propagation="true"  class="dh_btn yhq_bg_red" style='position: absolute;right: 10px;top: 43px;'>
       <text>兑换码</text>
     </button>
 
-    <button  bindtap='openGameCard' wx:if="{{item.MPCouponCard!=null}}" data-url="{{item.MPCouponCard.PageUrl}}" hover-stop-propagation="true"  class="dh_btn yhq_bg_red" style='position: absolute;right: 10px;top: 43px;'>
+    <button  bindtap='openGameCard' wx:if="{{item.MPCouponCard!=null&&item.MPCouponCard.PageUrl}}" data-url="{{item.MPCouponCard.PageUrl}}" hover-stop-propagation="true"  class="dh_btn yhq_bg_red" style='position: absolute;right: 10px;top: 43px;'>
       <text>立即查看</text>
     </button>
 

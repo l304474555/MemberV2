@@ -496,6 +496,7 @@
   <!--顶部-->
   <view class="member_card" bindtap='OpenCard'>
     <image src="{{isBrandMember?'https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201907/member_head_bg.jpg':'https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201907/31f28e9e7e0b5ca4.jpg'}}" mode="widthFix" style='width: 100%;vertical-align: top;max-height:200px' ></image>
+    <!-- <image src="{{isBrandMember&&isMinLevel&&currUserInfo?'https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201907/member_head_bg.jpg':(memberLevelObj.ImgUrl?memberLevelObj.ImgUrl:'https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201907/31f28e9e7e0b5ca4.jpg')}}" mode="widthFix" style='width: 100%;vertical-align: top;max-height:200px' ></image> -->
      <view class='h_pay_code'  catchtap='OpenCard'>
           <image src="../img/test_code.png" mode="widthFix" style='width: 80rpx;    vertical-align: middle;' ></image>
           <image src="../img/b7_w.png" mode="widthFix" class='code_act'></image>
@@ -505,7 +506,8 @@
       <view class='va_fa'>
         <view class="member_name">{{currUserInfo.nickName}}</view>
           <block wx:if="{{jfUserInfo==null}}">
-            <view class="{{isBrandMember?'member_type3':'member_type1'}}">{{currUserInfo.nickName?(isBrandMember?'品牌日会员':ordinaryMember):'点击登陆'}}</view>
+            <!-- <view class="{{isBrandMember?'member_type3':'member_type1'}}" catchtap="toMemberEquity">{{currUserInfo.nickName?(isBrandMember?'品牌日会员 | ' + ordinaryMember:ordinaryMember):'点击登陆'}}</view> -->
+            <view class="{{isBrandMember?'member_type3':'member_type1'}}" catchtap="toMemberEquity">{{currUserInfo.nickName?(isBrandMember?'品牌日会员':ordinaryMember):'点击登陆'}}</view>
           </block>
           <block wx:if="{{jfUserInfo!=null}}">
             <view class="member_type2">{{jfUserInfo.StoreCode}}佳纷会员</view>

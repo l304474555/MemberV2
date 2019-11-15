@@ -236,7 +236,7 @@ Page({
       if (that.data.coupontype==3) //礼品
       {
         cardInfo=that.getgifCardInfo(carid);
-        debugger
+        
         myjCommon.callApi({
           interfaceCode: "WxMiniProgram.Service.AddExchangeGif",
           biz: { 

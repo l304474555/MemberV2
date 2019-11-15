@@ -92,5 +92,6 @@ App({
     longitude: "",
     isNewPage: 0,//是否为新版会员页面:0加载中，1旧页面，2新页面
     currenAppid: "wxc94d087c5890e1f8", //当前小程序appid
+    companyCode: ''
   }
 })

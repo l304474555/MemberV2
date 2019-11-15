@@ -58,6 +58,7 @@ Page({
             console.log(res)
             that.setData({
               cityName: res.result.address_component.city
+              
             });
             app.currCity = that.data.cityName;
             app.currProvince = res.result.address_component.province;
@@ -80,19 +81,24 @@ Page({
   },
   //选择城市
   selectCity: function (event) {
+    debugger
     var that = this;
     //选中城市
     var city = event.currentTarget.dataset.city;
     //省份
     var province = event.currentTarget.dataset.peovince;
+    let companyCode = event.currentTarget.dataset.companycode;
     //把选择的城市，省份信息写入全局变量
     app.currCity = city;
     app.currProvince = province;
+    app.companyCode = companyCode;
     app.globalData.currCity = city;
     app.globalData.currProvince = province;
+    app.globalData.companyCode = companyCode;
     //把选择的城市，省份信息写入缓存
     wx.setStorageSync("membercity", city);
     wx.setStorageSync("memberprovince", province);
+    wx.setStorageSync('companyCode', companyCode);
 
     myjCommon.getLoginUser(function (user) {
       if (!user.isLogin) {
@@ -404,6 +410,9 @@ Page({
       app.globalData.currCity = that.data.cityName;
       wx.setStorageSync('membercity', that.data.cityName);
       wx.setStorageSync('memberprovince', '');
+      wx.setStorageSync('companyCode', '');
+      app.companyCode = undefined;
+      app.globalData.companyCode = undefined;
       wx.showToast({
         title: '修改城市成功！',
         icon: 'success',
