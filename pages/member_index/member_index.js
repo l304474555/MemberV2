@@ -685,9 +685,11 @@ Page({
   },
 
   GetAd: function (event) {// //点击广告弹出框
-
+    if (event.detail.formId != undefined || event.detail.formId != '') {
+      myjCommon.logFormId(event.detail.formId);
+    }
     //广告栏id
-    var id = event.currentTarget.dataset.id;
+    var id = event.detail.target.dataset.id;
     var adobj = null;
     var remark = "";
 
@@ -1264,16 +1266,19 @@ Page({
   },
   locationProm: function (event)         //<-----刘秋芳 2017- 12 - 21 增加广告跳转网页功能-->
   {
+    if (event.detail.formId != undefined || event.detail.formId != '') {
+      myjCommon.logFormId(event.detail.formId);
+    }
     var that = this;
     //类型： 1：不跳转 2：跳转小程序 3：跳转频道页  4：跳转链接
-    var typeid = event.currentTarget.dataset.ptype;//1：不跳转 2：跳转小程序 3：跳转频道页  4：跳转链接
-    var appid = event.currentTarget.dataset.appid;
+    var typeid = event.detail.target.dataset.ptype;//1：不跳转 2：跳转小程序 3：跳转频道页  4：跳转链接
+    var appid = event.detail.target.dataset.appid;
     //频道链接
-    var channelid = event.currentTarget.dataset.channelid;
+    var channelid = event.detail.target.dataset.channelid;
     //网页链接
-    var bannerUrl = event.currentTarget.dataset.jumpurl;
+    var bannerUrl = event.detail.target.dataset.jumpurl;
     //跳转页面路径
-    var url = event.currentTarget.dataset.url;
+    var url = event.detail.target.dataset.url;
 
     if (typeid == 4) {
       wx.navigateTo({
@@ -1386,6 +1391,7 @@ Page({
   },//跳到“我的积分”
   locationCoin: function (e) {
     if (e.detail.formId != undefined || e.detail.formId != '') {
+      console.error(e.detail.formId);
       myjCommon.logFormId(e.detail.formId);
     }
     var target = e.currentTarget.dataset.target;
@@ -1895,7 +1901,10 @@ Page({
   /**创建日期：20190716 */
   /**描述： 点击首页7个模块跳转（ 1：不跳转 2：跳转小程序 4：跳转链接）*/
   tapModuleList(e) {
-    let item = e.target.dataset.item;
+    if (e.detail.formId != undefined || e.detail.formId != '') {
+      myjCommon.logFormId(e.detail.formId);
+    }
+    let item = e.detail.target.dataset.item;
     console.log(item);
     if (item) {
       //跳转小程序
@@ -1919,10 +1928,13 @@ Page({
     }
   },
   //签到
-  tapToSign() {
+  tapToSign(e) {
+    if (e.detail.formId != undefined || e.detail.formId != '') {
+      myjCommon.logFormId(e.detail.formId);
+    }
     wx.navigateTo({
       url: '../sign/sign',
-    })
+    });
   },
   GivingNewMemberGC: function (areaname, sessionid) {
     var that = this;
