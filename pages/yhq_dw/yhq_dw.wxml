@@ -30,7 +30,7 @@
   <view  wx:for="{{item.cityList}}" wx:for-item="province">
     <view class='yhq_city_title_list yhq_city_title_gray'>{{province.Province}}</view>
   <!--显示城市-->
-  <view class='yhq_city_list' wx:for="{{province.Citys}}" wx:for-item="city" bindtap='selectCity' data-city="{{city.Name}}"  data-peovince="{{ isSerchcity?city.Province: province.Province}}" data-companycode="{{province.CompanyCode}}">
+  <view class='yhq_city_list' wx:for="{{province.Citys}}" wx:for-item="city" bindtap='selectCity' data-city="{{city.Name}}"  data-peovince="{{ isSerchcity?city.Province: province.Province}}" data-companycode="{{city.CompanyCode}}">
     <text>{{city.Name}}</text>
   </view>
   </view>

@@ -211,19 +211,29 @@
   <!--广告栏 正式-->
   <!-- <image src="{{item.ImageUrl}}" mode="widthFix"  bindtap='GetAd' data-id="{{item.Id}}"  data-jump="{{item.Jump}}" ></image> -->
   <view class='h_list_fa'>
-    <view class='h_list_fa2'  wx:for="{{memberAdList}}" wx:key="Id" >
+    <view class='h_list_fa2'  wx:for="{{memberAdList}}" wx:key="Id" style="position:relative;" >
       <block wx:if="{{item.Jump==2}}">
-    <image src="{{item.ImageUrl}}" mode="widthFix"  bindtap='locationProm' data-id="{{item.Id}}"  data-jump="{{item.Jump}}" data-ptype="{{item.Jump}}"  data-jumpurl="{{item.JumpUrl}}" data-url="{{item.PagePath}}"  data-appid="{{item.appid}}" ></image>
+      <image src="{{item.ImageUrl}}" mode="widthFix"></image>
+      <form report-submit="true" bindsubmit="locationProm">
+        <button style="position: absolute;width: calc(100% - 10rpx);height: 160rpx;top:0;opacity:0;" form-type="submit" role="button" aria-disabled="false" data-id="{{item.Id}}"  data-jump="{{item.Jump}}" data-ptype="{{item.Jump}}"  data-jumpurl="{{item.JumpUrl}}" data-url="{{item.PagePath}}"  data-appid="{{item.appid}}">locationProm</button>
+      </form>
     </block>
 
-  <block wx:if="{{item.Jump==4 || item.Jump==3 }}">
+    <block wx:if="{{item.Jump==4 || item.Jump==3 }}">
 
-  <image src="{{item.ImageUrl}}" mode="widthFix"  bindtap='locationProm' data-id="{{item.Id}}"  data-ptype="{{item.Jump}}"  data-jumpurl="{{item.JumpUrl}}"  data-appid="{{item.appid}}" data-channelid="{{item.ChannelPageId}}"  data-url="{{item.PagePath}}" ></image> 
-          </block>
+      <image src="{{item.ImageUrl}}" mode="widthFix"></image> 
 
-          <block wx:if="{{item.Jump==1}}">
-            <image src="{{item.ImageUrl}}" mode="widthFix"  bindtap='GetAd' data-id="{{item.Id}}"  data-jump="{{item.Jump}}" ></image>
-          </block>
+      <form report-submit="true" bindsubmit="locationProm">
+        <button style="position: absolute;width: calc(100% - 10rpx);height: 160rpx;top:0;opacity:0;" form-type="submit" role="button" aria-disabled="false" data-id="{{item.Id}}"  data-ptype="{{item.Jump}}"  data-jumpurl="{{item.JumpUrl}}"  data-appid="{{item.appid}}" data-channelid="{{item.ChannelPageId}}"  data-url="{{item.PagePath}}">locationProm</button>
+      </form>
+    </block>
+
+    <block wx:if="{{item.Jump==1}}">
+      <image src="{{item.ImageUrl}}" mode="widthFix"></image>
+      <form report-submit="true" bindsubmit="GetAd">
+        <button style="position: absolute;width: calc(100% - 10rpx);height: 160rpx;top:0;opacity:0;" form-type="submit" role="button" aria-disabled="false" data-id="{{item.Id}}"  data-jump="{{item.Jump}}">GetAd</button>
+      </form>
+    </block>
   <!-- 
           <image src="{{item.ImageUrl}}" mode="widthFix"  bindtap='GetAd' data-id="{{item.Id}}"  data-jump="{{item.Jump}}" ></image> -->
 

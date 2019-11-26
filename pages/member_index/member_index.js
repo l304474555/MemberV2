@@ -750,7 +750,7 @@ Page({
     that.setData({
       bannerCurrent: 0
     });
-
+debugger
     if (options.AreaNo) { //扫码定位 AreaNo市级编码
       wx.getUserInfo({
         success: function (e) {

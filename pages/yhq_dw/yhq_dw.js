@@ -275,6 +275,7 @@ Page({
 
     var province; //省份
     var city; //城市
+    let companyCode;
 
     var items = [];
     var hotCitys = []; //热门城市
@@ -289,9 +290,11 @@ Page({
             // province = that.data.allCityList[i].cityList[j].Province;
             city = that.data.allCityList[i].cityList[j].Citys[k].Name;
             province = that.getProvince(that.data.allCityList[i].cityList[j].Citys[k]);
+            companyCode = that.data.allCityList[i].cityList[j].Citys[k].CompanyCode;
             citysList.push({
               Name: city,
-              Province: province
+              Province: province,
+              CompanyCode: companyCode
             });
           }
 
