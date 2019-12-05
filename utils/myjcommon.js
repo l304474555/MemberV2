@@ -576,34 +576,10 @@ function logFormId(formId) {
         interfaceCode: "WxMiniProgram.Service.LogMPFormId",
         biz: { sessionId: user.sessionId, mpSource: myjConfig.mpSource, formId: formId },
         success: function (data) {
+          console.error(data);
         },
         fail: function (msg) {
-          console.log("记录用户提交formId：" + JSON.stringify(msg));
-        }
-      });
-    });
-  }
-  catch (e) {
-
-  }
-}
-
-//********记录用户提交formId ******* */
-function logFormId(formId) {
-  if (!formId) {
-    return;
-  }
-  try {
-    getLoginUser(function (user) {
-      callApi({
-        interfaceCode: "WxMiniProgram.Service.LogMPFormId",
-        biz: { sessionId: user.sessionId, mpSource: myjConfig.mpSource, formId: formId },
-        success: function (data) {
-          console.log("记录用户提交formId结果：");
-          console.log(data)
-        },
-        fail: function (msg) {
-          console.log("记录用户提交formId：" + JSON.stringify(msg));
+          console.error("记录用户提交formId：" + JSON.stringify(msg));
         }
       });
     });

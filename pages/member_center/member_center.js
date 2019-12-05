@@ -860,7 +860,6 @@ Page({
       wx.showLoading({
         title: '数据载入中...',
       });
-      debugger
       myjCommon.callApi({
         interfaceCode: "WxMiniProgram.Service.GetIntegralDtl",
         biz: {

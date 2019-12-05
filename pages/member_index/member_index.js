@@ -6,6 +6,10 @@ var QQMapWX = require('../../map/qqmap-wx-jssdk.js');
 const getBrandDayInfo_interface = 'WxMiniProgram.Service.GetBrandDayInfo';
 const getMemberLevelEquity_interface = 'WxMiniProgram.Service.GetMemberLevelEquity';
 const getStoreListData_interface = 'WxMiniProgram.Service.GetStoreListData';
+const _getAnnisaryConfig_interface = 'WxMiniProgram.Service.GetAnnisaryConfig';
+const _whiteListUrl = 'https://mimage.myj.com.cn/MicroMallFileServer/OpenMembership.js';
+const _getMemberDeduction_interface = 'WxMiniProgram.Service.GetMemberDeduction';
+const _deductionRuleUrl = 'https://mimage.myj.com.cn/MicroMallFileServer/ClearpointRule.js';
 
 Page({
 
@@ -77,6 +81,10 @@ Page({
     memberLevelObj: null, //会员等级对象
     gradeList: [],  //等级列表
     isMinLevel: true, //是否最低会员等级
+    isShowZeroResetRule: false, //是否显示积分清零规则弹框
+    isOpenMemberLevel: false, //是否开放会员等级入口
+    deduction: 0, //过期积分
+    year: 2020,
   },
 
   /**用户定位 */
@@ -313,7 +321,12 @@ Page({
       }
 
       if (user.sessionId){
-        that.loadMemberLevelEquity(user.sessionId, app.companyCode);
+        that.getMemberId(user.sessionId, memberId => {
+          that.checkWhiteListWithMemberId(memberId, () => {
+            that.getMemberDeduction(user.sessionId,app.companyCode);
+            that.loadMemberLevelEquity(user.sessionId, app.companyCode);
+          });
+        });
       }
     } else {
       var cityName = wx.getStorageSync("membercity");
@@ -347,7 +360,12 @@ Page({
         }
         
         if (user.sessionId) {
-          that.loadMemberLevelEquity(user.sessionId, companyCode);
+          that.getMemberId(user.sessionId, memberId => {
+            that.checkWhiteListWithMemberId(memberId, () => {
+              that.getMemberDeduction(user.sessionId,companyCode);
+              that.loadMemberLevelEquity(user.sessionId, companyCode);
+            });
+          });
         }
       } else {
         wx.getLocation({
@@ -360,7 +378,12 @@ Page({
             var longitude = res.longitude
             that.loadStoreInfo(latitude, longitude, (companyCode)=>{
               if (user.sessionId) {
-                that.loadMemberLevelEquity(user.sessionId, companyCode);
+                that.getMemberId(user.sessionId, memberId => {
+                  that.checkWhiteListWithMemberId(memberId, () => {
+                    that.getMemberDeduction(user.sessionId,companyCode);
+                    that.loadMemberLevelEquity(user.sessionId, companyCode);
+                  });
+                });
               }
             });
             // 调用接口 根据经纬度去获取所在城市
@@ -742,6 +765,12 @@ Page({
      * 生命周期函数--监听页面加载
   */
   onLoad: function (options) {
+    let myDate = new Date();
+    let year = myDate.getFullYear();
+    this.setData({
+      year: year
+    });
+
     console.log("onload......");
     var that = this;
     wx.showLoading({
@@ -750,7 +779,7 @@ Page({
     that.setData({
       bannerCurrent: 0
     });
-debugger
+
     if (options.AreaNo) { //扫码定位 AreaNo市级编码
       wx.getUserInfo({
         success: function (e) {
@@ -2042,7 +2071,6 @@ debugger
    * 描述：加载会员等级
    */
   loadMemberLevelEquity(sessionId,companyCode) {
-    return;//暂时不放出会员等级来
     let self = this;
 
     myjCommon.callApi({
@@ -2137,6 +2165,137 @@ debugger
     }
     this.setData({
       isMinLevel: false
+    });
+  },
+
+  /**
+   * 创建人：袁健豪
+   * 创建时间:20191126
+   * 描述：打开积分清零规则
+   */
+  openZeroResetRule() {
+    let self = this;
+
+    wx.request({
+      url: _deductionRuleUrl,
+      data: {},
+      header: {
+        'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+      },
+      method:'GET',
+      success(res) {
+        debugger
+        WxParse.wxParse('integral', 'html', res.data, self, 1);
+        self.setData({
+          isShowZeroResetRule: true
+        });
+      },
+      fail(msg) {
+        console.error(msg);
+      }
+    });
+  },
+
+  /**
+   * 创建人：袁健豪
+   * 创建时间:20191126
+   * 描述：关闭积分清零规则
+   */
+  closeZeroResetRule() {
+    this.setData({
+      isShowZeroResetRule: false
+    });
+  },
+
+  /**
+   * 创建人：袁健豪
+   * 创建时间：20191127
+   * 描述：获取会员ID
+   */
+  getMemberId(sessionId, callback) {
+    myjCommon.callApi({
+      interfaceCode: _getAnnisaryConfig_interface,
+      biz: {
+        sessionId: sessionId
+      },
+      success(res) {
+        if (res.Code == '0') {
+          let memberId = res.Result.MemberId;
+          callback && callback(memberId);
+        }
+      },
+      fail(msg) {
+        console.error(msg);
+      }
+    });
+  },
+
+  /**
+   * 创建人：袁健豪
+   * 创建时间：20191127
+   * 描述：校验会员ID是否存在白名单里
+   */
+  checkWhiteListWithMemberId(memberId, callback) {
+    let self = this;
+
+    wx.request({
+      url: _whiteListUrl,
+      data: {},
+      header: {
+        'content-type': 'application/json'
+      },
+      success(res) {
+        let data = res.data;
+        let isOpenMemberLevel = data.some(item => {
+          return item == memberId
+        });
+        self.setData({
+          isOpenMemberLevel: isOpenMemberLevel
+        });
+
+        if (isOpenMemberLevel) {
+          callback && callback();
+        }
+      },
+      fail(msg) {
+        console.error(msg);
+      }
+    });
+  },
+
+  /**
+   * 创建时间：20191204
+   * 创建人：袁健豪
+   * 描述：获取会员过期积分
+   */
+  getMemberDeduction(sessionId,companyCode){
+    if (this.data.year >= 2020) {
+      return;
+    }
+    let self = this;
+
+    myjCommon.callApi({
+      interfaceCode: _getMemberDeduction_interface,
+      biz: {
+        sessionId: sessionId,
+        companyCode: companyCode
+      },
+      success(res) {
+        if (res.Code == '0') {
+          self.setData({
+            deduction: res.Result
+          });
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: res.Msg,
+            showCancel: false
+          });
+        }
+      },
+      fail(msg) {
+        console.error(msg);
+      }
     });
   }
 })
