@@ -41,10 +41,6 @@
 		"game": {
 			"list": []
 		},
-		"gamePlugin": {
-			"current": -1,
-			"list": []
-		},
 		"miniprogram": {
 			"current": 1,
 			"list": [
@@ -101,13 +97,6 @@
 					"id": -1,
 					"name": "积分换券",
 					"pathName": "pages/member_dh/member_dh",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": 8,
-					"name": "pages/brandDay/brandDay",
-					"pathName": "pages/brandDay/brandDay",
 					"query": "",
 					"scene": null
 				}
