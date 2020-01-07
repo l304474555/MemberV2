@@ -59,6 +59,7 @@ Component({
    */
   methods: {
     onLoad: function(options) {
+      debugger
       console.log("onload")
       console.log(options)
       var that=this;

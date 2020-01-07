@@ -22,7 +22,7 @@
   <!--黎梅芳 20190424 注册会员组件-->
 
   <!--袁健豪 20191126 会员积分清零提醒-->
-  <view class="marquee_container" style="--marqueeWidth--:-20em;" bindtap="openZeroResetRule" wx:if="{{year<2020 && currUserInfo.nickName && isMember}}">
+  <view class="marquee_container" style="--marqueeWidth--:-20em;" bindtap="openZeroResetRule" wx:if="{{year<2020 && currUserInfo.nickName && isMember && companyCode!='HO' && companyCode!='AH'}}">
     <view class="marquee_text">您有{{deduction}}积分即将在2020年1月1号0点过期，请尽快使用，点击可查看积分余额及规则。</view>
   </view>
   <!--袁健豪 20191126 会员积分清零提醒-->
@@ -460,11 +460,12 @@
       </block>
 
       <block wx:if="{{isOpenMemberLevel}}">
-        <image src="{{isBrandMember&&isMinLevel&&currUserInfo?'https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201907/member_head_bg.jpg':(memberLevelObj.ImgUrl?memberLevelObj.ImgUrl:'https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201907/31f28e9e7e0b5ca4.jpg')}}" mode="widthFix" style='width: 100%;vertical-align: top;max-height:200px'></image>
+        <image src="{{isBrandMember&&isMinLevel&&currUserInfo?'https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201907/member_head_bg.jpg':(gradeList[currentMemberLevel].ImgUrl?gradeList[currentMemberLevel].ImgUrl:'https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201907/31f28e9e7e0b5ca4.jpg')}}" mode="widthFix" style='width: 100%;vertical-align: top;max-height:200px'></image>
+        <!-- <image src="{{isBrandMember&&isMinLevel&&currUserInfo?'https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201907/member_head_bg.jpg':(memberLevelObj.ImgUrl?memberLevelObj.ImgUrl:'https://mimage.myj.com.cn/MicroMallFileServer/Files/EditorPic/201907/31f28e9e7e0b5ca4.jpg')}}" mode="widthFix" style='width: 100%;vertical-align: top;max-height:200px'></image> -->
       </block>
 
       <view class='h_pay_code' catchtap='OpenCard'>
-        <image src="../img/test_code.png" mode="widthFix" style='width: 80rpx;    vertical-align: middle;'></image>
+        <image src="../img/test_code.png" mode="widthFix" style='width: 60rpx;    vertical-align: middle;'></image>
         <image src="../img/b7_w.png" mode="widthFix" class='code_act'></image>
       </view>
       <view class='pay_name2'>

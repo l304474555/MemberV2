@@ -7,6 +7,7 @@ const getBrandDayInfo_interface = 'WxMiniProgram.Service.GetBrandDayInfo';
 const getMemberLevelEquity_interface = 'WxMiniProgram.Service.GetMemberLevelEquity';
 const getStoreListData_interface = 'WxMiniProgram.Service.GetStoreListData';
 const _getAnnisaryConfig_interface = 'WxMiniProgram.Service.GetAnnisaryConfig';
+const _getMemberLevel_interface = 'WxMiniProgram.Service.GetMemberLevel';
 const _whiteListUrl = 'https://mimage.myj.com.cn/MicroMallFileServer/OpenMembership.js';
 const _getMemberDeduction_interface = 'WxMiniProgram.Service.GetMemberDeduction';
 const _deductionRuleUrl = 'https://mimage.myj.com.cn/MicroMallFileServer/ClearpointRule.js';
@@ -18,7 +19,7 @@ Page({
    */
   data: {
     isShowUserInfoBtn: false, //授权弹出框
-    carInfo: {},//会员卡信息
+    carInfo: {}, //会员卡信息
     userInfo: {}, //用户信息
     defaultAvatar: "../img/default.png", //用户默认头像
     backgroundImg: '', //会员卡背景
@@ -29,8 +30,8 @@ Page({
     isYes: false, //会员
     isWait: false, //更多尊享弹框
     isOnce: false, //只能是会员领取弹出框
-    isRight: false,//权益,
-    memberStatus: "",//是否是会员：会员状态
+    isRight: false, //权益,
+    memberStatus: "", //是否是会员：会员状态
     isRunout: false, // 库存弹出框控制
     isMemEnjoy: false, //点击会员尊享如果是非会员弹出框
     //活动大礼包
@@ -65,7 +66,7 @@ Page({
     ordinaryMember: '',
     isJfCoupons: false,
     /**券到账提醒 */
-    couponRemindTast: false,//券到账提醒弹框
+    couponRemindTast: false, //券到账提醒弹框
     couponsRemindInfo: null, //券到账提醒内容
     isjump: false, //是否跳转
     isJumpUrl: '',
@@ -74,33 +75,34 @@ Page({
     isclicking: false,
     isSelectCity: false,
 
-    isNewPage: 0,//是否为新版会员页面:0加载中，1旧页面，2新页面
-    moduleList: [],//首页7个模块
-    isBrandMember: false,  //是否品牌会员
-    companyCode: '',  //区域编号
+    isNewPage: 0, //是否为新版会员页面:0加载中，1旧页面，2新页面
+    moduleList: [], //首页7个模块
+    isBrandMember: false, //是否品牌会员
+    companyCode: '', //区域编号
     memberLevelObj: null, //会员等级对象
-    gradeList: [],  //等级列表
+    gradeList: [], //等级列表
     isMinLevel: true, //是否最低会员等级
     isShowZeroResetRule: false, //是否显示积分清零规则弹框
-    isOpenMemberLevel: false, //是否开放会员等级入口
-    deduction: 0, //过期积分
+    isOpenMemberLevel: true, //是否开放会员等级入口
+    deduction: '', //过期积分
     year: 2020,
+    currentMemberLevel: 0,
   },
 
   /**用户定位 */
-  getUserLocationInfo: function () {
+  getUserLocationInfo: function() {
     var that = this;
     var demo = new QQMapWX({
       key: that.data.key // 必填
     });
-    myjCommon.getLoginUser(function (user) {
+    myjCommon.getLoginUser(function(user) {
       if (!user.isLogin) {
         that.setData({
           isShowUserInfoBtn: true
         });
         return;
       }
-      that.getJFUserInfo();//获取佳纷会员信息
+      that.getJFUserInfo(); //获取佳纷会员信息
       if (app.currCity != undefined) //全局已经存在城市
       {
         that.setData({
@@ -122,7 +124,7 @@ Page({
         /**加载7个模块 */
         that.GetMemberIndexModules();
         // that.getJFGrantCoupon();
-      } else  //如果不存在则查询定位记录
+      } else //如果不存在则查询定位记录
       {
         myjCommon.callApi({
           interfaceCode: "WxMiniProgram.Service.GetUserLocationInfo",
@@ -130,7 +132,7 @@ Page({
             sessionId: user.sessionId,
             fromApp: that.data.fromApp
           },
-          success: function (res) {
+          success: function(res) {
             if (res.City != null) {
               app.currCity = res.City;
               app.currProvince = res.Province;
@@ -160,7 +162,7 @@ Page({
               that.setData({
                 LoadingDesc: "定位中，请稍候……"
               });
-              setTimeout(function () {
+              setTimeout(function() {
                 if (!that.data.isLocated) {
                   that.setData({
                     isSelectCity: true,
@@ -170,7 +172,7 @@ Page({
               }, 10000);
               wx.getLocation({
                 type: 'wgs84',
-                success: function (res) {
+                success: function(res) {
                   if (that.data.locationExpire) {
                     return;
                   }
@@ -188,7 +190,7 @@ Page({
                       latitude: latitude,
                       longitude: longitude
                     },
-                    success: function (res) {
+                    success: function(res) {
                       if (that.data.locationExpire) {
                         return;
                       }
@@ -218,12 +220,12 @@ Page({
                         biz: {
                           sessionId: user.sessionId,
                           city: that.data.cityName, //城市
-                          province: app.currProvince,//省份
+                          province: app.currProvince, //省份
                           lat: latitude, //城市维度
                           lng: longitude, //城市经度
                           fromApp: that.data.fromApp //来源：1 优惠券小程序； 2 会员小程序
                         },
-                        success: function (res) {
+                        success: function(res) {
                           //当旧账号解绑的时候业务要求不弹出“马上成为会员”弹框 4014是已经解 2018.05.15
                           if (user.lastErrorCode != "4014") {
                             if (res.Code == "301") {
@@ -237,48 +239,44 @@ Page({
                           }
 
                         },
-                        fail: function (res) {
-                        },
-                        complete: function (res) {
-                        }
+                        fail: function(res) {},
+                        complete: function(res) {}
                       });
                     },
-                    fail: function (res) {
+                    fail: function(res) {
                       that.setData({
                         isSelectCity: true
                       });
                       //that.changeCity();
                     },
-                    complete: function (res) {
-                    }
+                    complete: function(res) {}
                   });
                 },
-                fail: function (res) {
+                fail: function(res) {
                   that.setData({
                     isSelectCity: true
                   });
                   //that.changeCity();
                 },
-                complete: function (res) {
-                }
+                complete: function(res) {}
               });
             }
           },
-          fail: function (msg) {
+          fail: function(msg) {
             //如果定位失败则跳转到选择城市页面
             that.setData({
               isSelectCity: true
             });
             //that.changeCity();
           },
-          complete: function (res) {
+          complete: function(res) {
             wx.hideLoading();
           }
         });
       }
     });
   },
-  getUserLocationInfoV1: function (callback) {
+  getUserLocationInfoV1: function(callback) {
     var that = this;
     var demo = new QQMapWX({
       key: that.data.key // 必填
@@ -291,8 +289,8 @@ Page({
     //     return;
     //   }
     var user = myjCommon.getCurrentUser()
-    
-    that.getJFUserInfo();//获取佳纷会员信息
+
+    that.getJFUserInfo(); //获取佳纷会员信息
     if (app.currCity != undefined && app.currProvince != undefined && app.companyCode != undefined) //全局已经存在城市
     {
       that.setData({
@@ -320,12 +318,13 @@ Page({
         callback && callback(app.currCity);
       }
 
-      if (user.sessionId){
+      if (user.sessionId) {
         that.getMemberId(user.sessionId, memberId => {
-          that.checkWhiteListWithMemberId(memberId, () => {
-            that.getMemberDeduction(user.sessionId,app.companyCode);
-            that.loadMemberLevelEquity(user.sessionId, app.companyCode);
-          });
+          that.getMemberDeduction(user.sessionId, app.companyCode);
+          // that.checkWhiteListWithMemberId(memberId, () => {
+          //   that.loadMemberLevelEquity(user.sessionId, app.companyCode);
+          // });
+          that.loadMemberLevelEquity(user.sessionId, app.companyCode);
         });
       }
     } else {
@@ -336,7 +335,7 @@ Page({
         that.setData({
           cityName: cityName,
           isNewPage: app.checkNewPage(),
-          companyCode:companyCode
+          companyCode: companyCode
         });
         app.currCity = cityName;
         app.currProvince = provinceName;
@@ -358,31 +357,33 @@ Page({
         if (provinceName.indexOf('广东') > -1) {
           callback && callback(cityName);
         }
-        
+
         if (user.sessionId) {
           that.getMemberId(user.sessionId, memberId => {
-            that.checkWhiteListWithMemberId(memberId, () => {
-              that.getMemberDeduction(user.sessionId,companyCode);
-              that.loadMemberLevelEquity(user.sessionId, companyCode);
-            });
+            that.getMemberDeduction(user.sessionId, companyCode);
+            // that.checkWhiteListWithMemberId(memberId, () => {
+            //   that.loadMemberLevelEquity(user.sessionId, companyCode);
+            // });
+            that.loadMemberLevelEquity(user.sessionId, companyCode);
           });
         }
       } else {
         wx.getLocation({
           type: 'wgs84',
-          success: function (res) {
+          success: function(res) {
             if (that.data.locationExpire) {
               return;
             }
             var latitude = res.latitude
             var longitude = res.longitude
-            that.loadStoreInfo(latitude, longitude, (companyCode)=>{
+            that.loadStoreInfo(latitude, longitude, (companyCode) => {
               if (user.sessionId) {
                 that.getMemberId(user.sessionId, memberId => {
-                  that.checkWhiteListWithMemberId(memberId, () => {
-                    that.getMemberDeduction(user.sessionId,companyCode);
-                    that.loadMemberLevelEquity(user.sessionId, companyCode);
-                  });
+                  that.getMemberDeduction(user.sessionId, companyCode);
+                  // that.checkWhiteListWithMemberId(memberId, () => {
+                  //   that.loadMemberLevelEquity(user.sessionId, companyCode);
+                  // });
+                  that.loadMemberLevelEquity(user.sessionId, companyCode);
                 });
               }
             });
@@ -398,7 +399,7 @@ Page({
                 latitude: latitude,
                 longitude: longitude
               },
-              success: function (res) {
+              success: function(res) {
                 app.currCity = res.result.address_component.city;
                 wx.setStorageSync('membercity', res.result.address_component.city);
                 app.currProvince = res.result.address_component.province;
@@ -438,12 +439,12 @@ Page({
                   biz: {
                     sessionId: user.sessionId,
                     city: that.data.cityName, //城市
-                    province: app.currProvince,//省份
+                    province: app.currProvince, //省份
                     lat: latitude, //城市维度
                     lng: longitude, //城市经度
                     fromApp: that.data.fromApp //来源：1 优惠券小程序； 2 会员小程序
                   },
-                  success: function (res) {
+                  success: function(res) {
                     //当旧账号解绑的时候业务要求不弹出“马上成为会员”弹框 4014是已经解 2018.05.15
                     if (user.lastErrorCode != "4014") {
                       if (res.Code == "301") {
@@ -457,31 +458,28 @@ Page({
                     }
 
                   },
-                  fail: function (res) {
+                  fail: function(res) {
                     that.setData({
                       isSelectCity: true
                     });
                   },
-                  complete: function (res) {
-                  }
+                  complete: function(res) {}
                 });
               },
-              fail: function (res) {
+              fail: function(res) {
                 that.setData({
                   isSelectCity: true
                 });
               },
-              complete: function (res) {
-              }
+              complete: function(res) {}
             });
           },
-          fail: function (res) {
+          fail: function(res) {
             that.setData({
               isSelectCity: true
             });
           },
-          complete: function (res) {
-          }
+          complete: function(res) {}
         });
       }
     }
@@ -489,7 +487,7 @@ Page({
     // });
   },
   //获取会员卡小程序相关配置信息
-  GetMemberCardConfig: function () {
+  GetMemberCardConfig: function() {
     var that = this;
     //wx.showLoading({
     //  title: '载入中……'
@@ -511,8 +509,11 @@ Page({
 
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.GetMemberCardConfig",
-      biz: { sessionId: user.sessionId, cityName: app.currProvince },
-      success: function (res) {
+      biz: {
+        sessionId: user.sessionId,
+        cityName: app.currProvince
+      },
+      success: function(res) {
         console.log("登录状态");
         console.log(user);
         console.log(user.lastErrorCode);
@@ -556,10 +557,10 @@ Page({
         //赋值积分到全局变量  兑换券的时候要用到
         app.globalData.currJifen = cntCount;
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("调用GetMemberCardConfig失败" + JSON.stringify(msg));
       },
-      complete: function (res) {
+      complete: function(res) {
         wx.hideLoading();
         // 隐藏导航栏加载框
         wx.hideNavigationBarLoading();
@@ -570,7 +571,7 @@ Page({
     // });
   },
   //获取会员卡小程序相关配置信息
-  GetMemberMenu: function (cityName) {
+  GetMemberMenu: function(cityName) {
     var that = this;
     // myjCommon.getLoginUser(function (user) {
     //   console.log(user)
@@ -590,8 +591,11 @@ Page({
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.GetMiniMerberMuneFromCity",
       // interfaceCode: "WxMiniProgram.Service.GetMiniMerberMune",
-      biz: { channel: that.data.channel, cityName: cityName },
-      success: function (res) {
+      biz: {
+        channel: that.data.channel,
+        cityName: cityName
+      },
+      success: function(res) {
         console.log("菜单栏");
         console.log(res);
         if (res.Result.length > 0) {
@@ -600,16 +604,16 @@ Page({
           });
         }
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("调用GetMiniMerberMune失败" + JSON.stringify(msg));
       },
-      complete: function (res) {
+      complete: function(res) {
 
       }
     });
     // });
   },
-  getUserInfoBtnClick: function (e) {
+  getUserInfoBtnClick: function(e) {
     //console.log("组件")
     //console.log(e);
     var that = this;
@@ -619,7 +623,7 @@ Page({
       })
       that.getUserLocationInfoV1();
       wx.getUserInfo({
-        success: function (e) {
+        success: function(e) {
           that.setData({
             currUserInfo: e.userInfo,
             isShowUserInfoBtn: false
@@ -629,12 +633,14 @@ Page({
     }
   },
   //读取广告栏信息
-  GetMemberAd: function (cityName) {
+  GetMemberAd: function(cityName) {
     var that = this;
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.GetMiniProgramAd",
-      biz: { cityName: cityName },
-      success: function (res) {
+      biz: {
+        cityName: cityName
+      },
+      success: function(res) {
         console.log("广告栏")
         console.log(res)
         if (res.Result != null) {
@@ -643,20 +649,21 @@ Page({
           });
         }
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("调用GetMiniProgramAd失败：" + JSON.stringify(msg));
       },
-      complete: function (res) {
-      }
+      complete: function(res) {}
     });
   },
   //读取banner信息
-  GetBanners: function (cityName) {
+  GetBanners: function(cityName) {
     var that = this;
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.GetMiniProBanner",
-      biz: { cityName: cityName },
-      success: function (res) {
+      biz: {
+        cityName: cityName
+      },
+      success: function(res) {
         console.log("banner")
         console.log(res)
 
@@ -667,15 +674,14 @@ Page({
           });
         }
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("调用GetMiniProgramAd失败：" + JSON.stringify(msg));
       },
-      complete: function (res) {
-      }
+      complete: function(res) {}
     });
   },
   //加载会员尊享
-  loadMemEnjoy: function (cityname) {
+  loadMemEnjoy: function(cityname) {
     var that = this;
     // myjCommon.getLoginUser(function (user) {
     //   if (!user.isLogin) {
@@ -691,23 +697,25 @@ Page({
 
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.GetMPImageContentIndex",
-      biz: { sessionId: user.sessionId, cityName: cityname },
-      success: function (res) {
+      biz: {
+        sessionId: user.sessionId,
+        cityName: cityname
+      },
+      success: function(res) {
         console.log(res)
         that.setData({
           memberEnjoylist: res.Result
         });
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("GetMPImageContentIndex失败：" + JSON.stringify(msg));
       },
-      complete: function (res) {
-      }
+      complete: function(res) {}
     });
     // });
   },
 
-  GetAd: function (event) {// //点击广告弹出框
+  GetAd: function(event) { // //点击广告弹出框
     if (event.detail.formId != undefined || event.detail.formId != '') {
       myjCommon.logFormId(event.detail.formId);
     }
@@ -732,7 +740,7 @@ Page({
 
   },
   //会员尊享：点赞
-  clickGreat: function (event) {
+  clickGreat: function(event) {
     //获取当前点赞的图标标识，根据标识来显示对应的图标
     var typeSign = "";
     //图文Id
@@ -749,22 +757,25 @@ Page({
     var that = this;
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.LikeMPImageContent",
-      biz: { sessionId: curUser.sessionId, imgid: comId, typeSign: typeSign },
-      success: function (res) {
+      biz: {
+        sessionId: curUser.sessionId,
+        imgid: comId,
+        typeSign: typeSign
+      },
+      success: function(res) {
         //刷新点赞图标按钮
         that.loadMemEnjoy(app.currCity);
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("调用LikeMPImageContent失败：" + JSON.stringify(msg));
       },
-      complete: function (res) {
-      }
+      complete: function(res) {}
     });
   },
   /**
-     * 生命周期函数--监听页面加载
-  */
-  onLoad: function (options) {
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function(options) {
     let myDate = new Date();
     let year = myDate.getFullYear();
     this.setData({
@@ -782,21 +793,21 @@ Page({
 
     if (options.AreaNo) { //扫码定位 AreaNo市级编码
       wx.getUserInfo({
-        success: function (e) {
+        success: function(e) {
           console.log('执行getuserinfo')
           that.setData({
             currUserInfo: e.userInfo
           });
           that.formScanLocation(options.AreaNo)
         },
-        fail: function (e) {
+        fail: function(e) {
           that.formScanLocation(options.AreaNo)
         }
       })
 
     } else { //非扫码定位
       wx.getUserInfo({
-        success: function (e) {
+        success: function(e) {
           console.log('执行getuserinfo')
           that.setData({
             currUserInfo: e.userInfo
@@ -810,9 +821,9 @@ Page({
               that.checkBrandMember(cityName);
             });
           });
-          
+
         },
-        fail: function (msg) {
+        fail: function(msg) {
           console.log(msg)
           // that.setData({
           //   isShowUserInfoBtn: true
@@ -827,7 +838,7 @@ Page({
 
     /**获取转发管理配置 */
     myjCommon.forward(
-      function (res) {
+      function(res) {
         if (res != null) {
           app.forwardinfo = res;
           that.setData({
@@ -846,7 +857,7 @@ Page({
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.GetHotCity",
       biz: {},
-      success: function (res) {
+      success: function(res) {
         console.log(res)
         if (res.Result) {
           res.Result.CityList.forEach(province => {
@@ -865,7 +876,7 @@ Page({
         var qqmapsdk = new QQMapWX({
           key: that.data.key // 必填
         });
-        myjCommon.getLoginUser(function (user) {
+        myjCommon.getLoginUser(function(user) {
           if (!user.isLogin) {
             that.setData({
               isShowUserInfoBtn: true
@@ -875,7 +886,7 @@ Page({
 
           qqmapsdk.geocoder({
             address: currCity, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
-            success: function (res) { //成功后的回调
+            success: function(res) { //成功后的回调
               console.log(res)
               var latitude = res.result.location.lat,
                 longitude = res.result.location.lng;
@@ -884,12 +895,12 @@ Page({
                 biz: {
                   sessionId: user.sessionId,
                   city: app.currCity, //城市
-                  province: app.currProvince,//省份
+                  province: app.currProvince, //省份
                   lat: latitude, //城市维度
                   lng: longitude, //城市经度
                   fromApp: that.data.fromApp //来源：1 优惠券小程序； 2 会员小程序
                 },
-                success: function (res) {
+                success: function(res) {
                   //当旧账号解绑的时候业务要求不弹出“马上成为会员”弹框 4014是已经解 2018.05.15
                   if (user.lastErrorCode != "4014") {
                     if (res.Code == "301") {
@@ -903,17 +914,15 @@ Page({
                   }
 
                 },
-                fail: function (res) {
-                },
-                complete: function (res) {
-                }
+                fail: function(res) {},
+                complete: function(res) {}
               });
             },
           })
         })
         that.getUserLocationInfoV1()
       },
-      fail: function () {
+      fail: function() {
         app.currCity = currCity
         app.currProvince = currProvince
         that.getUserLocationInfoV1()
@@ -924,9 +933,9 @@ Page({
     })
   },
 
-  GetMember: function () {///判断是否是会员
+  GetMember: function() { ///判断是否是会员
     var that = this;
-    myjCommon.getLoginUser(function (user) {
+    myjCommon.getLoginUser(function(user) {
       if (!user.isLogin) {
         that.setData({
           isShowUserInfoBtn: true
@@ -944,8 +953,10 @@ Page({
       });
       myjCommon.callApi({
         interfaceCode: "WxMiniProgram.Service.IsMember",
-        biz: { sessionId: user.sessionId },
-        success: function (res) {
+        biz: {
+          sessionId: user.sessionId
+        },
+        success: function(res) {
           console.log(res)
           if (res.Code == "301") {
             that.setData({
@@ -971,10 +982,10 @@ Page({
             backgroundImg: res.Result.Background
           })
         },
-        fail: function (msg) {
+        fail: function(msg) {
           console.log("调用IsMember失败" + JSON.stringify(msg));
         },
-        complete: function (res) {
+        complete: function(res) {
 
         }
       });
@@ -985,14 +996,14 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
     console.log("onshow");
     this.data.isclicking = false;
     //券到账提醒
@@ -1002,21 +1013,21 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
     //在标题栏中显示加载
     wx.showNavigationBarLoading();
     this.setData({
@@ -1033,13 +1044,12 @@ Page({
     /**加载banner */
     this.GetBanners(app.currCity);
   },
-  onPageScroll: function (obj) {
+  onPageScroll: function(obj) {
     if (obj.scrollTop > 190 && !this.data.isShowMiniNav) {
       this.setData({
         isShowMiniNav: true
       });
-    }
-    else if (obj.scrollTop < 190 && this.data.isShowMiniNav) {
+    } else if (obj.scrollTop < 190 && this.data.isShowMiniNav) {
       this.setData({
         isShowMiniNav: false
       });
@@ -1051,14 +1061,14 @@ Page({
    * 页面上拉触底事件的处理函数
    */
 
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
     var that = this;
     return {
       title: app.forwardinfo.ForwardTitle,
@@ -1076,32 +1086,33 @@ Page({
       }
     }
   },
-  updateForwardCnt: function (fid, forwardCnt) {
+  updateForwardCnt: function(fid, forwardCnt) {
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.AddForwardCnt",
-      biz: { id: fid, forwordcnt: forwardCnt },
-      success: function (res) {
-      }, fail: function (msg) {
+      biz: {
+        id: fid,
+        forwordcnt: forwardCnt
+      },
+      success: function(res) {},
+      fail: function(msg) {
         console.log(" 记录分享次数AddForwardCnt失败：" + JSON.stringify(msg));
       },
-      complete: function (res) {
-      }
+      complete: function(res) {}
     });
   },
   //领取会员尊享券
-  getCard: function (event) {
+  getCard: function(event) {
     var that = this;
 
     //判断库存是否充足
-    var stocks = that.data.objcoupe.Stocks;//库存
+    var stocks = that.data.objcoupe.Stocks; //库存
     if (stocks == 0) {
       that.setData({
         isRunout: true,
         isShow: false
       });
       return;
-    }
-    else {
+    } else {
       var that = this;
       that.setData({
         isShow: false
@@ -1119,7 +1130,7 @@ Page({
       mask: true
     });
     var that = this;
-    myjCommon.getLoginUser(function (user) {
+    myjCommon.getLoginUser(function(user) {
       if (!user.isLogin) {
         wx.showModal({
           title: '提示',
@@ -1131,16 +1142,18 @@ Page({
       }
       myjCommon.callApi({
         interfaceCode: "WxMiniProgram.Service.AddUserCard",
-        biz: { cardId: cardId, sessionId: user.sessionId },
-        success: function (res) {
+        biz: {
+          cardId: cardId,
+          sessionId: user.sessionId
+        },
+        success: function(res) {
           if (res.Code == "0") {
             wx.showModal({
               title: '领取成功',
               content: "领取成功！到店使用微信支付即可自动享受优惠。",
               showCancel: false
             });
-          }
-          else if (res.Code == "301") {
+          } else if (res.Code == "301") {
             //非会员
             that.setData({
               noMemberTask: true,
@@ -1149,8 +1162,7 @@ Page({
             /**初始化注册会员组件方法 */
             that.regerter1 = that.selectComponent("#regerter");
             that.regerter1.init(that.data.noMemberTask, "wxc94d087c5890e1f8", "member_card");
-          }
-          else {
+          } else {
             wx.showModal({
               title: '领取失败',
               content: res.Msg,
@@ -1167,7 +1179,7 @@ Page({
             });
           }
         },
-        fail: function (msg) {
+        fail: function(msg) {
           console.log("调用AddUserCard失败：" + JSON.stringify(msg));
           wx.showModal({
             title: '领取失败',
@@ -1175,14 +1187,14 @@ Page({
             showCancel: false
           });
         },
-        complete: function (res) {
+        complete: function(res) {
           wx.hideLoading();
         }
       });
 
     });
   }, //跳转到外卖小程序
-  clickLinka: function () {
+  clickLinka: function() {
     wx.navigateToMiniProgram({
       appId: 'wxc670d51af76192f7',
       path: 'pages/category/category',
@@ -1193,16 +1205,16 @@ Page({
     })
   },
   /**会员权益说明弹框 */
-  clickRight: function () {
+  clickRight: function() {
     var that = this;
     that.setData({
       isRight: true
     })
   },
   /**新人礼包 2018.05.21 */
-  GetGiftBagActivity: function (cityName) {
+  GetGiftBagActivity: function(cityName) {
     var that = this;
-    myjCommon.getLoginUser(function (user) {
+    myjCommon.getLoginUser(function(user) {
       if (!user.isLogin) {
         that.setData({
           isShowUserInfoBtn: true
@@ -1210,7 +1222,9 @@ Page({
         return;
       }
       // var user = myjCommon.getCurrentUser()
-      if (!user.isLogin) { return }
+      if (!user.isLogin) {
+        return
+      }
       myjCommon.callApi({
         interfaceCode: "WxMiniProgram.Service.GetGiftBagActivity",
         biz: {
@@ -1219,7 +1233,7 @@ Page({
           provinceName: app.currProvince,
           cityName: cityName
         },
-        success: function (res) {
+        success: function(res) {
           console.log("礼包：" + JSON.stringify(res));
           if (res.Code == "0") {
             var jumpBool = false;
@@ -1235,10 +1249,10 @@ Page({
             });
           }
         },
-        fail: function (msg) {
+        fail: function(msg) {
           console.log("礼包加载失败：" + JSON.stringify(msg));
         },
-        complete: function (res) {
+        complete: function(res) {
           console.log("礼包加载完成：" + JSON.stringify(res));
         }
       });
@@ -1248,7 +1262,7 @@ Page({
     });
   },
   /**加载首页7个模块 2019.07.15 */
-  GetMemberIndexModules: function () {
+  GetMemberIndexModules: function() {
     var that = this;
     // myjCommon.getLoginUser(function (user) {
     //   if (!user.isLogin) {
@@ -1263,7 +1277,7 @@ Page({
       biz: {
         provinceName: app.currProvince
       },
-      success: function (res) {
+      success: function(res) {
         console.log("首页模块：" + JSON.stringify(res));
         if (res.Code == "0") {
           that.setData({
@@ -1271,36 +1285,35 @@ Page({
           })
         }
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("首页模块：" + JSON.stringify(msg));
       },
-      complete: function (res) {
-      }
+      complete: function(res) {}
     });
     // });
   },
-  urlJump: function () {
+  urlJump: function() {
     wx.navigateToMiniProgram({
       appId: 'wx55595d5cf709ce79',
       path: this.data.jumpurl,
       envVersion: 'release',
-      success(res) { }
+      success(res) {}
     });
   },
   //点击会员尊享：查看更多跳转到会员资讯页面
-  locationToMas: function () {
+  locationToMas: function() {
     wx.reLaunch({
       url: '../member_zx/member_zx'
     })
   },
-  locationProm: function (event)         //<-----刘秋芳 2017- 12 - 21 增加广告跳转网页功能-->
+  locationProm: function(event) //<-----刘秋芳 2017- 12 - 21 增加广告跳转网页功能-->
   {
     if (event.detail.formId != undefined || event.detail.formId != '') {
       myjCommon.logFormId(event.detail.formId);
     }
     var that = this;
     //类型： 1：不跳转 2：跳转小程序 3：跳转频道页  4：跳转链接
-    var typeid = event.detail.target.dataset.ptype;//1：不跳转 2：跳转小程序 3：跳转频道页  4：跳转链接
+    var typeid = event.detail.target.dataset.ptype; //1：不跳转 2：跳转小程序 3：跳转频道页  4：跳转链接
     var appid = event.detail.target.dataset.appid;
     //频道链接
     var channelid = event.detail.target.dataset.channelid;
@@ -1326,8 +1339,7 @@ Page({
           appId: appid,
           path: url,
           envVersion: 'release',
-          success(res) {
-          }
+          success(res) {}
         });
       }
     } else if (typeid == 3) {
@@ -1342,30 +1354,29 @@ Page({
 
   //,wx55595d5cf709ce79
   //跳转到优惠券小程序
-  locationCoupe: function () {
+  locationCoupe: function() {
     wx.navigateToMiniProgram({
       appId: 'wx4df9ffe1d8f2ad76',
       path: 'pages/yhq_index/yhq',
       envVersion: 'release',
-      success(res) {
-      }
+      success(res) {}
     })
   },
   //点击“积分换券”跳转到积分兑换页
-  locationJifen: function () {
+  locationJifen: function() {
     wx.navigateTo({
       url: '../member_dh/member_dh'
     })
   },
   //点击图文调到详情
-  locationDtl: function (event) {
+  locationDtl: function(event) {
     var id = event.currentTarget.dataset.id;
     wx.navigateTo({
       url: '../member_tw/member_tw?id=' + id
     })
   },
   //关闭弹框
-  closeModel: function () {
+  closeModel: function() {
     var that = this;
     that.setData({
       isShow: false,
@@ -1383,8 +1394,8 @@ Page({
       isNoMember: false,
       noMemberTask: false
     })
-  },//点击会员卡调到会员卡界面
-  OpenCard: function () {
+  }, //点击会员卡调到会员卡界面
+  OpenCard: function() {
     if (!this.data.currUserInfo) {
       wx.navigateTo({
         url: '../login/login',
@@ -1407,7 +1418,7 @@ Page({
     }
   },
   //领取会员卡
-  getMemberCard: function (e) {
+  getMemberCard: function(e) {
     this.setData({
       isMember: true,
       noMemberTask: false
@@ -1417,8 +1428,8 @@ Page({
     wx.navigateTo({
       url: '/pages/member_card/index',
     });
-  },//跳到“我的积分”
-  locationCoin: function (e) {
+  }, //跳到“我的积分”
+  locationCoin: function(e) {
     if (e.detail.formId != undefined || e.detail.formId != '') {
       console.error(e.detail.formId);
       myjCommon.logFormId(e.detail.formId);
@@ -1436,7 +1447,7 @@ Page({
       })
     }
   },
-  locationBill: function (e) {
+  locationBill: function(e) {
     if (e.detail.formId != undefined || e.detail.formId != '') {
       myjCommon.logFormId(e.detail.formId);
     }
@@ -1445,7 +1456,7 @@ Page({
     });
   },
   /**跳转激活会员卡页面 */
-  bindMemberinfo: function () {
+  bindMemberinfo: function() {
     this.setData({
       isbind: false
     });
@@ -1454,15 +1465,16 @@ Page({
     });
   },
   /**跳转到选择城市页面 */
-  changeCity: function () {
+  changeCity: function() {
     this.setData({
       isSelectCity: false
     });
     wx.navigateTo({
       url: '/pages/yhq_dw/yhq_dw'
     });
-  },/**跳到优惠券首页 */
-  locationyhq: function () {
+  },
+  /**跳到优惠券首页 */
+  locationyhq: function() {
     //江苏省、浙江省、上海市 跳到条形码支付页
     if (app.currProvince == "江苏省" || app.currProvince == "浙江省" || app.currProvince == "上海市") {
       this.setData({
@@ -1473,13 +1485,12 @@ Page({
         appId: 'wx55595d5cf709ce79',
         path: '',
         envVersion: 'release',
-        success(res) {
-        }
+        success(res) {}
       })
     }
   },
   /**点击菜单栏作相应的跳转 或者不跳 */
-  menuclick: function (e) {
+  menuclick: function(e) {
     //跳转（ 1：不跳转 2：跳转小程序 3：跳转频道页  4：跳转链接）
     var jump = e.currentTarget.dataset.jump;
     //小程序的appid
@@ -1518,8 +1529,7 @@ Page({
           wx.navigateTo({
             url: '../components/ninebox_lucky/ninebox_lucky',
           })
-        }
-        else {
+        } else {
           if (appid == this.data.currenAppid) {
             wx.navigateTo({
               url: pagePath,
@@ -1548,12 +1558,12 @@ Page({
       })
     }
   },
-  bindchange: function (e) {
+  bindchange: function(e) {
     this.setData({
       current: e.detail.current
     });
   },
-  imageLoad: function (e) {
+  imageLoad: function(e) {
     var imgwidth = e.detail.width,
       imgheight = e.detail.height,
       //宽高比  
@@ -1570,7 +1580,7 @@ Page({
     })
 
   },
-  renderBannerDialog: function (event) {
+  renderBannerDialog: function(event) {
     var that = this;
     //类型： 1：不跳转 2：跳转小程序 3：跳转频道页  4：跳转链接
     var typeid = event.currentTarget.dataset.ptype;
@@ -1594,7 +1604,7 @@ Page({
     //bannertype = 1;
     //bannertype :0广告图 1:视频
     if (bannertype == 0) {
-      myjCommon.getLoginUser(function (user) {
+      myjCommon.getLoginUser(function(user) {
         if (!user.isLogin) {
           that.setData({
             isShowUserInfoBtn: true
@@ -1607,13 +1617,13 @@ Page({
             sessionId: user.sessionId,
             bannerId: bannerId
           },
-          success: function (res) {
+          success: function(res) {
             console.log(res)
           },
-          fail: function (msg) {
+          fail: function(msg) {
             console.log("计算浏览人数失败：" + JSON.stringify(msg));
           },
-          complete: function (res) { }
+          complete: function(res) {}
         })
         if (typeid > 1) {
           if (typeid == 4) { //跳转到网页
@@ -1642,12 +1652,11 @@ Page({
                   appId: appid,
                   path: url,
                   envVersion: 'release',
-                  success(res) { }
+                  success(res) {}
                 });
               }
             }
-          }
-          else if (typeid == 5 && activityNo != undefined) //跳转优惠券
+          } else if (typeid == 5 && activityNo != undefined) //跳转优惠券
           {
             //根据活动号去查找券详情
             myjCommon.callApi({
@@ -1656,7 +1665,7 @@ Page({
                 sessionId: user.sessionId,
                 id: activityNo
               },
-              success: function (res) {
+              success: function(res) {
                 if (res.Result != null && res.Result.Remark) {
                   WxParse.wxParse('article', 'html', res.Result.Remark, that, 1);
                   that.setData({
@@ -1666,10 +1675,10 @@ Page({
                   });
                 }
               },
-              fail: function (msg) {
+              fail: function(msg) {
                 console.log("加载失败：" + JSON.stringify(msg));
               },
-              complete: function (res) { }
+              complete: function(res) {}
             });
 
           }
@@ -1700,20 +1709,19 @@ Page({
               appId: appid,
               path: url,
               envVersion: 'release',
-              success(res) { }
+              success(res) {}
             });
           }
         }
 
       }
-    }
-    else if (bannertype == 1) {
+    } else if (bannertype == 1) {
       wx.navigateTo({
         url: '../yhq_video/yhq_video?videoId=' + bannerId
       })
     }
   },
-  ncloseTast: function () {
+  ncloseTast: function() {
     this.setData({
       isSuccessAddCouponByMobile: false,
       isJfCoupons: false,
@@ -1721,7 +1729,7 @@ Page({
     });
   },
   /**检查当前用户是否有可派发的券如果有根据手机号发券 */
-  addCouponByMobile: function () {
+  addCouponByMobile: function() {
     var that = this;
     // myjCommon.getLoginUser(function (user) {
     //   if (!user.isLogin) {
@@ -1731,14 +1739,16 @@ Page({
     //     return;
     //   }
     var user = myjCommon.getCurrentUser()
-    if (!user.isLogin) { return }
+    if (!user.isLogin) {
+      return
+    }
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.DistributeCouponByMobile",
       biz: {
         sessionId: user.sessionId,
-        channel: 1  //1:优惠券小程序；2：会员小程序
+        channel: 1 //1:优惠券小程序；2：会员小程序
       },
-      success: function (res) {
+      success: function(res) {
         console.log("根据手机号发券")
         console.log(res);
         if (res.Code == "0") {
@@ -1758,18 +1768,17 @@ Page({
           });
         }
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("根据手机号发券实际失败：" + JSON.stringify(msg));
       },
-      complete: function (res) {
-      }
+      complete: function(res) {}
     });
     // });
   },
   /**判断是否是佳纷会员 */
-  isJfMember: function () {
+  isJfMember: function() {
     var that = this;
-    myjCommon.getLoginUser(function (user) {
+    myjCommon.getLoginUser(function(user) {
       if (!user.isLogin) {
         that.setData({
           isShowUserInfoBtn: true
@@ -1781,20 +1790,19 @@ Page({
         biz: {
           sessionId: user.sessionId
         },
-        success: function (res) {
+        success: function(res) {
           console.log("判断是否是佳纷会员");
           console.log(res);
         },
-        fail: function (msg) {
+        fail: function(msg) {
           console.log("IsJFMember失败：" + JSON.stringify(msg));
         },
-        complete: function (res) {
-        }
+        complete: function(res) {}
       });
     });
   },
   /**佳纷会员  demi 2019.01.07 */
-  getJFUserInfo: function () {
+  getJFUserInfo: function() {
     var that = this;
     // myjCommon.getLoginUser(function (user) {
     //   if (!user.isLogin) {
@@ -1809,7 +1817,7 @@ Page({
       biz: {
         sessionId: user.sessionId
       },
-      success: function (res) {
+      success: function(res) {
         if (res.Code == "301") {
           that.setData({
             noMemberTask: true
@@ -1829,11 +1837,10 @@ Page({
           });
         }
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("调用GetJFMemberInfo失败" + JSON.stringify(msg));
       },
-      complete: function (res) {
-      }
+      complete: function(res) {}
     });
     // });
   },
@@ -1841,9 +1848,9 @@ Page({
   /**创建人：黎梅芳 */
   /**创建日期：20190418 */
   /**描述： 获取佳纷权益发券信息*/
-  getJFGrantCoupon: function () {
+  getJFGrantCoupon: function() {
     var that = this;
-    myjCommon.getLoginUser(function (user) {
+    myjCommon.getLoginUser(function(user) {
       if (!user.isLogin) {
         that.setData({
           isShowUserInfoBtn: true
@@ -1855,7 +1862,7 @@ Page({
         biz: {
           sessionId: user.sessionId
         },
-        success: function (res) {
+        success: function(res) {
           console.log("获取佳纷权益发券信息")
           console.log(res)
           if (res.Code == "0") {
@@ -1867,11 +1874,10 @@ Page({
           }
 
         },
-        fail: function (msg) {
+        fail: function(msg) {
           console.log("调用GetJfMemberGrantCounponCntCurmonth失败" + JSON.stringify(msg));
         },
-        complete: function (res) {
-        }
+        complete: function(res) {}
       });
     });
   },
@@ -1888,13 +1894,15 @@ Page({
     //     return;
     //   }
     var user = myjCommon.getCurrentUser()
-    if (!user.isLogin) { return; };
+    if (!user.isLogin) {
+      return;
+    };
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.CouponsArriveRemindUser",
       biz: {
         sessionId: user.sessionId
       },
-      success: function (res) {
+      success: function(res) {
         console.log("券到账提醒");
         console.log(res)
         if (res.Code == "0") {
@@ -1906,11 +1914,10 @@ Page({
           }
         }
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("调用CouponsArriveRemindUser失败" + JSON.stringify(msg));
       },
-      complete: function (res) {
-      }
+      complete: function(res) {}
     });
     // });
   },
@@ -1940,16 +1947,20 @@ Page({
       if (item.Jump == 2) {
         //有配置appid和页面路径，如果没有配置页面路径就直接跳转对应appid的小程序的首页
         if (item.PagePath != undefined) {
-          if (item.AppId == this.data.currenAppid) { wx.navigateTo({ url: item.PagePath }); return; }
+          if (item.AppId == this.data.currenAppid) {
+            wx.navigateTo({
+              url: item.PagePath
+            });
+            return;
+          }
           wx.navigateToMiniProgram({
             appId: item.AppId,
             path: item.PagePath,
             envVersion: 'release',
-            success(res) {
-            }
+            success(res) {}
           });
         }
-      } else if (item.Jump == 4) {//跳转其他页面
+      } else if (item.Jump == 4) { //跳转其他页面
         wx.navigateTo({
           url: '../bannerWeb/bannerWeb?bannerUrl=' + item.JumpLink
         })
@@ -1965,7 +1976,7 @@ Page({
       url: '../sign/sign',
     });
   },
-  GivingNewMemberGC: function (areaname, sessionid) {
+  GivingNewMemberGC: function(areaname, sessionid) {
     var that = this;
     myjCommon.callApi({
       interfaceCode: "WxMiniProgram.Service.GivingNewMemberGC",
@@ -1975,27 +1986,27 @@ Page({
         cityName: areaname,
         provinceName: app.currProvince
       },
-      success: function (res) {
+      success: function(res) {
         console.log("新人送积分结果：");
         console.log(res);
       },
-      fail: function (msg) {
+      fail: function(msg) {
         console.log("新人送积分失败：" + JSON.stringify(msg));
       },
-      complete: function (res) { }
+      complete: function(res) {}
     });
   },
   /**关闭券到账提醒弹框*/
-  closeRemindTask: function () {
+  closeRemindTask: function() {
     this.setData({
       couponRemindTast: false
     });
     /**标志已提醒过用户 */
     this.couponsArriveRemind();
   },
-  couponsArriveRemind: function () {
+  couponsArriveRemind: function() {
     var that = this;
-    myjCommon.getLoginUser(function (user) {
+    myjCommon.getLoginUser(function(user) {
       if (!user.isLogin) {
         that.setData({
           isShowUserInfoBtn: true
@@ -2007,14 +2018,14 @@ Page({
         biz: {
           sessionId: user.sessionId
         },
-        success: function (res) {
+        success: function(res) {
           console.log("关闭券到账提醒弹框");
           console.log(res)
         },
-        fail: function (msg) {
+        fail: function(msg) {
           console.log("调用WxMiniProgram.Service.RemoveCouponsArriveRemindCacheByMobile失败" + JSON.stringify(msg));
         },
-        complete: function (res) { }
+        complete: function(res) {}
       });
     });
   },
@@ -2070,7 +2081,7 @@ Page({
    * 创建时间：20191105
    * 描述：加载会员等级
    */
-  loadMemberLevelEquity(sessionId,companyCode) {
+  loadMemberLevelEquity(sessionId, companyCode) {
     let self = this;
 
     myjCommon.callApi({
@@ -2082,11 +2093,14 @@ Page({
       success(res) {
         if (res.Code == '0') {
           self.setData({
-            memberLevelObj: res.Result.MemberLevel,
             gradeList: res.Result.GradeList,
-            ordinaryMember: res.Result.MemberLevel.Name
-          },()=>{
-            self.judgeMinLevel();
+            memberLevelObj: res.Result.MemberLevel
+          }, () => {
+            // self.judgeMinLevel();
+            self.loadMemberLevel(sessionId).then(() => {
+              self.levelLocation();
+              self.judgeMinLevel();
+            });
           });
         }
       },
@@ -2101,7 +2115,7 @@ Page({
    * 创建时间：20191105
    * 描述：加载门店信息
    */
-  loadStoreInfo(lat, lng,callback) {
+  loadStoreInfo(lat, lng, callback) {
 
     myjCommon.callApi({
       interfaceCode: getStoreListData_interface,
@@ -2114,7 +2128,7 @@ Page({
         groupId: 0
       },
       success(res) {
-        if(res.Code!='0'){
+        if (res.Code != '0') {
           wx.showModal({
             title: '提示',
             content: '无法加载CompanyCode!',
@@ -2145,6 +2159,10 @@ Page({
       });
       return;
     }
+
+    if (!this.data.isOpenMemberLevel) {
+      return;
+    }
     wx.navigateToMiniProgram({
       appId: 'wx55595d5cf709ce79',
       path: 'pages/member_rankequity/member_rankequity'
@@ -2163,9 +2181,80 @@ Page({
       });
       return;
     }
+    let grid = 0;
+    let gradeList = this.data.gradeList;
+
+    if (this.data.memberLevelObj.levels > 0 && gradeList.length >= this.data.memberLevelObj.levels) {
+      grid = this.data.memberLevelObj.levels - 1;
+    }
+
+    if (gradeList[grid].GRId == gradeList[0].GRId) {
+      this.setData({
+        isMinLevel: true
+      });
+      return;
+    }
     this.setData({
       isMinLevel: false
     });
+
+    // if (this.data.memberLevelObj.levels == this.data.gradeList[0].GRId) {
+    //   this.setData({
+    //     isMinLevel: true
+    //   });
+    //   return;
+    // }
+
+    // let isExist = this.data.gradeList.some(item => {
+    //   return item == this.data.memberLevelObj.levels
+    // });
+
+    // if (!isExist) {
+    //   this.setData({
+    //     isMinLevel: true
+    //   });
+    //   return;
+    // }
+
+    // this.setData({
+    //   isMinLevel: false
+    // });
+  },
+
+  /**
+   * 创建人：袁健豪
+   * 创建时间：20191225
+   * 描述：等级卡片位置定位
+   */
+  levelLocation() {
+    let grid = 0;
+    let gradeList = this.data.gradeList;
+
+    if (this.data.memberLevelObj.levels > 0 && gradeList.length >= this.data.memberLevelObj.levels) {
+      grid = this.data.memberLevelObj.levels - 1;
+    }
+
+    for (let i = 0; i < gradeList.length; i++) {
+      if (gradeList[grid].GRId == gradeList[i].GRId) {
+        this.setData({
+          ordinaryMember: gradeList[i].Name,
+          currentMemberLevel: i
+        });
+        return;
+      }
+    }
+
+    // let grid = this.data.memberLevelObj.levels;
+    // let gradeList = this.data.gradeList;
+
+    // for (let i = 0; i < gradeList.length; i++) {
+    //   if (grid == gradeList[i].GRId) {
+    //     this.setData({
+    //       current: i
+    //     });
+    //     return;
+    //   }
+    // }
   },
 
   /**
@@ -2182,7 +2271,7 @@ Page({
       header: {
         'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
       },
-      method:'GET',
+      method: 'GET',
       success(res) {
         debugger
         WxParse.wxParse('integral', 'html', res.data, self, 1);
@@ -2268,8 +2357,8 @@ Page({
    * 创建人：袁健豪
    * 描述：获取会员过期积分
    */
-  getMemberDeduction(sessionId,companyCode){
-    if (this.data.year >= 2020) {
+  getMemberDeduction(sessionId, companyCode) {
+    if (this.data.year >= 2020 || companyCode == 'HO' || companyCode == 'AH') {
       return;
     }
     let self = this;
@@ -2297,5 +2386,58 @@ Page({
         console.error(msg);
       }
     });
-  }
+  },
+
+  /**
+   * 创建时间：20191225
+   * 创建人：袁健豪
+   * 描述：加载会员当前等级
+   */
+  loadMemberLevel(sessionId) {
+    let self = this;
+
+    return new Promise((resolve, reject) => {
+      myjCommon.callApi({
+        interfaceCode: _getMemberLevel_interface,
+        biz: {
+          sessionId: sessionId,
+        },
+        success: function(res) {
+          if (res.Code == '300') {
+            self.setData({
+              isShowLoginBtn: true
+            });
+            return;
+          }
+
+          if (res.Code == '301') {
+            self.setData({
+              isMember: false
+            }, () => {
+              self.registerMember();
+            });
+            return;
+          }
+
+          if (res.Code != '0') {
+            wx.showModal({
+              title: '提示',
+              content: res.Msg,
+              showCancel: false
+            });
+            return;
+          }
+          self.setData({
+            memberLevelObj: res.Result
+          }, () => {
+            resolve();
+          });
+        },
+        fail: function(msg) {
+          console.error("loadMemberLevel失败：" + JSON.stringify(msg));
+        }
+      });
+    });
+  },
+
 })
