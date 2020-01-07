@@ -2358,7 +2358,9 @@ Page({
    * 描述：获取会员过期积分
    */
   getMemberDeduction(sessionId, companyCode) {
-    if (this.data.year >= 2020 || companyCode == 'HO' || companyCode == 'AH') {
+    if (companyCode == 'HO'){
+
+    }else if ( (this.data.year >= 2020 || companyCode == 'AH') || companyCode == 'HO'  ) {
       return;
     }
     let self = this;
