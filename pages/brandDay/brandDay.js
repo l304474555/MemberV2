@@ -6,7 +6,7 @@ const appId = 'wxc94d087c5890e1f8';
 const barCodeSign = 'myj_barcode_sign';
 const createMpBarcode_interface = 'WxMiniProgram.Service.CreateMpBarcode';
 const getBrandDetails_interface = 'WxMiniProgram.Service.GetBrandDetails';
-const isMember_interface = 'WxMiniProgram.Service.IsMember';
+const isMember_interface = 'WxMiniProgram.Service.IsMember'
 const getBrandDayInfo_interface = 'WxMiniProgram.Service.GetBrandDayInfo';
 const openBrand_interface = 'WxMiniProgram.Service.OpenBrand';
 const checkBrandStock_interface = 'WxMiniProgram.Service.CheckBrandStockInRedis';
@@ -348,6 +348,7 @@ debugger
             });
             return;
           }
+debugger
           wx.setStorageSync('brandMemberAgreement', res.Result.BrandDayModel.MemberAgreement);
           wxParse.wxParse('rule', 'html', res.Result.BrandDayModel.ActivityRule, self, 1);
 
@@ -628,7 +629,7 @@ debugger
    */
   openBrand() {
     let self = this;
-
+    
     if (!this.data.isAgreementCheck) {
       wx.showModal({
         title: '提示',
@@ -646,84 +647,87 @@ debugger
       });
       return;
     }
-    wx.showLoading({
-      title: '开通中...',
-    });
-    myjCommon.getLoginUser(user => {
-      if (!user.isLogin) {
-        self.setData({
-          isShowUserInfoBtn: true
+    app.requestSubscribeMessage("Usebrand", function () {
+      wx.showLoading({
+        title: '开通中...',
+      });
+      myjCommon.getLoginUser(user => {
+        if (!user.isLogin) {
+          self.setData({
+            isShowUserInfoBtn: true
+          });
+          return;
+        }
+        let brandIds = [];
+        self.data.checkStatus.map((item, i) => {
+          if (item) {
+            return brandIds.push(self.data.brandList[i].Id);
+          }
         });
-        return;
-      }
-      let brandIds = [];
-      self.data.checkStatus.map((item, i) => {
-        if (item) {
-          return brandIds.push(self.data.brandList[i].Id);
-        }
+
+        myjCommon.callApi({
+          interfaceCode: openBrand_interface,
+          biz: {
+            sessionId: user.sessionId,
+            brandAmount: self.data.brandAmount,
+            brandDayId: self.data.brandDayInfo.Id,
+            brandIdsJson: JSON.stringify(brandIds),
+            companyCode: self.data.brandDayInfo.CompanyCode
+          },
+          success(res) {
+            if (res.Code == '300') {
+              wx.hideLoading();
+              wx.showModal({
+                title: '提示',
+                content: '登录已过期，请重新登录',
+                showCancel: false,
+                success(res) {
+                  self.setData({
+                    isShowUserInfoBtn: true
+                  });
+                }
+              });
+              return;
+            }
+
+            if (res.Code == '301') {
+              wx.hideLoading();
+              self.setData({
+                noMemberTask: true,
+                memberStatus: '301'
+              });
+              wx.showModal({
+                title: '提示',
+                content: '对不起，请先注册会员',
+                showCancel: false,
+                success(res) {
+                  self.regerter1 = self.selectComponent('#regerter');
+                  self.regerter1.init(self.data.noMemberTask, app.globalData.currenAppid, 'member_card');
+                }
+              })
+              return;
+            }
+
+            if (res.Code != '0') {
+              wx.hideLoading();
+              wx.showModal({
+                title: '提示',
+                content: res.Msg,
+                showCancel: false
+              });
+              return;
+            }
+            self.prePay(res.Result, user.sessionId, brandIds);
+          },
+          fail(msg) {
+            console.error(`调用接口OpenBrand失败：${JSON.stringify(msg)}`);
+            wx.hideLoading();
+          }
+        });
+
       });
-
-      myjCommon.callApi({
-        interfaceCode: openBrand_interface,
-        biz: {
-          sessionId: user.sessionId,
-          brandAmount: self.data.brandAmount,
-          brandDayId: self.data.brandDayInfo.Id,
-          brandIdsJson: JSON.stringify(brandIds),
-          companyCode: self.data.brandDayInfo.CompanyCode
-        },
-        success(res) {
-          if (res.Code == '300') {
-            wx.hideLoading();
-            wx.showModal({
-              title: '提示',
-              content: '登录已过期，请重新登录',
-              showCancel: false,
-              success(res) {
-                self.setData({
-                  isShowUserInfoBtn: true
-                });
-              }
-            });
-            return;
-          }
-
-          if (res.Code == '301') {
-            wx.hideLoading();
-            self.setData({
-              noMemberTask: true,
-              memberStatus: '301'
-            });
-            wx.showModal({
-              title: '提示',
-              content: '对不起，请先注册会员',
-              showCancel: false,
-              success(res) {
-                self.regerter1 = self.selectComponent('#regerter');
-                self.regerter1.init(self.data.noMemberTask, app.globalData.currenAppid, 'member_card');
-              }
-            })
-            return;
-          }
-
-          if (res.Code != '0') {
-            wx.hideLoading();
-            wx.showModal({
-              title: '提示',
-              content: res.Msg,
-              showCancel: false
-            });
-            return;
-          }
-          self.prePay(res.Result, user.sessionId, brandIds);
-        },
-        fail(msg) {
-          console.error(`调用接口OpenBrand失败：${JSON.stringify(msg)}`);
-          wx.hideLoading();
-        }
-      });
-
-    });
+    })
+  
   },
 
   /**
@@ -956,36 +960,10 @@ debugger
    * 描述：微信支付
    */
   url_wxpay() {
-    myjCommon.callApi({
-      interfaceCode: "WxMiniProgram.Service.MPMberPay",
-      biz: {
-      },
-      success: function (res) {
-        if (res.Code == "0") {
-          wx.openOfflinePayView({
-            'appId': res.Result.appId,
-            'timeStamp': res.Result.timeStamp,
-            'nonceStr': res.Result.nonceStr,
-            'package': res.Result.package,
-            'signType': res.Result.signType,
-            'paySign': res.Result.paySign,
-            'success': function (res) { },
-            'fail': function (res) {
-              console.log(res)
-            },
-            'complete': function (res) { }
-          });
-        }
-
-
-      },
-      fail: function (msg) {
-        console.log("MPMberPay失败：" + JSON.stringify(msg));
-      },
-      complete: function (res) {
-        wx.hideLoading();
-      }
-    });
+    app.requestSubscribeMessage("Pay_success", function () {
+      app.toWxPay()
+    })
+   
   },
 
 })

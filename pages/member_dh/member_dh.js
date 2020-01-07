@@ -197,9 +197,9 @@ Page({
     /**创建者：黎梅芳 */
     /**创建日期：20190422 */
     /**描述：记录formid */
-    if (e.detail.formId != undefined && e.detail.formId != '') {
-      myjCommon.logFormId(e.detail.formId);
-    }
+    // if (e.detail.formId != undefined && e.detail.formId != '') {
+      // myjCommon.logFormId(e.detail.formId);
+    // }
     var that = this;
     if (that.data.disabled)
     {
@@ -220,194 +220,195 @@ Page({
     var carid = that.data.carId;//券id
     var cardInfo = null;
     //调用接口兑换
-    myjCommon.getLoginUser(function (user) {
-      if (!user.isLogin) {
-        wx.showModal({
-          title: '提示',
-          content: "登录失败，请稍后重试。",
-          showCancel: false
-        });
-        that.setData({
-          disabled: false
-        });
-        return false;
-      }
+    app.requestSubscribeMessage("Useticket", function () {
+      myjCommon.getLoginUser(function (user) {
+        if (!user.isLogin) {
+          wx.showModal({
+            title: '提示',
+            content: "登录失败，请稍后重试。",
+            showCancel: false
+          });
+          that.setData({
+            disabled: false
+          });
+          return false;
+        }
 
-      if (that.data.coupontype==3) //礼品
-      {
-        cardInfo=that.getgifCardInfo(carid);
-        
-        myjCommon.callApi({
-          interfaceCode: "WxMiniProgram.Service.AddExchangeGif",
-          biz: { 
-            sessionId: user.sessionId, 
-            cardId: carid, 
-            GCCnt: needJifen, 
-            source: 2, 
-            province:app.currProvince,
+        if (that.data.coupontype == 3) //礼品
+        {
+          cardInfo = that.getgifCardInfo(carid);
+          debugger
+          myjCommon.callApi({
+            interfaceCode: "WxMiniProgram.Service.AddExchangeGif",
+            biz: {
+              sessionId: user.sessionId,
+              cardId: carid,
+              GCCnt: needJifen,
+              source: 2,
+              province: app.currProvince,
             },//source:来源：1 优惠券小程序；2 会员小程序  formId:表单Id
-          success: function (res) {
-            that.setData({
-              isChange:false
-            });
-            if (res.Code == "301") //非会员
-            {
+            success: function (res) {
               that.setData({
-                isMember: true
-              });
-              /**初始化注册会员组件方法 */
-              that.regerter1 = that.selectComponent("#regerter");
-              that.regerter1.init(that.data.isMember, "wxc94d087c5890e1f8", "member_card");
-            } else if (res.Code == "306") //金币不够
-            {
-
-              that.setData({
-                noteContent: '您的积分余额不足，暂不能兑换此礼品!',
-                isEnave: true,
                 isChange: false
               });
+              if (res.Code == "301") //非会员
+              {
+                that.setData({
+                  isMember: true
+                });
+                /**初始化注册会员组件方法 */
+                that.regerter1 = that.selectComponent("#regerter");
+                that.regerter1.init(that.data.isMember, "wxc94d087c5890e1f8", "member_card");
+              } else if (res.Code == "306") //金币不够
+              {
 
-            } else if (res.Code == "0") //兑换成功
-            {
-              if (that.data.gifType==2) //兑换码
+                that.setData({
+                  noteContent: '您的积分余额不足，暂不能兑换此礼品!',
+                  isEnave: true,
+                  isChange: false
+                });
+
+              } else if (res.Code == "0") //兑换成功
               {
-                that.setData({
-                  redeemCode: res.Msg,
-                  isChange: false,
-                  isredeecodeTast: true
-                });
-              } else if (that.data.gifType == 1)
-              {
-                that.setData({
-                  reckey: res.Msg,
-                  isChange: false,
-                  isexpress: true
-                });
-              } else if (that.data.gifType == 3) {
-                that.setData({
-                  cardUrl: res.Msg,
-                  isChange: false,
-                  isShowCardTast: true
-                });
-              }
-              if (parseInt(res.Result)<=0) {
-                cardInfo.CardStatus = "已兑换";
-                if (that.data.objcoupe != null && that.data.objcoupe.Id == cardInfo.Id) {
-                  that.data.objcoupe.CardStatus = "已兑换";
+                if (that.data.gifType == 2) //兑换码
+                {
+                  that.setData({
+                    redeemCode: res.Msg,
+                    isChange: false,
+                    isredeecodeTast: true
+                  });
+                } else if (that.data.gifType == 1) {
+                  that.setData({
+                    reckey: res.Msg,
+                    isChange: false,
+                    isexpress: true
+                  });
+                } else if (that.data.gifType == 3) {
+                  that.setData({
+                    cardUrl: res.Msg,
+                    isChange: false,
+                    isShowCardTast: true
+                  });
                 }
-                that.setData({
-                  MaterialList: that.data.MaterialList,
-                  objcoupe: that.data.objcoupe
-                  //pageIndex: 1
-                });
+                if (parseInt(res.Result) <= 0) {
+                  cardInfo.CardStatus = "已兑换";
+                  if (that.data.objcoupe != null && that.data.objcoupe.Id == cardInfo.Id) {
+                    that.data.objcoupe.CardStatus = "已兑换";
+                  }
+                  that.setData({
+                    MaterialList: that.data.MaterialList,
+                    objcoupe: that.data.objcoupe
+                    //pageIndex: 1
+                  });
+                }
+                //that.LoadGCMPJfList();
               }
-              //that.LoadGCMPJfList();
-            }
-            else  //已达到领取上限 ||  对不起，券已被抢光 || 卡券活动不存在或已被删除
-            {
+              else  //已达到领取上限 ||  对不起，券已被抢光 || 卡券活动不存在或已被删除
+              {
+                wx.showModal({
+                  title: '领取提示',
+                  content: res.Msg
+                })
+              }
+            },
+            fail: function (msg) {
+              console.log("AddExchangeGif失败：" + JSON.stringify(msg));
+              that.setData({
+                isChange: false,
+                disabled: false
+              });
               wx.showModal({
-                title: '领取提示',
-                content: res.Msg
-              })
+                title: '温馨提示',
+                content: '系统出错了，请稍后再来兑换。',
+                showCancel: false
+              });
+            },
+            complete: function (res) {
+              that.setData({
+                disabled: false
+              });
             }
-          },
-          fail: function (msg) {
-            console.log("AddExchangeGif失败：" + JSON.stringify(msg));
-            that.setData({
-              isChange: false,
-              disabled: false
-            });
-            wx.showModal({
-              title: '温馨提示',
-              content: '系统出错了，请稍后再来兑换。',
-              showCancel: false
-            });
-          },
-          complete: function (res) {
-            that.setData({
-              disabled: false
-            });
-          }
-        });
-      }else 
-      {
-       cardInfo=that.getCardInfo(carid); //根据id获取券对象
-        myjCommon.callApi({
-          interfaceCode: "WxMiniProgram.Service.GCChangeMPCoupon",
-          biz: { 
-            sessionId: user.sessionId, 
-            cardId: carid, 
-            GCCnt: needJifen, 
-            source: 2, 
-            cityName: app.currProvince,
-            formId: that.data.formId 
+          });
+        } else {
+          cardInfo = that.getCardInfo(carid); //根据id获取券对象
+          myjCommon.callApi({
+            interfaceCode: "WxMiniProgram.Service.GCChangeMPCoupon",
+            biz: {
+              sessionId: user.sessionId,
+              cardId: carid,
+              GCCnt: needJifen,
+              source: 2,
+              cityName: app.currProvince,
+              formId: that.data.formId
             },//source:来源：1 优惠券小程序；2 会员小程序  formId:表单Id
-          success: function (res) {
-            console.log(res)
-            if (res.Code == "301") //非会员
-            {
-              that.setData({
-                isMember: true
-              });
-              /**初始化注册会员组件方法 */
-              that.regerter1 = that.selectComponent("#regerter");
-              that.regerter1.init(that.data.isMember, "wxc94d087c5890e1f8", "member_card");
-            } else if (res.Code == "306") //金币不够
-            {
-              that.setData({
-                noteContent:'您的积分余额不足，暂不能兑换此券!',
-                isEnave: true,
-                isChange: false
-              });
+            success: function (res) {
+              console.log(res)
+              if (res.Code == "301") //非会员
+              {
+                that.setData({
+                  isMember: true
+                });
+                /**初始化注册会员组件方法 */
+                that.regerter1 = that.selectComponent("#regerter");
+                that.regerter1.init(that.data.isMember, "wxc94d087c5890e1f8", "member_card");
+              } else if (res.Code == "306") //金币不够
+              {
+                that.setData({
+                  noteContent: '您的积分余额不足，暂不能兑换此券!',
+                  isEnave: true,
+                  isChange: false
+                });
 
-            } else if (res.Code == "0") //兑换成功
-            {
-              
+              } else if (res.Code == "0") //兑换成功
+              {
+
                 that.setData({
                   isGetSucess: true,
                   isChange: false
                 });
-                if (parseInt(res.Result)<=0) {
-                cardInfo.CardStatus = "已兑换";
-                if (that.data.objcoupe != null && that.data.objcoupe.Id == cardInfo.Id) {
-                  that.data.objcoupe.CardStatus = "已兑换";
+                if (parseInt(res.Result) <= 0) {
+                  cardInfo.CardStatus = "已兑换";
+                  if (that.data.objcoupe != null && that.data.objcoupe.Id == cardInfo.Id) {
+                    that.data.objcoupe.CardStatus = "已兑换";
+                  }
+                  that.setData({
+                    integralList: that.data.integralList,
+                    objcoupe: that.data.objcoupe
+                    //pageIndex: 1
+                  });
                 }
-                that.setData({
-                  integralList: that.data.integralList,
-                  objcoupe: that.data.objcoupe
-                  //pageIndex: 1
-                });
-                }
-              //that.LoadGCMPJfList();
-            }
-            else  //已达到领取上限 ||  对不起，券已被抢光 || 卡券活动不存在或已被删除
-            {
+                //that.LoadGCMPJfList();
+              }
+              else  //已达到领取上限 ||  对不起，券已被抢光 || 卡券活动不存在或已被删除
+              {
+                wx.showModal({
+                  title: '领取提示',
+                  content: res.Msg
+                })
+              }
+            },
+            fail: function (msg) {
+              console.log("GCChangeMPCoupon失败：" + JSON.stringify(msg));
+              that.setData({
+                isChange: false,
+                disabled: false
+              });
               wx.showModal({
-                title: '领取提示',
-                content: res.Msg
-              })
+                title: '温馨提示',
+                content: '系统出错了，请稍后再来兑换。',
+                showCancel: false
+              });
+            },
+            complete: function (res) {
+              that.setData({
+                disabled: false
+              });
             }
-          },
-          fail: function (msg) {
-            console.log("GCChangeMPCoupon失败：" + JSON.stringify(msg));
-            that.setData({
-              isChange: false,
-              disabled: false
-            });
-            wx.showModal({
-              title: '温馨提示',
-              content: '系统出错了，请稍后再来兑换。',
-              showCancel: false
-            });
-          },
-          complete: function (res) {
-            that.setData({
-              disabled: false
-            });
-          }
-        });
-      }
-    });
+          });
+        }
+      });
+    })
+  
   },
   /**保存填写的快递信息 */
   savexpressinfo: function (e) {
@@ -1068,36 +1069,10 @@ Page({
   },
   /**打开微信支付：跳转到微信支付页 */
   url_wxpay: function () {
-    myjCommon.callApi({
-      interfaceCode: "WxMiniProgram.Service.MPMberPay",
-      biz: {
-      },
-      success: function (res) {
-        if (res.Code == "0") {
-          wx.openOfflinePayView({
-            'appId': res.Result.appId,
-            'timeStamp': res.Result.timeStamp,
-            'nonceStr': res.Result.nonceStr,
-            'package': res.Result.package,
-            'signType': res.Result.signType,
-            'paySign': res.Result.paySign,
-            'success': function (res) { },
-            'fail': function (res) {
-              console.log(res)
-            },
-            'complete': function (res) { }
-          });
-        }
-
-
-      },
-      fail: function (msg) {
-        console.log("MPMberPay失败：" + JSON.stringify(msg));
-      },
-      complete: function (res) {
-        wx.hideLoading();
-      }
-    });
+    app.requestSubscribeMessage("Pay_success", function () {
+      app.toWxPay()
+    })
+  
   },
 
   /**

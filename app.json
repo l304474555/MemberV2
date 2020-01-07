@@ -2,7 +2,7 @@
   "pages": [
         
     "pages/member_index/member_index",
-    "pages/Basketball_integral/Basketball_integral",
+"pages/Basketball_integral/Basketball_integral",
     "pages/login/login",
     "pages/member_barcode/member_barcode",
     "pages/store_map/store_map",

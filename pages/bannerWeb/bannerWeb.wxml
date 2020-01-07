@@ -7,6 +7,6 @@
 
 <!-- <web-view src="https://ceshiserver.myj.com.cn/test.html"></web-view> -->
 
- <web-view src="{{path}}"></web-view>
+ <web-view src="{{path}}" bindmessage="message"></web-view>
 
 

@@ -1,11 +1,11 @@
 
-const accessTokenUrl = "https://servicedx.myj.com.cn/mp_token.ashx?grant_type=client_credential&partner_code=wxxiaochengxu&secret=e857tsd1f3sd7ras8r677ur";
-const apiUrl = "https://servicedx.myj.com.cn/mp_aip.ashx";
-const apiPartner = "wxxiaochengxu";
-
-// const accessTokenUrl = "https://ceshiserver.myj.com.cn/mp_token.ashx?grant_type=client_credential&partner_code=myjapp&secret=ad526837e2504c11b13439986c710869";
-// const apiUrl = "https://ceshiserver.myj.com.cn/mp_aip.ashx";
+// const accessTokenUrl = "https://servicedx.myj.com.cn/mp_token.ashx?grant_type=client_credential&partner_code=wxxiaochengxu&secret=e857tsd1f3sd7ras8r677ur";
+// const apiUrl = "https://servicedx.myj.com.cn/mp_aip.ashx";
 // const apiPartner = "wxxiaochengxu";
+
+const accessTokenUrl = "https://ceshiserver.myj.com.cn/mp_token.ashx?grant_type=client_credential&partner_code=myjapp&secret=ad526837e2504c11b13439986c710869";
+const apiUrl = "https://ceshiserver.myj.com.cn/mp_aip.ashx";
+const apiPartner = "wxxiaochengxu";
 
 var util = {
   getUrlParams:function(url){
@@ -576,10 +576,9 @@ function logFormId(formId) {
         interfaceCode: "WxMiniProgram.Service.LogMPFormId",
         biz: { sessionId: user.sessionId, mpSource: myjConfig.mpSource, formId: formId },
         success: function (data) {
-          console.error(data);
         },
         fail: function (msg) {
-          console.error("记录用户提交formId：" + JSON.stringify(msg));
+          console.log("记录用户提交formId：" + JSON.stringify(msg));
         }
       });
     });
@@ -588,6 +587,7 @@ function logFormId(formId) {
 
   }
 }
+
 
 function log(category, msg) {
   callApi({

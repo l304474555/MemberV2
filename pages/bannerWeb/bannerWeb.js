@@ -1,4 +1,6 @@
 // pages/bannerWeb/bannerWeb.js
+const app = getApp();
+const myjCommon = require("../../utils/myjcommon.js");
 Page({
 
   /**
@@ -19,10 +21,61 @@ Page({
   // },
 
   onLoad: function (options) {
+    this.initUrl(options)
     var that = this;
     var bannerweburl = options.bannerUrl
     that.setData({
       path: bannerweburl
+    })
+  },
+  initUrl(options) {
+    var that = this;
+    var bannerweburl = options.bannerUrl
+    if (bannerweburl.indexOf('mimage') > -1) { //抽奖h5需要登陆获取token
+      this.getToken(options)
+    } else {
+      this.setData({
+        path: bannerweburl
+      })
+    }
+  },
+  getToken(options) {
+    var that = this;
+    var bannerweburl = options.bannerUrl
+    myjCommon.getLoginUser(function (user) {
+      console.log(user.sessionId)
+      if (!user.isLogin) {
+        that.setData({
+          isShowUserInfoBtn: true
+        });
+        return;
+      }
+      app.signPost.callApi({
+        url: '/api/Member/MPLogin',
+        biz: {
+          "sessionId": user.sessionId,
+          "channel": "wx",
+        },
+        success: function (res) {
+          if (res.code == 0) {
+            that.setData({
+              path: bannerweburl + '?1211=1&token=' + res.data.token// 'http://www.baidu.com'//
+            })
+          } else {
+            wx.showModal({
+              title: '温馨提示',
+              content: res.msg,
+              showCancel: false,
+              success() {
+                myjCommon.relogin(function (user) {
+                  that.getToken(options)
+                })
+              }
+            })
+
+          }
+        }
+      })
     })
   },
   /**

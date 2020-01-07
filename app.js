@@ -1,8 +1,93 @@
 //app.js
 var myjCommon = require("/utils/myjcommon.js");
+import signPost from 'utils/signpost.js'
 App({
   onLaunch: function () {
-    
+    this.getSubscribeMessageList()
+  },
+  /**创建人：刘嘉麒 */
+  /**创建日期：20200103 */
+  /**描述：获取订阅消息模板 */
+  getSubscribeMessageList() {
+    wx.request({
+      url: 'https://mimage.myj.com.cn/mpdata/mscene/wxc94d087c5890e1f8.js?t=' + new Date().getTime().toString(),
+      data: {},
+      header: {
+        'content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      success: (res) => {
+        console.error('订阅列表', res)
+        // area = res.data
+        getApp().globalData.templateList = res.data
+        // getApp().requestSubscribeMessage(0)
+      }
+    })
+  },
+  /**创建人：刘嘉麒 */
+  /**创建日期：20200103 */
+  /**描述：开始订阅消息 */
+  requestSubscribeMessage(type, cb = '') {
+    // type 0 退款 1 支付回调 
+    console.log('订阅消息列表', getApp().globalData.templateList)
+    let list = getApp().globalData.templateList
+    let SceneList = ''
+    list.forEach(item => {
+      if (item.SceneCode == type) {
+        SceneList = item.SceneList
+      }
+    })
+    let tmplIds = []
+    for (let item of SceneList) {
+      tmplIds.push(item.TemplateId)
+    }
+    try {
+      wx.requestSubscribeMessage({
+        tmplIds,
+        success(res) {
+          console.log('订阅消息调用成功', res)
+        },
+        fail(res) {
+          console.log('订阅消息调用失败', res)
+        },
+        complete(res) {
+          console.log(tmplIds)
+          if (cb) {
+            cb(res)
+          }
+        }
+      })
+    } catch (err) {
+      console.log('err', err)
+    }
+  },
+  toWxPay(){
+    myjCommon.callApi({
+      interfaceCode: "WxMiniProgram.Service.MPMberPay",
+      biz: {
+      },
+      success: function (res) {
+        if (res.Code == "0") {
+          wx.openOfflinePayView({
+            'appId': res.Result.appId,
+            'timeStamp': res.Result.timeStamp,
+            'nonceStr': res.Result.nonceStr,
+            'package': res.Result.package,
+            'signType': res.Result.signType,
+            'paySign': res.Result.paySign,
+            'success': function (res) { },
+            'fail': function (res) {
+            },
+            'complete': function (res) { }
+          });
+        }
+      },
+      fail: function (msg) {
+        console.log("MPMberPay失败：" + JSON.stringify(msg));
+      },
+      complete: function (res) {
+        wx.hideLoading();
+      }
+    });
   },
   onShow: function (options) {
     console.log("App onShow");
@@ -93,5 +178,6 @@ App({
     isNewPage: 0,//是否为新版会员页面:0加载中，1旧页面，2新页面
     currenAppid: "wxc94d087c5890e1f8", //当前小程序appid
     companyCode: ''
-  }
+  },
+  signPost,//验签请求
 })

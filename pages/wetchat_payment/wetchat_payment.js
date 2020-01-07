@@ -1,4 +1,5 @@
 var myjCommon = require("../../utils/myjcommon.js");
+var app = getApp();
 Page({
 
   /**
@@ -29,36 +30,9 @@ Page({
   onShow: function () {
   },
   url_wxpay: function () {
-    myjCommon.callApi({
-      interfaceCode: "WxMiniProgram.Service.MPMberPay",
-      biz: {
-      },
-      success: function (res) {
-        if (res.Code == "0") {
-          wx.openOfflinePayView({
-            'appId': res.Result.appId,
-            'timeStamp': res.Result.timeStamp,
-            'nonceStr': res.Result.nonceStr,
-            'package': res.Result.package,
-            'signType': res.Result.signType,
-            'paySign': res.Result.paySign,
-            'success': function (res) { },
-            'fail': function (res) {
-              console.log(res)
-            },
-            'complete': function (res) { }
-          });
-        }
-
-
-      },
-      fail: function (msg) {
-        console.log("MPMberPay失败：" + JSON.stringify(msg));
-      },
-      complete: function (res) {
-        wx.hideLoading();
-      }
-    });
+    app.requestSubscribeMessage("Pay_success", function () {
+      app.toWxPay()
+    })
   },
   /**
    * 生命周期函数--监听页面隐藏

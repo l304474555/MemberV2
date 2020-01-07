@@ -263,35 +263,9 @@ Page({
   },
   /**跳到微信支付 */
   url_wxpay: function () {
-    myjCommon.callApi({
-      interfaceCode: "WxMiniProgram.Service.MPMberPay",
-      biz: {},
-      success: function (res) {
-        if (res.Code == "0") {
-          wx.openOfflinePayView({
-            'appId': res.Result.appId,
-            'timeStamp': res.Result.timeStamp,
-            'nonceStr': res.Result.nonceStr,
-            'package': res.Result.package,
-            'signType': res.Result.signType,
-            'paySign': res.Result.paySign,
-            'success': function (res) { },
-            'fail': function (res) {
-              console.log(res)
-            },
-            'complete': function (res) { }
-          });
-        }
-
-
-      },
-      fail: function (msg) {
-        console.log("MPMberPay失败：" + JSON.stringify(msg));
-      },
-      complete: function (res) {
-        wx.hideLoading();
-      }
-    });
+    app.requestSubscribeMessage("Pay_success", function () {
+      app.toWxPay()
+    })
   },
   /**获取会员满减次数信息 */
   /**黎梅芳 20190606 */

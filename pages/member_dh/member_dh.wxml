@@ -157,9 +157,9 @@
       <button class='modal_btn' style="margin-top:10px;background-color: #ffb71c;color:white;" disabled='true' data-cardid="{{objcoupe.Id}}">{{objcoupe.CardStatus}}</button>
     </block>
     <block wx:if="{{(objcoupe.CardStatus=='已领取' || objcoupe.CardStatus=='已兑换')}}">
-      <form report-submit="true" bindsubmit='url_wxpay'>
-        <button class='modal_btn_green' form-type="submit" hover-stop-propagation="true" style="margin-top:10px;background-color: #50a837;color:white;" data-cardid="{{objcoupe.Id}}">打开微信支付</button>
-      </form>
+      <!-- <form report-submit="true" bindsubmit='url_wxpay'> -->
+        <button bindtap="url_wxpay" class='modal_btn_green' form-type="submit" hover-stop-propagation="true" style="margin-top:10px;background-color: #50a837;color:white;" data-cardid="{{objcoupe.Id}}">打开微信支付</button>
+      <!-- </form> -->
     </block>
 
     <block wx:if="{{objcoupe.CardStatus=='已抢光'}}">
@@ -263,9 +263,9 @@
     <view class="modal_txt" style="margin:30px 0;text-align:left;line-height: 20px; max-height:250px; overflow:auto;text-align:center;font-size:30rpx;">
       <text>{{deducContent}}</text>
     </view>
-    <form report-submit='true' bindsubmit='yesExcange'>
-    <button class="modal_btn"  form-type='submit' disabled='{{disabled}}'>确定</button>
-    </form>
+    <!-- <form report-submit='true' bindsubmit='yesExcange'> -->
+    <button bindtap="yesExcange" class="modal_btn"  form-type='submit' disabled='{{disabled}}'>确定</button>
+    <!-- </form> -->
   </view>
 </view>
 <!--确认是否要兑换此券 弹出框-->

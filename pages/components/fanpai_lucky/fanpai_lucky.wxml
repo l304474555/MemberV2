@@ -107,7 +107,7 @@
       <view class='lp_tip_fa2_txt1 mt20'>{{winRecortObj.PrizeName}}</view>
       <view class='lp_tip_fa2_txt2'>使用时间：{{winRecortObj.ShowStartTime}} - {{winRecortObj.ShowEndTime}}</view>
       <view class='ta_c' style='margin:30px auto 0 auto;'>
-      <button class='ld_tip_btn' bindtap='tap_close'>确定</button> 
+      <button class='ld_tip_btn' bindtap='tap_close' data-type="coupon">确定</button> 
       </view>
       
     </view>

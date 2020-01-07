@@ -860,6 +860,7 @@ Page({
       wx.showLoading({
         title: '数据载入中...',
       });
+      debugger
       myjCommon.callApi({
         interfaceCode: "WxMiniProgram.Service.GetIntegralDtl",
         biz: {
@@ -1033,35 +1034,9 @@ Page({
   },
   /**打开微信支付 */
   url_wxpay: function () {
-    myjCommon.callApi({
-      interfaceCode: "WxMiniProgram.Service.MPMberPay",
-      biz: {
-      },
-      success: function (res) {
-        if (res.Code == "0") {
-          wx.openOfflinePayView({
-            'appId': res.Result.appId,
-            'timeStamp': res.Result.timeStamp,
-            'nonceStr': res.Result.nonceStr,
-            'package': res.Result.package,
-            'signType': res.Result.signType,
-            'paySign': res.Result.paySign,
-            'success': function (res) { },
-            'fail': function (res) {
-            },
-            'complete': function (res) { }
-          });
-        }
-
-
-      },
-      fail: function (msg) {
-        console.log("MPMberPay失败：" + JSON.stringify(msg));
-      },
-      complete: function (res) {
-        wx.hideLoading();
-      }
-    });
+    app.requestSubscribeMessage("Pay_success", function () {
+      app.toWxPay()
+    })
   },
   /**
    * 创建人：袁健豪

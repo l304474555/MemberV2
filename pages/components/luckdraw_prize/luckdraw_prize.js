@@ -180,9 +180,12 @@ Component({
             isreedcodetast: true
           });
         } else {
-          wx.switchTab({
-            url: '/pages/member_center/member_center',
+          getApp().requestSubscribeMessage('Useticket', function () {
+            wx.switchTab({
+              url: '/pages/member_center/member_center',
+            })
           })
+        
         }
       } else if (distributeWay == 4) //跳转到会员“我的积分"页面
       {

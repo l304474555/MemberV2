@@ -59,7 +59,6 @@ Component({
    */
   methods: {
     onLoad: function(options) {
-      debugger
       console.log("onload")
       console.log(options)
       var that=this;
@@ -782,7 +781,12 @@ Component({
       })
     },
     /**关闭弹框 */
-    tap_close: function() {
+    tap_close: function(e) {
+      let type = e.currentTarget.dataset.type
+      if (type == 'coupon') {
+        getApp().requestSubscribeMessage('Useticket', function () {
+        })
+      }
       this.setData({
         isPrize: false,
         isIntegral: false,
