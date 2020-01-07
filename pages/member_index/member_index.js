@@ -332,13 +332,14 @@ Page({
       var provinceName = wx.getStorageSync("memberprovince");
       let companyCode = wx.getStorageSync('companyCode');
       if (cityName && provinceName && companyCode) {
+        app.currCity = cityName;
+        app.currProvince = provinceName;
         that.setData({
           cityName: cityName,
           isNewPage: app.checkNewPage(),
           companyCode: companyCode
         });
-        app.currCity = cityName;
-        app.currProvince = provinceName;
+        
         /**加载配置信息 */
         that.GetMemberCardConfig();
         /**加载菜单栏 */
