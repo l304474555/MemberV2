@@ -58,7 +58,6 @@ Page({
             console.log(res)
             that.setData({
               cityName: res.result.address_component.city
-              
             });
             app.currCity = that.data.cityName;
             app.currProvince = res.result.address_component.province;
@@ -81,7 +80,6 @@ Page({
   },
   //选择城市
   selectCity: function (event) {
-    debugger
     var that = this;
     //选中城市
     var city = event.currentTarget.dataset.city;

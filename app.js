@@ -58,6 +58,9 @@ App({
       })
     } catch (err) {
       console.log('err', err)
+      if (cb) {
+        cb(err)
+      }
     }
   },
   toWxPay(){

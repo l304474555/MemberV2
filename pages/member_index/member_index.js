@@ -2176,50 +2176,50 @@ Page({
    * 描述：判断是否最低会员等级
    */
   judgeMinLevel() {
-    // if (this.data.memberLevelObj.GRId == this.data.gradeList[0].GRId) {
-    //   this.setData({
-    //     isMinLevel: true
-    //   });
-    //   return;
-    // }
-    // let grid = 0;
-    // let gradeList = this.data.gradeList;
-
-    // if (this.data.memberLevelObj.levels > 0 && gradeList.length >= this.data.memberLevelObj.levels) {
-    //   grid = this.data.memberLevelObj.levels - 1;
-    // }
-
-    // if (gradeList[grid].GRId == gradeList[0].GRId) {
-    //   this.setData({
-    //     isMinLevel: true
-    //   });
-    //   return;
-    // }
-    // this.setData({
-    //   isMinLevel: false
-    // });
-
-    if (this.data.memberLevelObj.levels == this.data.gradeList[0].GRId) {
+    if (this.data.memberLevelObj.GRId == this.data.gradeList[0].GRId) {
       this.setData({
         isMinLevel: true
       });
       return;
     }
+    let grid = 0;
+    let gradeList = this.data.gradeList;
 
-    let isExist = this.data.gradeList.some(item => {
-      return item.GRId == this.data.memberLevelObj.levels
-    });
+    if (this.data.memberLevelObj.levels > 0 && gradeList.length >= this.data.memberLevelObj.levels) {
+      grid = this.data.memberLevelObj.levels - 1;
+    }
 
-    if (!isExist) {
+    if (gradeList[grid].GRId == gradeList[0].GRId) {
       this.setData({
         isMinLevel: true
       });
       return;
     }
-
     this.setData({
       isMinLevel: false
     });
+
+    // if (this.data.memberLevelObj.levels == this.data.gradeList[0].GRId) {
+    //   this.setData({
+    //     isMinLevel: true
+    //   });
+    //   return;
+    // }
+
+    // let isExist = this.data.gradeList.some(item => {
+    //   return item == this.data.memberLevelObj.levels
+    // });
+
+    // if (!isExist) {
+    //   this.setData({
+    //     isMinLevel: true
+    //   });
+    //   return;
+    // }
+
+    // this.setData({
+    //   isMinLevel: false
+    // });
   },
 
   /**
@@ -2228,10 +2228,15 @@ Page({
    * 描述：等级卡片位置定位
    */
   levelLocation() {
+    let grid = 0;
     let gradeList = this.data.gradeList;
 
+    if (this.data.memberLevelObj.levels > 0 && gradeList.length >= this.data.memberLevelObj.levels) {
+      grid = this.data.memberLevelObj.levels - 1;
+    }
+
     for (let i = 0; i < gradeList.length; i++) {
-      if (this.data.memberLevelObj.levels == gradeList[i].GRId) {
+      if (gradeList[grid].GRId == gradeList[i].GRId) {
         this.setData({
           ordinaryMember: gradeList[i].Name,
           currentMemberLevel: i
@@ -2355,7 +2360,6 @@ Page({
    */
   getMemberDeduction(sessionId, companyCode) {
     if (companyCode == 'HO'){
-
     }else if ( (this.data.year >= 2020 || companyCode == 'AH') || companyCode == 'HO'  ) {
       return;
     }

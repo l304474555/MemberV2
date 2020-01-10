@@ -1,6 +1,7 @@
 /** liujiaqi 20190920 md5加密请求 */
+import myjcommon from './myjcommon.js'
 import md5 from './md5.js'
-const BASIC_URL = 'https://lotterytest.myj.com.cn';
+const BASIC_URL = myjcommon.signUrl;
 //密钥
 const SECRET_KEY = 'myj123'
 //获取时间戳

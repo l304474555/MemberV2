@@ -960,7 +960,7 @@ debugger
    * 描述：微信支付
    */
   url_wxpay() {
-    app.requestSubscribeMessage("Pay_success", function () {
+    app.requestSubscribeMessage("Usebrand", function () {
       app.toWxPay()
     })
    
