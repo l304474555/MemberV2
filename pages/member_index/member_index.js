@@ -332,7 +332,7 @@ Page({
       var provinceName = wx.getStorageSync("memberprovince");
       let companyCode = wx.getStorageSync('companyCode');
       if (cityName && provinceName && companyCode) {
-		app.currCity = cityName;
+        app.currCity = cityName;
         app.currProvince = provinceName;
         that.setData({
           cityName: cityName,
@@ -2359,7 +2359,9 @@ Page({
    * 描述：获取会员过期积分
    */
   getMemberDeduction(sessionId, companyCode) {
-    if (this.data.year >= 2020 || companyCode == 'HO' || companyCode == 'AH') {
+    if (companyCode == 'HO'){
+
+    }else if ( (this.data.year >= 2020 || companyCode == 'AH') || companyCode == 'HO'  ) {
       return;
     }
     let self = this;
